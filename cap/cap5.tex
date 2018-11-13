@@ -1,0 +1,190 @@
+\chapter[Resultados Preliminares e Discussão]{Resultados Preliminares  e Discussões}\label{Capitulo5}
+
+A partir dos métodos propostos no capítulo anterior, são apresentados nessa seção os resultados obtidos a partir da utilização da \textit{toolbox} desenvolvida nesse trabalho. São então discutidos os resultados de cada método de acordo com os gráficos, figuras e tabelas apresentadas. A \textit{toolbox} encontra-se disponível em \url{https://github.com/marcelo-vieira/DBT-Reconstruction.git}. 
+
+\section{Reconstrução de Imagens}
+
+A Figura \ref{fig:imgCap5Resultados1} demonstra os resultados obtidos após a aplicação de cada método de reconstrução implementado na \textit{toolbox}. Foram escolhidas 10 fatias de um total de 128 geradas pela reconstrução, sendo que essas foram selecionadas pois representam partes distintas de todo o volume. A primeira coluna apresenta as fatias do \textit{phantom} original usado como referência, a segunda o resultado da simples retroprojeção dos dados, a terceira o método de \acs{FBP} e a última o algoritmo de \acs{MLEM} com 5 iterações. As linhas de 1 a 10 representam respectivamente as fatias: 1, 15, 30, 43, 64, 78, 85, 99, 113 e 128. 
+
+É importante destacar que houve um ajuste automático na faixa de exibição dos níveis de cinza que são mostrados, baseado nos locais onde se encontram os menores e os maiores níveis de cinza de cada imagem. 
+
+%\colorbox{pink}{É importante destacar que para o algoritmo de retroprojeção filtrada foram feitos ajustes automáticos de brilho e de contraste em uma determinada região da imagem através do \textit{software} Fiji\footnote{\url{www.fiji.sc}} \cite{schindelin2012fiji} para uma melhor visualização.}
+
+Levando em consideração somente o método \acs{MLEM}, a Figura \ref{fig:imgCap5Resultados3} demonstra os resultados obtidos por essa técnica e faz então uma comparação entre os diferentes números de iteração. São representas pela coluna de 1 até a 4 as iterações de número 5, 10, 15 e 20. Já para as fatias, em cada linha, são exibidas respectivamente as de número 43, 64, 78 e 85.  
+
+Comparando os três métodos através de uma análise subjetiva é possível observar que o \acs{MLEM} com cinco iterações obteve o melhor resultado em todo o volume, levando em consideração a estrutura dos objetos, quantidade de artefatos e a nitidez de uma maneira geral. A simples retroprojeção possui uma imagem sem detalhes, como já era esperado, mas mantendo o formato exterior do crânio. Na retroprojeção filtrada é possível observar mais detalhes quando comparada com sua versão simples, porém artefatos são gerados no processo de reconstrução, devido a confecção do filtro no domínio da frequência. 
+
+%devido ao filtro de rampa anular a frequência 0, cancelando o nível DC do sinal, o fundo não ficou com o valor 0. Devido a isso foi necessário a realização de operações de pós-processamento para a visualização da imagem. Problemas com a implementação da filtragem também foram encontrados. 
+
+Em todas as técnicas é possível observar que as fatias iniciais e as finais possuem artefatos de reconstrução, enquanto que no meio do volume o formato da imagem reconstruída é mais fiel à original. Esse fato pode ser observado também em todos os resultados objetivos através das Figuras \ref{fig:imgCap5GraficoMSSIM}, \ref{fig:imgCap5GraficoNRMSE} e \ref{fig:imgCap5GraficoSHARPDB}, onde os melhores valores encontram-se em torno das fatias centrais. Isso decorre da utilização de uma estreita faixa de ângulo na tomossíntese. 
+
+Analisando isoladamente os resultados da Figura \ref{fig:imgCap5Resultados3} é notável que quanto maior o número de iterações, maior é também o ruído e a quantidade de artefato nas imagens geradas. De certo modo isso era esperado como foi discutido na seção \ref{MétodoEstatístico} de métodos estatísticos.       
+
+Todo o processamento foi feito em \acs{CPU} e as configurações do respectivo computador são: Intel Core i7-7700k 4,2GHz com 16GB de memória RAM. O tempo gasto para a execução de cada método é demonstrado pelas tabelas abaixo, onde a Tabela \ref{tab:tabCap5Tempos1} expõe os tempos de projeção, retroprojeção e filtragem para as técnicas de \acs{BP} e \acs{FBP}. Já a Tabela \ref{tab:tabCap5Tempos2} mostra os tempos para o algoritmo \acs{MLEM} com os respectivos números de iterações. Cada iteração é caraterizada por um ciclo como foi demonstrado no pseudocódigo anteriormente.
+
+É incontestável a diferença existente entre o tempo gasto pelo método analítico e estatístico. Para cada iteração do método estatístico são necessárias uma projeção e uma retroprojeção, fazendo com que o custo computacional do método aumente muito. Já para o método analítico de \acs{FBP} é necessário somente uma retroprojeção e uma pré filtragem, tornando esse método mais eficiente quando se leva em consideração o tempo de execução. 
+
+\begin{table}[H]
+	\footnotesize
+	\centering
+	\caption{Tempo de execução em segundos dos algoritmos de \acs{BP} e \acs{FBP}.}
+	\label{tab:tabCap5Tempos1}
+	\begin{tabular}{l|c|c|c}
+		\textbf{Algoritmo}	    & \textbf{Retroprojeção} 	& \textbf{Filtragem} 	& \textbf{Soma}	\\ [5pt]
+		\hline
+		\hline
+		Retroprojeção 	 		& 0,55						& -						& 0,55			\\ 
+		\hline
+		Retroprojeção Filtrada	& 0,56 						& 0,03					& 0,59			\\
+		\hline
+	\end{tabular}
+	\vspace{2ex}
+	\legend{Fonte: do autor, 2018}
+\end{table}
+
+\begin{table}[H]
+	\footnotesize
+	\centering
+	\caption{Tempos de execução em segundos do algoritmo \acs{MLEM} e seus respectivo número de iterações}
+	\label{tab:tabCap5Tempos2}
+	\begin{tabular}{c|c|c|c|c}
+		\textbf{N\textsuperscript{\underline{o}}}&\textbf{5 Iterações}& \textbf{10 Iterações}& \textbf{15  Iterações}& \textbf{20 Iterações} 	\\ [5pt]
+		\hline
+		\hline
+		\textbf{1 }&1,65 & 1,68 & 1,74 & 1,65 \\
+		\hline
+		\textbf{2 }&1,71 & 1,66 & 1,68 & 1,67 \\
+		\hline
+		\textbf{3 }&1,67 & 1,74 & 1,70 & 1,71 \\
+		\hline
+		\textbf{4 }&1,71 & 1,77 & 1,69 & 1,73 \\
+		\hline
+		\textbf{5 }&1,67 & 1,77 & 1,78 & 1,76 \\
+		\hline
+		\textbf{6 }&     & 1,74 & 1,73 & 1,75 \\
+		\hline
+		\textbf{7 }&     & 1,72 & 1,71 & 1,72 \\
+		\hline
+		\textbf{8 }&     & 1,73 & 1,73 & 1,71 \\
+		\hline
+		\textbf{9 }&     & 1,69 & 1,67 & 1,72 \\
+		\hline
+		\textbf{10}&     & 1,69 & 1,63 & 1,70 \\
+		\hline
+		\textbf{11}&     &      & 1,69 & 1,69 \\
+		\hline
+		\textbf{12}&     &      & 1,70 & 1,68 \\
+		\hline
+		\textbf{13}&     &      & 1,70 & 1,70 \\
+		\hline
+		\textbf{14}&     &      & 1,64 & 1,69 \\
+		\hline
+		\textbf{15}&     &      & 1,69 & 1,67 \\
+		\hline
+		\textbf{16}&     &      &      & 1,70 \\
+		\hline
+		\textbf{17}&     &      &      & 1,72 \\
+		\hline
+		\textbf{18}&     &      &      & 1,66 \\
+		\hline
+		\textbf{19}&     &      &      & 1,67 \\
+		\hline
+		\textbf{20}&     &      &      & 1,65 \\
+		\hline
+		\rowcolor{lightgray}\textbf{Soma} &8,43   	   & 17,23      & 25,55      & 34,06  \\
+		\hline
+	\end{tabular}
+	\vspace{2ex}
+	\legend{Fonte: do autor, 2018}
+\end{table}  
+
+
+
+As Figuras \ref{fig:imgCap5GraficoMSSIM}, \ref{fig:imgCap5GraficoNRMSE} e \ref{fig:imgCap5GraficoSHARPDB} ilustram os gráficos de validação dos procedimentos executados fazendo uma análise objetivas dos resultados. 
+
+Para o \acs{SSIM}, o método iterativo obteve os melhores resultados, sendo que a maior similaridade foi obtida com 15 iterações. É interessante ressaltar que o maior índice de similaridade possível de se obter é o valor 1. 
+
+Já para o \acs{MSE}, o método iterativo com 20 iterações obteve o menor erro, sendo observado que todos o erros tendem a diminuir nas fatias centrais. 
+
+Por fim, para a validação através do \textit{Sharpness}, quando comparado com o \textit{phantom} virtual o método iterativo com 20 iterações obteve o melhor resultado. Novamente é possível observar uma tendência de crescimento do valor medido nas fatias centrais. Para o \textit{phantom}, a diminuição nas extremidades se deve aos valores de \textit{pixel} nulo nas imagens respectivas.   
+
+\section{Redução de Artefatos de Alta Atenuação}
+
+A partir da execução dos métodos ditos em \ref{MetodosReduçãodeArtefatosdeAltaAtenuação}, foram obtidos os resultados apresentados a seguir. A Figura \ref{fig:imgCap5ROIBP} demonstra a comparação entre retroprojeção simples e a técnica de redução de artefatos. Os conjuntos da esquerda significam a \acs{BP} e os da direita a \acs{BP} ponderada das fatias 1, 4, 7, 10, 13, 15 da \acs{ROI} mencionada para fins de comparação.
+
+É possível notar que os resultados não foram satisfatórios após a aplicação dos métodos. Alguns empecilhos foram encontrados ao aplicar as técnicas. Devido ao centro de rotação do equipamento estar localizado $40mm$ acima do detector o foco de raio X muda a sua posição fazendo com que a média dos valores dos \textit{pixels} aumente onde o foco está. Isso faz com que as escolhas dos \textit{patches} aconteça de maneira errada, pois o método utiliza a técnica de \acs{MSE} para a escolha do referência. A Figura \ref{fig:imgCap5ROIPatchA} ilustra o histograma do número de contagem em que cada \textit{patch} foi escolhido, exemplificando o problema ocorrido. Já a Figura \ref{fig:imgCap5ROIPatchB} ilustra o histograma após a correção através da média local em cada patch, retirando assim o nível DC. Mesmo após a correção da média para o cálculo dos pesos, o problema ainda persistiu, devido a soma ponderada entre \textit{pixels} com diferentes valores de média.
+
+O valor da constante M, como já foi dito, influencia na quantidade de sinal e de ruído presentes na imagem. A Figura \ref{fig:imgCap5FuncaoPesos} demonstra a relação existente entre essa constante e o formato da função. Nessa mesma figura está contido o histograma de distâncias calculadas em todos os \textit{pixels} de todas as fatias. É notável, através da Figura \ref{fig:imgCap5DiffM} que quanto menor o valor da constante M maior será o ruído na imagem. Caso contrário o resultado tende a ficar mais parecido com a simples média das imagens. 
+
+\begin{figure}[H]
+	\centering
+	
+	\caption{Comparação entre retroprojeção simples (Conjunto da esquerda) e a técnica de redução de artefatos (Conjunto da direita)  \colorbox{pink}{Elias: Imagem do equipamento?}.}
+	
+	\subfloat[1]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_1.png}\label{fig:imgCap5ROIBP1}}
+	\subfloat[4]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_4.png}\label{fig:imgCap5ROIBP4}}
+	\hfill
+	\subfloat[1]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_1.png}\label{fig:imgCap5ROIWBP1}}
+	\subfloat[4]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_4.png}\label{fig:imgCap5ROIWBP4}}
+	
+	\subfloat[7]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_7.png}\label{fig:imgCap5ROIBP7}}
+	\subfloat[10]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_10.png}\label{fig:imgCap5ROIBP10}}
+	\hfill
+	\subfloat[7]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_7.png}\label{fig:imgCap5ROIWBP7}}
+	\subfloat[10]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_10.png}\label{fig:imgCap5ROIWBP10}}
+	
+	\subfloat[13]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_13.png}\label{fig:imgCap5ROIBP13}}
+	\subfloat[15]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_15.png}\label{fig:imgCap5ROIBP15}}
+	\hfill
+	\subfloat[13]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_13.png}\label{fig:imgCap5ROIWBP13}}
+	\subfloat[15]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_15.png}\label{fig:imgCap5ROIWBP15}}
+	
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap5ROIBP}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	
+	\caption{Histograma da ocorrência de cada \textit{patch} (a) sem a técnica da média local e (b) com a técnica.}
+	
+	\subfloat[]{\includegraphics[scale=0.6]{imgs/cap5/ROI/EscolhaPatchSemMedia.pdf}\label{fig:imgCap5ROIPatchA}}
+	\subfloat[]{\includegraphics[scale=0.6]{imgs/cap5/ROI/EscolhaPatchComMedia.pdf}\label{fig:imgCap5ROIPatchB}}
+	
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap5ROIPatch}
+\end{figure}
+
+ \begin{figure}[H]
+ 	\caption{Ilustração da função de pesos com diferentes valores da constante M junto com o histograma da ocorrência das distâncias.}
+	\begin{center}
+		\includegraphics[scale=0.6]{imgs/cap5/ROI/FuncaoPesos.pdf}
+	\end{center}
+	
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap5FuncaoPesos}
+\end{figure} 
+
+\begin{figure}[H]
+	\centering
+	
+	\caption{Influência da constante M no nível de ruído nas \acs{ROI}s. A primeira linha representa as fatias 67 e 74 para o valor de $M=0.0014$, a segunda $M=0.0033$ e a terceira $M=0.0051$.}
+	
+	\subfloat[67]{\includegraphics[scale=1]{imgs/cap5/ROI/M1_67.png}\label{fig:imgCap5M1_67}}
+	\subfloat[74]{\includegraphics[scale=1]{imgs/cap5/ROI/M1_74.png}\label{fig:imgCap5M1_74}}
+	
+	\subfloat[67]{\includegraphics[scale=1]{imgs/cap5/ROI/M2_67.png}\label{fig:imgCap5M2_67}}
+	\subfloat[74]{\includegraphics[scale=1]{imgs/cap5/ROI/M2_74.png}\label{fig:imgCap5M2_74}}
+	
+	\subfloat[67]{\includegraphics[scale=1]{imgs/cap5/ROI/M3_67.png}\label{fig:imgCap5M3_67}}
+	\subfloat[74]{\includegraphics[scale=1]{imgs/cap5/ROI/M3_74.png}\label{fig:imgCap5M3_74}}
+	
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap5DiffM}
+\end{figure}
+
+
+
+
+
+

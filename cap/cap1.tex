@@ -1,0 +1,67 @@
+\chapter[Introdução]{Introdução}\label{Introdução}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%												 	 Motivação    															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Motivação}
+Segundo a \ac{OMS}, o câncer é uma preocupação crescente da saúde pública no âmbito mundial e requer um aumento de atenção, priorização e financiamento. Ainda segundo a organização, o câncer é a segunda maior causa de morte em todo o mundo, com crescimento de novos casos de 14,1 milhões em 2012 para 21,6 milhões projetados em 2030. A grande preocupação está nos países em desenvolvimento, nos quais esses números crescem mais rapidamente e o gasto estimado anualmente é de 1,16 trilhão de dólares \cite{oms}.
+
+De acordo com os dados do \ac{INCA}, no Brasil, a estimativa indica a ocorrência de 600 mil novos casos para o biênio 2016-2017. Em mulheres, o tipo mais frequente será o de mama com previsão de 58 mil casos, sendo esse número 28,1\% do total \cite{inca}.
+
+Grandes esforços são necessários para minimizar essas ocorrências. Dentre as ações recomendadas para a diminuição dos casos em geral, está o diagnóstico precoce, o qual deve ser acessível à toda população. O fornecimento de capacitação para as forças de trabalho e o aperfeiçoamento de dados para o auxílio de tomada de decisão é também de suma importância \cite{oms}. 
+
+O câncer de mama possui uma maior ocorrência na população feminina, excetuando-se os casos de câncer de pele não melanoma, conforme as estatísticas do \ac{INCA}. No ano de 2015 foram registrados aproximadamente 570 mil óbitos no mundo, representando a mais elevada causa de morte por câncer em mulheres \cite{oms}. 
+
+Dentre as estratégias para o controle e detecção estão o rastreamento e o diagnóstico precoce. A mamografia é o método preconizado para o rastreamento, porém, outras técnicas são utilizadas como: o autoexame e o exame clínico das mamas, o uso de equipamentos de ressonância nuclear magnética, ultrassonografia, termografia e tomossíntese \cite{inca}. A utilização da mamografia como exame para o rastreamento reduz em aproximadamente 20\% a taxa de mortalidade, essa técnica consiste em examinar mulheres em determinada faixa etária para identificar o câncer de mama antes mesmo de quaisquer sintomas \cite{oms}.
+
+Apesar de ser amplamente usada para rastreamento, o exame de mamografia possui algumas limitações. A maior e mais conhecida, citada na literatura, é a sobreposição de tecidos, que leva a obscurecer possíveis lesões, dentre as quais podem haver aquelas malignas, levando a um diagnóstico errado \cite{vedantham2015digital}. 
+
+A tomossíntese digital da mama (\textit{Digital Breast Tomosynthesis} - \acs{DBT}), em outras palavras, tomografia de ângulo limitado, é uma técnica de imagem 3D que foi desenvolvida para contornar os problemas devido à sobreposição de tecidos da mamografia \acs{2D}. Nesse método, múltiplas projeções de raio X da mama são adquiridas em diferentes ângulos, enquanto o tubo se move em uma trajetória fixa pré-definida. Ao final do exame, as imagens radiográficas são processadas para a reconstrução \acs{3D} do volume da mama \cite{vedantham2015digital}.  
+
+Diversos métodos de reconstrução de imagem vêm sendo estudados e comparados \cite{wu2004comparison,zhang2006comparative}. A elaboração desses algoritmos para tomossíntese mamária é um grande desafio, uma vez que, há um limitado número de projeções adquiridos com baixa dose de radiação \cite{wu2004comparison}. A geometria de aquisição varia para cada equipamento de \acs{DBT} \cite{vedantham2015digital}. Dessa forma, não há um consenso sobre qual é o número de projeções ideal, ou o melhor ângulo de aquisição, ou ainda qual o algoritmo de reconstrução que deve ser utilizado \cite{sechopoulos2009optimization}. As técnicas de reconstrução são comumente divididas, de uma maneira geral, em duas categorias: os métodos analíticos e os iterativos. Dentre essas, pode-se citar os algoritmos de retroprojeção (\textit{Back-projection} - \acs{BP}), retroprojeção filtrada (\textit{Filtered Back-projection} - \acs{FBP}) e os iterativos, sendo o método de \acs{FBP} o mais comum em tomossíntese \cite{zheng2018detector}.  
+
+Algoritmos de reconstrução iterativa (\textit{Iterative Reconstruction} - \acs{IR}) demandam um alto custo computacional. Devido a esse fato, historicamente, os equipamentos comerciais de tomografia por raio X não utilizam esses métodos. Todavia com o avanço do poder computacional, os métodos iterativos vêm sendo  amplamente utilizados por diversos grupos de pesquisas e fabricantes \cite{wu2003tomographic}. Sistemas comerciais de tomossíntese mamária como, por exemplo, os fabricados pela Siemens\footnote{\url{www.siemens.com}} e pela Hologic\footnote{\url{www.hologic.com}} utilizam \acs{FBP}, no entanto, algoritmos iterativos já são utilizados pelos equipamentos de \acs{DBT} da \ac{GE}\footnote{\url{www.ge.com}}. 
+
+Dentre os objetivos dos diversos métodos de reconstrução, a redução de artefatos nas imagens reconstruídas pode ser destacada \cite{hu2008image}. Devido a utilização de um feixe cônico e uma baixa amostragem no domínio da frequência dos sistemas de tomossíntese, os algoritmos de \acs{BP} e \acs{FBP}, quando aplicados, introduzem artefatos de objetos fora do foco em imagens que estão em foco no processo de reconstrução, sendo necessária a aplicação de técnicas de pós-filtragem e redução de borramento, como demonstrado pelo trabalho de \citeonline[]{borges2017metal} e \citeonline[]{levakhina2013weighted} para a redução de artefatos metálicos. Já os métodos iterativos são capazes de agregar no processo de reconstrução a geometria do sistema e o seu respectivo modelo físico, além da possibilidade de incluir restrições a partir de conhecimentos \textit{a priori} \cite{xu2015statistical,levakhina2013weighted}.
+
+Modelamentos físicos, estatísticos e restrições vêm sendo incorporados nos processos iterativos com as recentes pesquisas a fim de aprimorar a qualidade das imagens. Informações \textit{a priori} como a similaridade dos \textit{pixels} e a morfologia da imagem foram incorporadas através de Campos Aleatórios Markovianos (Markov Random Field - \acs{MRF}) para a reconstrução \cite{xu2015statistical} e também para a remoção de ruído em imagens \cite{salvadeo2016nonlocal}. A correlação do ruído e o respectivo borramento nos detectores indiretos foram estudados por \citeonline[]{zheng2018detector} e o modelamento completo do ruído por \citeonline[]{borges2017pipeline}.   
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%												  	Objetivos	    														%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Objetivos}
+
+Esse trabalho tem como objetivo fazer um estudo teórico sobre os métodos de reconstrução de imagens mais utilizados em tomossíntese digital da mama. %Assim como revisar detalhadamente os conceitos de mamografia e \acs{DBT}. 
+
+A partir desse estudo, deve-se desenvolver uma ferramenta computacional de código aberto (\textit{open source toolbox}) para o MATLAB que seja capaz de implementar os principais métodos de reconstrução de imagens para \acs{DBT}, bem como qualquer geometria de aquisição, sendo possível variar o número de projeções, ângulo de aquisição, etc. Com isso, pode-se definir quais os modelos e quais as geometrias de aquisição são as mais adequadas para a obtenção das imagens reconstruídas com uma melhor qualidade e com menos artefatos.
+
+%Os princípios básicos para implementação dos algoritmos respectivos também são abordados.
+%
+%Após essa fundamentação teórica, propõe-se a implementação de algoritmos analíticos bem como os iterativos. Para os algoritmos iterativos são aplicados os modelos estatísticos junto às suas restrições. O estudo e a aplicação de técnicas para redução de artefatos de alta atenuação é também explorada. Todos os experimentos serão feitos com \textit{phantons}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%										     Organização da Monografia														%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Organização da Monografia}
+
+O documento é divido em 8 capítulos que visam demostrar todo o trabalho desenvolvido no período da pesquisa. 
+
+No \autoref{Capitulo2} é feita uma revisão dos conceitos de mamografia e tomossíntese da mama. São abordados os fatos históricos bem como o funcionamento geral de ambas modalidades de exame. São detalhados a física por trás dos equipamentos de \acs{DBT} assim como seus parâmetros geométricos.
+
+Já no \autoref{Capitulo3} é exposto a teoria básica sobre reconstrução, demonstrando os princípios para \acs{2D} e para \acs{3D}. São discutidos os métodos de reconstrução analítica e iterativos. 
+
+No \autoref{Capitulo4} são apresentados os materiais e métodos utilizados nesse trabalho. 
+
+No \autoref{Capitulo5} são expostos os resultados preliminares obtidos a partir dos experimentos e avaliações realizadas, bem como a discussão desses resultados.
+
+No \autoref{Capitulo6} é feita uma conclusão preliminar sobre o trabalho.
+
+No \autoref{Capitulo7} são apresentados as próximas etapas e o cronograma definido. 
+
+Por fim, no \autoref{Capitulo8} é apresentado o congresso onde o trabalho foi publicado.
+
+
+
+  
+
+  

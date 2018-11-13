@@ -1,0 +1,339 @@
+\chapter{Campos Aleatórios Markovianos}\label{ApendiceA:CamposAleatóriosMarkovianos}
+
+Nesse capítulo estão contidos os conceitos necessários para o entendimento da teoria de Campo Aleatório Markoviano (\textit{Markov Random Field} - \acs{MRF}) do Capítulo \ref{Capitulo3}. Toda essa notação foi retirada de \citeonline[p. 1-12]{li2009markov} e \citeonline[p. 11-13]{won2013stochastic}.
+
+\section{Sites \& Rótulos}\label{ApendiceA:SitesRotulos}
+
+Considerando $S$ um conjunto que contêm índices de um número $N$ de \textit{\textbf{sites}}. Esse conjunto é descrito da seguinte forma:  
+
+\begin{equation}
+	S \, = \, \{1,2,\dots,N\}.
+	\label{eq:eqApendiceAConjuntoSites}
+\end{equation}  
+
+A palavra \textit{\textbf{site}} tem como significado representar um ponto ou região no espaço euclidiano. No caso específico de uma imagem em \acs{2D} de $NxN$, esses \textit{sites} representam a localização onde a imagem foi amostrada, ou seja, os \textit{\textbf{pixels}}. Nesse caso o conjunto $S$ contém os índices da seguinte forma:
+
+\begin{equation}
+	S \, = \, \{(i,j) \mid 1 \leq i,j \leq N\}.
+	\label{eq:eqApendiceAConjuntoSites2D}
+\end{equation}  
+
+Além disso, a representação dos índices no conjunto $S$ também pode ser feita de maneira não ordenada $S \, = \, \{1,2,...,M\}$, onde $M = NxN$. Essa notação segundo o autor é muito utilizada em modelos de \acs{MRF}. 
+
+Um evento que pode acontecer com um \textit{site} é denominado de rótulo (\textit{\textbf{label}}), e.g., um \textit{pixel} receber um certo valor de nível de cinza. Denota-se $\varGamma$ como um conjunto de rótulos, sendo esse contido por valores discretos de $r_{k}$ rótulos, como descrito a seguir:
+
+\begin{equation}
+	\varGamma \, = \, \{r_{1},r_{2},\dots,r_{k}\},
+	\label{eq:eqApendiceAConjuntoRotulos}
+\end{equation} 
+
+\noindent onde em uma determinada aplicação de imagem, o conjunto de rótulos $\varGamma$ toma valores discretos que representam todos os \textbf{níveis de cinzas} possíveis que foram quantizados, por exemplo $\varGamma \, = \, \{1,2,\dots,254,255\}$.
+
+O conjunto $f = \{f_{1},f_{2},\dots,f_{N}\},$ é denominado como ``rotulagem'' dos \textit{sites} que estão contidos no conjunto $S$, de maneira que cada rótulo do conjunto $f$ está contido no conjunto $\varGamma$ descrito acima.
+
+O produto cartesiano é dito como o conjunto de todos os possíveis rótulos admissíveis pelos \textit{sites}, quando os mesmos tem o conjunto de rótulo $\varGamma$ em comum. Sua equação matemática se dá por:
+
+\begin{equation}
+	\varPsi \, = \, \varGamma^{N},
+	\label{eq:eqApendiceAProdutoCarteziano}
+\end{equation}   
+
+\noindent onde $N$ é o tamanho do conjunto $S$. Segundo o autor, em um problema de restauração de imagem, $\varGamma$ contém todos os valores admissíveis para os \textit{pixels} (\textit{sites}) dentro do conjunto $S$ e $\varPsi$ define todas as possíveis imagens.  
+
+
+
+\section{Vizinhança \& Cliques}\label{ApendiceA:sVizinhancaCliques}
+
+De acordo com o autor, os \textit{sites} contidos em $S$ relacionam-se uns com os outros através de um sistema de vizinhança $\nu$:
+
+\begin{equation}
+	\nu \, = \, \{\nu_{i} \mid \forall i \in S\},
+	\label{eq:eqApendiceAVizinhanca}
+\end{equation}  
+
+\noindent onde $\nu_{i}$ é um conjunto de outros \textit{sites} que fazem vizinhança com o \textit{site} $i$.
+
+Um sistema de \textbf{vizinhança} pode ser definido de diversas formas. O de primeira ordem (vizinhança-4) é dado como mostra a Figura \ref{fig:imgApendiceAVizinhancaA}, o de segunda ordem (vizinhança-8) como a Figura \ref{fig:imgApendiceAVizinhancaB}, o de terceira ordem (vizinhança-12) como a Figura \ref{fig:imgApendiceAVizinhancaC} e assim adiante.
+
+O par  $(S,\nu) \, \overset{\Delta}{=} \, G $, constitui um grafo, de tal maneira que $S$ contém os nós e $\nu$ determina as ligações entre os nós de acordo com a vizinhança estipulada. Um \textbf{clique} $c$ para $(S,\nu)$ é definido como um subconjunto de \textit{sites} contido no conjunto $S$, de tal maneira que o clique pode ser considerado como único $c_{1} = \{i\}$, com dois vizinhos $c_{2} = \{i,i^{'}\}$, com três vizinhos $c{3} = \{i,i^{'},i^{''}\}$ e assim sucessivamente. O conjunto de todos os cliques para $(S,\nu)$ é dado por:
+
+\begin{equation}
+	C \,=\, C_{1} \,\cup\, C_{2}\, \cup \,C_{3}\,...
+	\label{eq:eqApendiceAConjuntoCliques}
+\end{equation}  
+
+O tipo de clique para o grafo $(S,\nu)$ é definido pelo seu tamanho, formato e orientação. Para a vizinhança-4 (Figura \ref{fig:imgApendiceAVizinhancaA}), seus cliques respectivos são os: \ref{fig:imgApendiceACliqueA}, \ref{fig:imgApendiceACliqueB} e \ref{fig:imgApendiceACliqueC}; já para a vizinhança-8 (Figura \ref{fig:imgApendiceAVizinhancaB}), seus cliques são os: \ref{fig:imgApendiceACliqueA}, \ref{fig:imgApendiceACliqueB}, \ref{fig:imgApendiceACliqueC}, \ref{fig:imgApendiceACliqueD}, \ref{fig:imgApendiceACliqueE}, \ref{fig:imgApendiceACliqueF}, \ref{fig:imgApendiceACliqueG}, \ref{fig:imgApendiceACliqueH}, \ref{fig:imgApendiceACliqueI} e \ref{fig:imgApendiceACliqueJ}. É possível notar, segundo o autor, que ao aumentar a ordem de vizinhança, aumenta-se também o número de cliques impactando no custo computacional do algoritmo envolvido.  
+
+\begin{figure}[H]
+	\centering
+	
+	\caption{Exemplo de vizinhança (a) 4, (b) 8 e (c) 12.}
+	
+	\subfloat[]{\includegraphics[scale=0.18]{imgs/ApenA/Vizi1.png}\label{fig:imgApendiceAVizinhancaA}}
+	\subfloat[]{\includegraphics[scale=0.2]{imgs/ApenA/Vizi2.png}\label{fig:imgApendiceAVizinhancaB}}
+	\subfloat[]{\includegraphics[scale=0.2]{imgs/ApenA/Vizi3.png}\label{fig:imgApendiceAVizinhancaC}}
+	
+	\legend{Fonte: \citeonline[p. 73]{salvadeo2013filtragem}}
+	\label{fig:imgApendiceAVizinhanca}
+\end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	
+	\caption{Cliques possíveis para cada tipo de vizinhança.}
+	
+	\subfloat[]{\includegraphics[scale=1]{imgs/ApenA/Clique1.pdf}\label{fig:imgApendiceACliqueA}}
+	\subfloat[]{\includegraphics[scale=1]{imgs/ApenA/Clique2.pdf}\label{fig:imgApendiceACliqueB}}
+	\subfloat[]{\includegraphics[scale=1]{imgs/ApenA/Clique3.pdf}\label{fig:imgApendiceACliqueC}}
+	
+	
+	\subfloat[]{\includegraphics[scale=1]{imgs/ApenA/Clique4.pdf}\label{fig:imgApendiceACliqueD}}
+	\subfloat[]{\includegraphics[scale=1]{imgs/ApenA/Clique5.pdf}\label{fig:imgApendiceACliqueE}}
+	\subfloat[]{\includegraphics[scale=1]{imgs/ApenA/Clique6.pdf}\label{fig:imgApendiceACliqueF}}
+	\subfloat[]{\includegraphics[scale=1]{imgs/ApenA/Clique7.pdf}\label{fig:imgApendiceACliqueG}}
+	\subfloat[]{\includegraphics[scale=1]{imgs/ApenA/Clique8.pdf}\label{fig:imgApendiceACliqueH}}
+	\subfloat[]{\includegraphics[scale=1]{imgs/ApenA/Clique9.pdf}\label{fig:imgApendiceACliqueI}}
+	\subfloat[]{\includegraphics[scale=1]{imgs/ApenA/Clique10.pdf}\label{fig:imgApendiceACliqueJ}}
+	
+	\legend{Fonte: \citeonline[p. 74]{salvadeo2013filtragem}}
+	\label{fig:imgApendiceAClique}
+\end{figure}
+
+\section{Campo Aleatório}\label{ApendiceA:CampoAleatorio}
+
+Um campo aleatório é definido por $F$, onde $F = \{F_{1},F_{2},...,F_{N}\}$ é um conjunto de variáveis aleatórias $F_{i}$ que admitem o valor de rótulo $f_{i}$ dentro do conjunto de rótulos $\varGamma$. A probabilidade de uma variável aleatória $F_{i}$ assumir um valor $f_{i}$ é dada por $P(F_{i} = f_{i} )$ ou somente $P(f_{i})$ e a probabilidade conjunta do campo aleatório é dada por:
+
+\begin{equation}
+	P(F = f) = P(F_{1}=f_{1},...,F_{N}=f_{N}),
+	\label{eq:eqApendiceAProbCampoAleatorio}
+\end{equation}  
+
+\noindent ou somente por $P(f)$, dado um conjunto $\varGamma$ de valores discretos.
+
+\chapter{Campos Aleatórios de Gibbs}\label{ApendiceB:CamposAleatóriosdeGibbs}
+
+Nesse capítulo estão os conceitos da teoria de Campo Aleatório de Gibbs (\textit{Gibbs Random Field} - \acs{GRF}) e sua relação com Campo Aleatório Markoviano (\textit{Markov Random Field} - \acs{MRF}), referente ao Capítulo \ref{Capitulo3}. Toda esta notação foi retirada de \citeonline[p. 13-15]{li2009markov} e \citeonline[p. 14-21]{won2013stochastic}.
+
+\section{Campo Aleatório de Gibbs}\label{ApendiceB:CampoAleatóriodeGibbs}
+
+Dado um conjunto de variáveis aleatórias $F$, esse é dito ser um \acs{GRF} em $S$ com relação a vizinhança $\nu$ se o mesmo obedecer a distribuição de Gibbs dada a seguir:
+
+\begin{equation}
+	P(f) = \frac{1}{Z}\; e^{-U(f)},
+	\label{eq:eqApendiceBDistribuicaoGibbs}
+\end{equation}
+
+\noindent onde $Z$ é uma constante de normalização denominada função de partição, dada por \eqref{eq:eqApendiceBDistribuicaoGibbsZ} e $U(f)$ é chamada de função de energia, dada por \eqref{eq:eqApendiceBDistribuicaoGibbsU1} que representa a soma dos potenciais dos cliques $V_{c}(f)$ em todos os possíveis cliques $C$. 
+
+\begin{equation}
+	Z = \sum_{f \,\in\, \varPsi}^{} \, e^{-U(f)}. 
+	\label{eq:eqApendiceBDistribuicaoGibbsZ}
+\end{equation}
+
+\begin{equation}
+	U(f) = \sum_{c \,\in\, C}^{} \, V_{c}(f).
+	\label{eq:eqApendiceBDistribuicaoGibbsU1}
+\end{equation}
+
+A função de energia também pode ser expressa através do somatório de termos independentes, de acordo com a ordem de seu clique:
+
+\begin{equation}
+	U(f) = \sum_{\{i\} \,\in\, C_{1}}^{} \, V_{1}(f_{i}) \,+\, \sum_{\{i,i^{'}\} \,\in\, C_{2}}^{} \, V_{2}(f_{i},f_{i^{'}}) \,+\, \sum_{\{i,i^{'},i^{''}\} \,\in\, C_{3}}^{} \, V_{3}(f_{i},f_{i^{'}},f_{i^{''}}),
+	\label{eq:eqApendiceBDistribuicaoGibbsU2}
+\end{equation}  
+
+\noindent ou considerando somente cliques de ordem um e dois:
+
+\begin{equation}
+	U(f) = \sum_{i \,\in\, S}^{} \, V_{1}(f_{i}) \,+\, \sum_{i \,\in\, S}^{} \, \sum_{i^{'} \,\in\, \nu_{i} }^{} \, V_{2}(f_{i},f_{i^{'}}).
+	\label{eq:eqApendiceBDistribuicaoGibbsU3}
+\end{equation} 
+
+A prova da de que o \acs{GRF} é um \acs{MRF} e vice-versa, pode ser encontrada em \citeonline[p. 19]{won2013stochastic}.
+
+
+\chapter{Imagens Resultados}\label{ApendiceC:ImagensResultados}
+
+Esse apêndice contém as imagens obtidas como resultado desse trabalho. Devido a organização do espaço as mesmas foram inseridas nessa seção.
+
+\begin{figure}[htb]
+	\centering
+	
+	\caption{Parte 1 dos resultados obtidos após a aplicação dos métodos \acs{BP}, \acs{FBP} e \acs{MLEM}. Da coluna 1 a 5 são representados respectivamente: \textit{Phantom}, \acs{BP}, \acs{FBP} e \acs{MLEM} com 10 iterações. Capítulo \ref{Capitulo5}.}
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/Original/1.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconBP/1.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconFBP/1.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/1.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/Original/15.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconBP/15.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconFBP/15.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/15.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/Original/30.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconBP/30.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconFBP/30.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/30.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/Original/43.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconBP/43.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconFBP/43.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/43.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/Original/64.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconBP/64.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconFBP/64.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/64.png}}
+	
+	\label{fig:imgCap5Resultados1}
+\end{figure}
+\begin{figure}[!t] \ContinuedFloat
+	\centering
+	
+	\caption{Parte 2 dos resultados obtidos após a aplicação dos métodos \acs{BP}, \acs{FBP} e \acs{MLEM}. Da coluna 1 a 5 são representados respectivamente: \textit{Phantom}, \acs{BP}, \acs{FBP} e \acs{MLEM} com 10 iterações. Capítulo \ref{Capitulo5}.}
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/Original/78.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconBP/78.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconFBP/78.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/78.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/Original/85.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconBP/85.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconFBP/85.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/85.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/Original/99.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconBP/99.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconFBP/99.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/99.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/Original/113.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconBP/113.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconFBP/113.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/113.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/Original/128.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconBP/128.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconFBP/128.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/128.png}}
+	
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap5Resultados2}
+\end{figure}
+
+
+\begin{figure}[!t]
+	\centering
+	
+	\caption{Resultados obtidos após a aplicação do método \acs{MLEM} com os números de iteração: 5, 10, 15 e 20 respectivamente ao número das colunas. Capítulo \ref{Capitulo5}.}
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/43.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/10/43.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/15/43.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/20/43.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/64.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/10/64.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/15/64.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/20/64.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/78.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/10/78.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/15/78.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/20/78.png}}
+	
+	
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/5/85.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/10/85.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/15/85.png}}
+	\hfil
+	\subfloat{\includegraphics[scale=.85]{imgs/cap5/ReconMLEM/20/85.png}}
+	
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap5Resultados3}
+\end{figure}
+
+ \begin{figure}[t!]
+ 	\caption{Gráfico de \acs{SSIM} médio para todos os métodos de reconstrução utilizados. Capítulo \ref{Capitulo5}.}
+	\begin{center}
+		\includegraphics[scale=0.8]{imgs/cap5/WN/MSSIM.pdf}
+	\end{center}
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap5GraficoMSSIM}
+\end{figure} 
+
+\begin{figure}[t!]
+	\caption{Gráfico da raiz do \acs{MSE} normalizado para todos os métodos de reconstrução utilizados. Capítulo \ref{Capitulo5}.}
+	\begin{center}
+		\includegraphics[scale=0.8]{imgs/cap5/WN/NRMSE.pdf}
+	\end{center}
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap5GraficoNRMSE}
+\end{figure} 
+
+\begin{figure}[t!]
+	\caption{Gráfico de \textit{Sharpness} em escala de dB para todos os métodos de reconstrução utilizados e para o \textit{Phantom} de referência. Capítulo \ref{Capitulo5}.}
+	\begin{center}
+		\includegraphics[scale=0.8]{imgs/cap5/WN/SHARPDB.pdf}
+	\end{center}
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap5GraficoSHARPDB}
+\end{figure}
+
+\chapter{Artigo}\label{Artigo}
+
+\includepdf[pages=-]{docs/artigo-cbeb-2018.pdf}
+

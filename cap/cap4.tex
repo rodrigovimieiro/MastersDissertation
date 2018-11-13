@@ -1,0 +1,405 @@
+\chapter[Materiais e Métodos]{Materiais e Métodos}\label{Capitulo4}
+ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%														Phantom																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Materiais}
+
+No presente trabalho foram utilizados \textit{phantoms} a fim de simular todos os métodos de reconstrução. Um \textit{phantom} pode ser físico ou virtual e tem como objetivo simular condições reais de exame para que os métodos alvos de pesquisas possam ser estudados e testados de maneira sistemática. Isso se deve ao fato de que exames clínicos, ou seja, com pacientes, não podem ser realizados toda vez que um novo método necessitar ser testado.
+
+\subsection{\textit{Phantom} Virtual}
+
+Uma versão modificada de \citeonline[]{shepp1974fourier} foi usada. O \textit{phantom} originalmente é constituído por uma seção da cabeça que foi desenvolvido para testar o algoritmo proposto pelos autores naquela época. Esse \textit{phantom} simula diversas estruturas anatômicas com diferentes densidades $D$ como: a água ($D=1$) nos ventrículos, massa cinzenta ($D=1,2$), tumores ($D=1,03;1,04$) e para o crânio ($D=2$). A Figura \ref{fig:imgCap4SheppLogan} ilustra o \textit{phantom} de Shepp-Logan em sua versão modificada.
+
+\begin{figure}[H]
+	\caption{Ilustração do \textit{phantom} de Shepp-Logan em sua versão modificada.}
+	\begin{center}
+		\includegraphics[scale=1]{imgs/cap4/SheppLogan.png}
+	\end{center}
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap4SheppLogan}
+\end{figure}   
+
+Como esse trabalho visa a reconstrução de estruturas anatômicas em \acs{3D} pela técnica de tomossíntese, deve-se usar um objeto tri-dimensional para validar as técnicas aplicadas. Tendo isso em mente, foi utilizado um algoritmo\footnote{\url{www.mathworks.com/matlabcentral/fileexchange/9416-3d-shepp-logan-phantom}}, retirado da comunidade \textit{MathWorks}\footnote{\url{www.mathworks.com}}, que gera uma extensão do \textit{phantom} Shepp-Logan em \acs{3D}. A Figura \ref{fig:imgCap4SheppLogan3D} ilustra o \textit{phantom} criado pelo respectivo algoritmo e suas medidas físicas são descritas na seção seguinte.
+
+\begin{figure}[H]
+	\caption{Ilustração do \textit{phantom} de Shepp-Logan \acs{3D}.}
+	\begin{center}
+		\includegraphics[scale=0.3]{imgs/cap4/SheppLogan3D.pdf}
+	\end{center}
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap4SheppLogan3D}
+\end{figure} 
+
+\subsection{\textit{Phantom} Físico}
+
+Já para os testes envolvendo a redução de artefatos de alta atenuação foi usado o \textit{phantom} físico BR3D\footnote{\url{www.cirsinc.com/products/all/51/br3d-breast-imaging-phantom/}} \cite{PhantomBR3D}, como ilustra a Figura \ref{fig:imgCap4BR3D}. Esse \textit{phantom} é constituído de 6 fatias com um material que simula o tecido $100\%$ adiposo e $100\%$ glandular de uma mama. Junto ao tecido estão contidas microcalcificações, fibrilas e massas em formato de esfera. Todas essas estruturas possuem diferentes tamanhos e buscam mimetizar os aspectos reais encontrados em uma mama com possíveis lesões.   
+
+\begin{figure}[H]
+	\caption{Ilustração do \textit{phantom} BR3D.}
+	\begin{center}
+		\includegraphics[scale=0.34]{imgs/cap4/BR3D.jpeg}
+	\end{center}
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap4BR3D}
+\end{figure} 
+   
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%													Geometria																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Geometria} 
+
+%\subsection{\textit{Phantom} Virtual}
+ 
+Para a aplicação dos métodos no \textit{phantom} virtual foi proposto uma geometria física do sistema que se aproxima de um equipamento de \acs{DBT} comercial. A Tabela \ref{tab:tabCap4ParametrosPhantoms} expõe os parâmetros físicos do sistema que foram utilizados, seguindo as propriedades geométricas de um sistema hipotético de \acs{DBT}. %O leitor pode fazer uma comparação com os valores dos equipamentos comerciais demonstrados na Tabela \ref{tab:tabCap2SistemasDBT}.
+
+A Figura \ref{fig:imgCap4GeometriaProjecao} ilustra a geometria que foi usada para a projeção e retroprojeção, sendo que a Figura \ref{fig:imgCap4GeometriaProjecao1} representa a projeção de número 1, \ref{fig:imgCap4GeometriaProjecao2} de número 9 e \ref{fig:imgCap4GeometriaProjecao3} de número 5, onde os ângulos são: $-1,25\degree$, $1,25\degree$ e $0\degree$ respectivamente. O cubo azul representa espacialmente o \textit{phantom} virtual da Figura \ref{fig:imgCap4SheppLogan3D}, o plano em amarelo a posição da projeção do objeto no detector, o plano pontilhado as extremidades do detector e o ponto vermelho o tubo de raios X. 
+
+
+\begin{table}[H]
+	\footnotesize
+	\centering
+	\caption{Parâmetros físicos do sistema implementado com \textit{phantom} virtual e do sistema comercial utilizado pelo \textit{phantom} BR3D.}
+	\label{tab:tabCap4ParametrosPhantoms}
+	\begin{tabular}{l|c|c}
+		\textbf{Parâmetro}                            &  \textbf{Shepp-Logan} &  \textbf{BR3D}  \\
+		[5pt]
+		\hline
+		\hline
+		\rule[-0.5ex]{0pt}{3ex}
+		Tamanho do detector 						  &     28x35cm       &      24x30cm       \\ \hline
+		\rule[-0.5ex]{0pt}{3ex}
+		Tamanho do \textit{pixel}                     &       1mm        &     100$\mu$m      \\ \hline
+		\rule[-0.5ex]{0pt}{3ex}
+		Número de projeções                           &        9         &         9          \\ \hline
+		\rule[-0.5ex]{0pt}{3ex}
+		Angulação do tubo                             &   2,5$\degree$   &    25$\degree$     \\ \hline
+		\rule[-0.5ex]{0pt}{3ex}
+		Angulação do detector                         &   Estacionário   &    Estacionário    \\ \hline
+		\rule[-0.5ex]{0pt}{3ex}
+		Tamanho do objeto                             & 128x128x128 u.v. & 2004x1092x129 u.v. \\ \hline
+		\rule[-0.5ex]{0pt}{3ex}
+		Tamanho do \textit{Voxel}                     &     1x1x10mm     &   0.1x0.1x0.5mm    \\ \hline
+		\rule[-0.5ex]{0pt}{3ex}
+		Distância fonte para detector                 &      660cm       &       660mm        \\ \hline
+		\rule[-0.5ex]{0pt}{3ex}
+		Distância detector para centro de rotação     &       40cm       &        40mm        \\ \hline
+		\rule[-0.5ex]{0pt}{3ex}
+		Tamanho lacuna de ar                          &       22cm       &        22mm        \\ \hline
+	\end{tabular}
+	\vspace{2ex}
+	\legend{Fonte: \citeonline{michell2018role,vedantham2015digital,sechopoulos2013review,baker2011breast}}
+\end{table}
+
+
+\begin{figure}[t!]
+	\centering
+	
+	\caption{Geometria utilizada na aplicação dos métodos, onde (a) representa a projeção de número 1, (b) de número 9 e (c) de número 5, onde os ângulos são: $-1,25\degree$, $1,25\degree$ e $0\degree$ respectivamente.}
+	
+	\subfloat[]{\includegraphics[scale=.5]{imgs/cap4/Geometria/Proj1.png}\label{fig:imgCap4GeometriaProjecao1}}
+	\subfloat[]{\includegraphics[scale=.5]{imgs/cap4/Geometria/Proj9.png}\label{fig:imgCap4GeometriaProjecao2}}
+	
+	\subfloat[]{\includegraphics[scale=.55]{imgs/cap4/Geometria/Proj5.png}\label{fig:imgCap4GeometriaProjecao3}}
+	
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap4GeometriaProjecao}
+\end{figure}
+
+ 
+%\subsection{\textit{Phantom} Físico}\label{PhantomReal}
+
+Já para o \textit{phantom} BR3D, as projeções foram realizadas em um equipamento da empresa \acs{GE} modelo Senographe Essential\texttrademark, ilustrado pela Figura \ref{fig:imgCap4EquipamentoGE}. A geometria utilizada pelo equipamento é detalhada também pela Tabela \ref{tab:tabCap4ParametrosPhantoms}.
+
+%\begin{table}[H]
+%	\footnotesize
+%	\centering
+%	\caption{Parâmetros físicos do sistema comercial.}
+%	\label{tab:tabCap4ParametrosGESenographeEssential}
+%	\begin{tabular}{l|c}
+%		\textbf{Parâmetro}                            &   \textbf{Valor}   \\
+%		[5pt]
+%		\hline
+%		\hline
+%		\rule[-0.5ex]{0pt}{3ex}
+%		Tamanho do detector 						  &      24x30cm       \\ \hline
+%		\rule[-0.5ex]{0pt}{3ex}
+%		Tamanho do \textit{pixel}                     &     100$\mu$m      \\ \hline
+%		\rule[-0.5ex]{0pt}{3ex}
+%		Número de projeções                           &         9          \\ \hline
+%		\rule[-0.5ex]{0pt}{3ex}
+%		Angulação do tubo                             &    25$\degree$     \\ \hline
+%		\rule[-0.5ex]{0pt}{3ex}
+%		Angulação do detector                         &    Estacionário    \\ \hline
+%		\rule[-0.5ex]{0pt}{3ex}
+%		Tamanho do objeto                             & 2004x1092x129 u.v. \\ \hline
+%		\rule[-0.5ex]{0pt}{3ex}
+%		Tamanho do \textit{Voxel}                     &   0.1x0.1x0.5mm    \\ \hline
+%		\rule[-0.5ex]{0pt}{3ex}
+%		Distância fonte para detector                 &       660mm        \\ \hline
+%		\rule[-0.5ex]{0pt}{3ex}
+%		Distância detector para centro de rotação     &        40mm        \\ \hline
+%		\rule[-0.5ex]{0pt}{3ex}
+%		Tamanho lacuna de ar                          &        22mm        \\ \hline
+%	\end{tabular}
+%	\vspace{2ex}
+%	\legend{Fonte: \citeonline{michell2018role,vedantham2015digital,sechopoulos2013review,baker2011breast}}
+%\end{table}
+
+\begin{figure}[H]
+	\centering
+	
+	\caption{(a) Equipamento de tomossíntese modelo Senographe Essential\texttrademark \ utilizado para realizar as projeções e (b) o mesmo com o \textit{phantom} BR3D.}
+	
+	\subfloat[]{\includegraphics[scale=0.08]{imgs/cap4/EquipamentoGE.jpg}\label{fig:imgCap4EquipamentoGEA}}
+	\hfil
+	\subfloat[]{\includegraphics[scale=.49]{imgs/cap4/BR3Deq.jpeg}\label{fig:imgCap4EquipamentoGEB}}
+	
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap4EquipamentoGE}
+\end{figure} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%														Métodos																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Métodos} 
+
+Para os métodos de reconstrução, uma \textit{toolbox}\footnote{www.mathworks.com/matlabcentral/fileexchange/35548-3d-cone-beam-ct--cbct--projection-backprojection-fdk--iterative-reconstruction-matlab-examples.} foi utilizada para auxílio da implementação dos métodos propostos. Foram aplicadas as técnicas de simples retroprojeção, retroprojeção filtrada e o método estatístico de máxima verossimilhança. Entretanto antes de implementar essas técnicas é necessário a obtenção das projeções dado o volume do objeto. Em função disso, são discutidos os métodos utilizados para a obtenção delas.  
+
+\subsection{Projeção e Retroprojeção} 
+
+Para a implementação da projeção direta foi utilizado o método de \textit{Pixel Driven} (Figura \ref{fig:imgCap3Projetores1}) descrito nos capítulos anteriores. Para isso então são utilizadas as Equações \ref{eq:eqCap3ProjectionY} e \ref{eq:eqCap3ProjectionX}, considerando a distância entre o detector e o eixo de rotação igual a zero, ou seja, $D=0$. 
+
+ \colorbox{pink}{Reescrever esse parágrafo} De modo que nenhum \textit{pixel} no detector fique sem valor, um processo inverso é feito, ou seja, para cada \textit{pixel} no detector é calculado o respectivo \textit{voxel} do qual se atribui o seu valor. O mesmo é feito para a retroprojeção, onde são calculados para todos os \textit{voxels} qual o respectivo \textit{pixel} que contribui para o seu valor. 
+
+
+ Os cálculos das projeções e retroprojeções são feitos com o objetivo de converter as coordenadas do mundo, e.g. $(X,Y,Z)$, para as coordenadas da imagem, e.g. $(x_{i},y_{i})$, porém após isso ainda são necessárias as conversões das coordenadas da imagem para as coordenadas em \textit{pixel}, e.g. $(i,j)$. Isso pode ser feito segundo as Equações \ref{eq:eqCap4ConversaoCoordImgparaPixelY} e \ref{eq:eqCap4ConversaoCoordImgparaPixelX}, seguido por uma interpolação linear entre as coordenadas em \textit{pixel} e a imagem a ser projetada ou reprojetada, onde $dx\,\text{e}\,dy$ são os tamanhos dos \textit{pixels} em (mm) para as coordenadas $x\,\text{e}\,y$ respectivamente. A Figura \ref{fig:imgCap4ConversaoCoord} ilustra a relação entre as coordenadas e os pseudocódigos abaixo resumem todo o processo. 
+ 
+\begin{equation}
+i = \dfrac{y_{i}}{dy} + y_{0}  
+\label{eq:eqCap4ConversaoCoordImgparaPixelY}
+\end{equation} 
+ 
+\begin{equation}
+ j = -\dfrac{x_{i}}{dx} + x_{0}.  
+\label{eq:eqCap4ConversaoCoordImgparaPixelX}
+\end{equation} 
+ 
+ 
+ \begin{figure}[H]
+ 	\caption{Ilustração da relação entre as coordenadas.}
+ 	\begin{center}
+ 		\includegraphics[scale=1]{imgs/cap4/ConversaoCoord.pdf}
+ 	\end{center}
+ 	\legend{Fonte: do autor, 2018.}
+ 	\label{fig:imgCap4ConversaoCoord}
+\end{figure} 
+
+\begin{algorithm}[H]
+	\label{alg:algProjecao}
+	\caption{Projeção}
+	\Entrada{$Volume3D$, $Parâmetros$} 
+	\Saida{$Projeções$}
+	\Inicio{
+		
+		\Para{cada $Projeção \in Projeções$}{
+			$\theta \leftarrow Ângulo(Projeção)$
+			
+			\Para{cada $Fatia \in Volume3D$}{
+				
+				Calcular $Y \;\text{e}\; X \; \forall \; (y_{i}, x_{i}) \; \in Projeção$
+				
+				Calcular $i \;\text{e}\; j \; \forall \; (Y, X)$
+				
+				$Projeção \leftarrow Projeção + \text{Interpolação}(Fatia\,,\,(i,j)\,)$			
+			}
+		}
+	}
+	\Retorna{$Projeções$}
+\end{algorithm}
+
+
+\begin{algorithm}[H]
+	\label{alg:algRetroprojecao}
+	\caption{Retroprojeção}
+	\Entrada{$Projeções$, $Parâmetros$} 
+	\Saida{$Volume3D$}
+	\Inicio{
+		
+		\Para{cada $Projeção \in Projeções$}{
+			$\theta \leftarrow Ângulo(Projeção)$
+			
+			\Para{cada $Fatia \in Volume3D$}{
+				
+				Calcular $y_{i} \;\text{e}\; x_{i} \; \forall \; (X,Y,Z) \; \in Fatia$
+				
+				Calcular $i \;\text{e}\; j \; \forall \; (y_{i}, x_{i})$
+				
+				$Fatia \leftarrow Fatia + \text{Interpolação}(Projeção\,,\,(i,j)\,)$			
+			}
+		}
+	}
+	\Retorna{$Volume3D$}
+\end{algorithm}
+
+
+Após a aplicação dos passos mencionados acima em todo o volume \acs{3D}, são geradas as projeções da Figura \ref{fig:imgCap4Projecoes}, onde as imagens de (a) até (i) representam as projeções de 1 a 9 respectivamente. A partir dessas projeções é possível fazer a reconstrução do volume aplicando os métodos propostos.
+ 
+\begin{figure}[H]
+	\centering
+	
+	\caption{Projeções geradas a partir da Figura \ref{fig:imgCap4GeometriaProjecao}, onde de (a) até (i) representam as projeções de 1 a 9.}
+	
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/1.png}\label{fig:imgCap4Projecao1}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/2.png}\label{fig:imgCap4Projecao2}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/3.png}\label{fig:imgCap4Projecao3}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/4.png}\label{fig:imgCap4Projecao4}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/5.png}\label{fig:imgCap4Projecao5}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/6.png}\label{fig:imgCap4Projecao6}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/7.png}\label{fig:imgCap4Projecao7}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/8.png}\label{fig:imgCap4Projecao8}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/9.png}\label{fig:imgCap4Projecao9}}
+	
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap4Projecoes}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%												Reconstrução																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Reconstrução de Imagens} 
+
+Após a execução do passo a passo exemplificado anteriormente é possível a aplicação dos métodos de reconstrução. São utilizadas três técnicas para a comparação do melhor resultado: retroprojeção, retroprojeção filtrada e máxima verossimilhança. Para o algoritmo estatístico, diferentes quantidades de iterações são aplicadas no teste, variando de cinco até vinte iterações. O método de simples retroprojeção foi descrito no subitem anterior e os pseudocódigos abaixo descrevem o funcionamento dos métodos de \acs{FBP} e \acs{MLEM}. A confecção do filtro para o algoritmo de retroprojeção filtrada se dá a partir dos passos ditos no item \ref{RetroprojeçãoFiltrada}.
+
+\begin{algorithm}[H]
+	\label{alg:algRetroprojecaoFiltrada}
+	\caption{Retroprojeção Filtrada}
+	\Entrada{$Projeções$, $Parâmetros$} 
+	\Saida{$Volume3D$}
+	\Inicio{
+		
+		\Para{cada $Projeção \in Projeções$}{
+			$Projeção \leftarrow Filtrar(Projeção)$	
+		}
+		$Volume3D \leftarrow Retroprojeção(Projeções)$
+	}
+	\Retorna{$Volume3D$}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\label{alg:algMlEM}
+	\caption{MLEM}
+	\Entrada{$Projeções$, $Parâmetros$} 
+	\Saida{$Volume3D$}
+	\Inicio{
+	$Volume3D \leftarrow EstimativaInicial$	
+		
+	$FatorNorm \leftarrow Retroprojeção(1)$	
+	
+		\Para{cada Iteração}{
+		$EstimativaProjeções \leftarrow Projeção(Volume3D)$	
+		
+		$RazãoProjeções \leftarrow Projeções \;/\; EstimativaProjeções$
+		
+		$VolumeEstimado \leftarrow Retroprojeção(RazãoProjeções)$
+		
+		$FatorModificação \leftarrow VolumeEstimado \;/\; FatorNorm$
+		
+		$Volume3D \leftarrow Volume3D \;X\; FatorModificação$
+		}
+	}
+	\Retorna{$Volume3D$}
+\end{algorithm}
+
+
+\subsection{Redução de Artefatos de Alta Atenuação}\label{MetodosReduçãodeArtefatosdeAltaAtenuação} 
+
+Para a implementação dos métodos de redução de artefatos, utilizou-se os materiais ditos na seção anterior. Em seguida aplicou-se os métodos de \citeonline[]{borges2017metal} de redução de artefatos metálicos com o intuito de avaliar os resultados apresentados. 
+
+A constante $M$ da Equação \ref{eq:eqCap3wBPLogistic} foi ajustada de maneira a balancear o nível de ruído e a redução dos artefatos de alta atenuação na imagem.
+
+
+Foram recortadas regiões de interesse (\textit{Region of Interest} - \acs{ROI}) de tamanho $90x90$, para aplicar a técnica abordada. As coordenadas da \acs{ROI} foram de 1440 até 1529 em Y e 860 até 949 em X. A Figura \ref{fig:imgCap4ROIGE} ilustra essa região referente a fatia 74 reconstruída pelo equipamento comercial assim como a Figura \ref{fig:imgCap4ROIBP} ilustra a mesma região com uma técnica de reconstrução por retroprojeção simples. 
+
+Foram selecionadas somente as fatias de 67 a 75 para a realização dos procedimentos. Isso se deve ao fato de que o método é computacionalmente caro.
+
+\begin{figure}[H]
+	\centering
+	
+	\caption{\acs{ROI} reconstruídas pelo modelo (a) comercial e através da (b) retroprojeção simples a fim de testar os métodos de redução de artefatos.}
+	
+	\subfloat[\acs{ROI} da fatia 74 - Comercial.]{\includegraphics[scale=.5]{imgs/cap4/GEroi.png}\label{fig:imgCap4ROIGE}}
+	\hfil
+	\subfloat[\acs{ROI} da fatia 74 - \acs{BP}]{\includegraphics[scale=.5]{imgs/cap4/BProi.png}\label{fig:imgCap4ROIBP}}
+	
+	\legend{Fonte: do autor, 2018.}
+	\label{fig:imgCap4ROI}
+\end{figure} 
+
+\subsection{Validação} 
+
+Para analisar de maneira objetiva os resultados das imagens, utilizou-se métricas de avaliação da qualidade da imagem, conhecidas na literatura, como as descritas abaixo:
+
+O Erro quadrático médio (\textit{Mean Square Error} - \acs{MSE}) é uma forma de medida pontual que analisa as diferenças de intensidade entre uma imagem referência e outra estimada. Esse método é utilizado devido a sua simplicidade de cálculo, obtenção de resultados com fácil interpretação e baixa complexidade computacional, porém críticas são feitas ao mesmo devido a sua ineficiência quando se comparado com as métricas subjetivas da percepção humana \cite{gonzalez2008digital,wang2004image}. Sua equação matemática é dada por:
+
+\begin{equation}
+MSE = \dfrac{1}{MN} \sum_{x=1}^{M} \sum_{y=1}^{N} [f(x,y) - \hat{f}(x,y)]^{2},
+\label{eq:eqCap4MSE}
+\end{equation} 
+
+\noindent ou em sua versão aplicando a raiz quadrada:
+
+\begin{equation}
+RMSE = \sqrt{MSE(f,\hat{f})},
+\label{eq:eqCap4RMSE}
+\end{equation}
+ 
+\noindent ou ainda em sua versão normalizada:
+
+\begin{equation}
+NRMSE = \dfrac{RMSE(f,\hat{f})}{max(\hat{f}) - min(\hat{f})},
+\label{eq:eqCap4NRMSE}
+\end{equation}
+
+%\noindent onde:
+%
+%\begin{equation}
+%S_{f} = \dfrac{1}{MN} \sum_{x=1}^{M} \sum_{y=1}^{N} f(x,y)  \;\; S_{\hat{f}} = \dfrac{1}{MN} \sum_{x=1}^{M} \sum_{y=1}^{N} \hat{f}(x,y).
+%\label{eq:eqCap4NRMSESxSy}
+%\end{equation}
+
+
+A métrica de Índice de Similaridade Estrutural (\textit{Structural Similarity Index} - \acs{SSIM}) tem como função fazer uma avaliação que seja mais fiel a percepção humana e a formação das imagens, segundo \citeonline[]{wang2004image}. Esse método avalia componentes como a  luminância $l(\cdot)$, o contraste $c(\cdot)$ e a estrutura dos objetos $s(\cdot)$. Sua formulação matemática é dada por:
+
+\begin{equation}
+SSIM(x,y) = [l(x,y)]^{\alpha} \cdot [c(x,y)]^{\beta} \cdot [s(x,y)]^{\gamma},
+\label{eq:eqCap4SSIM}
+\end{equation}
+
+\noindent onde $\alpha,\beta,\gamma$ são constantes de ajuste da métrica. É importante ressaltar que o \acs{SSIM} retorna os índices de similaridade para diversas regiões da imagem, porém quando se fala em similaridade é interessante que haja somente um índice para toda a imagem. Portanto é feito então uma média dos M índices retornados, dado pela equação:
+
+\begin{equation}
+MSSIM(x,y) = \dfrac{1}{M} \sum_{j=1}^{M} SSIM(x_{j},y_{j})
+\label{eq:eqCap4MSSIM}
+\end{equation} 
+
+A métrica de \textit{Sharpness} tem como função avaliar o nível de borramento em uma imagem. Isso é importante pois os métodos de restauração ou reconstrução tendem a borrar as imagens, fazendo com que haja perda de detalhes, como por exemplo em uma microcalcificação nos exames mamografias. É importante notar que esse método não necessita de uma imagem referência. A estimativa é feita através das seguintes equações:
+
+\begin{equation}
+Sharpness = \sum_{r}^{} \sum_{c}^{}  w_{x}G^{2}_{x} + w_{y} G^{2}_{y}, 
+\label{eq:eqCap4SHARPDB}
+\end{equation}
+
+\noindent onde $G_{x}$ e $G_{y}$ são gradientes direcionais, $w_{x}$ e $w_{y}$ são pesos baseados em uma vizinhança local, dados por:
+
+\begin{equation}
+w_{x} = [M(x+1,y)-M(x-1,y)]^{2},
+\label{eq:eqCap4SHARPDB1}
+\end{equation}
+
+\begin{equation}
+w_{y} = [M(x,y+1)-M(x,y-1)]^{2}.
+\label{eq:eqCap4SHARPDB2}
+\end{equation}
+
+\colorbox{pink}{Alexandre: Arrumar essas equações de Sharpness}
+	
