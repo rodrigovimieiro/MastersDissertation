@@ -26,7 +26,7 @@
 % Identificação
 %========================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{eesc}[2013/02/18 v1.0 Classe Tese EESC - Teses Escola de Engenharia de São Carlos]
+\ProvidesClass{eesc}%[2013/02/18 v1.0 Classe Tese EESC - Teses Escola de Engenharia de São Carlos]
 
 \RequirePackage[T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
@@ -354,9 +354,9 @@
 \newcommand{\imprimirepigrafe}[1]{
 \begin{epigrafe}
     \vspace*{\fill}
-	\begin{flushright}
+	\begin{flushleft}
 		\textit{#1}
-	\end{flushright}
+	\end{flushleft}
 \end{epigrafe}
 }
 % ---

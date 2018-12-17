@@ -1,18 +1,24 @@
-\chapter[Próximas Etapas e Cronograma]{Próximas Etapas e Cronograma}\label{Capitulo7}
+\chapter[Conclusões]{Conclusões}\label{Capitulo7}
 
-As próximas etapas a serem executadas levam em consideração o aprimoramento dos métodos de reconstrução já desenvolvidos, a aplicação de geometrias de equipamentos comerciais e a implementação do método iterativo estatístico junto com os conhecimentos \textit{a priori} advindos da teoria de Campo Aleatório Markoviano não-local.
+Como conclusão, foi desenvolvida uma ferramenta de reconstrução de imagens específica para a técnica de tomossíntese mamária. Esse \textit{software} está disponibilizado \textit{online} para toda a comunidade acadêmica. Da mesma forma, foi apresentada a validação da ferramenta de reconstrução \acs{DBT} através dos \textit{phantoms} virtuais, físicos e casos reais de pacientes.  
 
-A extensão da \textit{toolbox} para outras linguagens de programação, como por exemplo Python, é também necessária tendo em vista o grande aumento na sua utilização e por ser uma linguagem aberta.
+Utilizou-se um simulador de mama antropomórfico, gerado por um sistema \acs{VCT}. As fatias reconstruídas pela \textit{toolbox} foram comparadas com o \textit{software} disponibilizado pelo \acs{FDA}. As reconstruções do \textit{phantom} físico BR3D e das imagens clínicas também foram comparadas, mas estas com as imagens fornecidas pelo equipamento comercial, demonstrando assim a eficácia da ferramenta desenvolvida. 
 
-Uma outra etapa estabelecida é a implementação de novas técnicas para a redução de artefatos com alta atenuação, bem como o aprimoramento da técnica já implementada no trabalho de \citeonline[]{borges2017metal}. A investigação do não funcionamento da implementação também é necessária. 
+Ainda não estão definidos com exatidão os parâmetros utilizados na geometria dos equipamentos. Faixa de angulação, número de projeções, tipo de movimentação do tubo e angulação do detector, são campos de pesquisas que devem ser explorados a fim de buscar os benefícios da escolha de cada configuração. Para isso é necessária uma plataforma aberta com implementações de algoritmos de reconstrução que possibilite a pesquisa para toda a comunidade acadêmica, que é o objetivo principal deste trabalho.     
 
-Por fim, a publicação de artigos científicos é de extrema importância, assim como a disponibilização de todos os códigos em uma plataforma aberta para a comunidade científica com o intuito de difusão do conhecimento e ampliação de pesquisas na área. 
+Dentre os tipos de algoritmos estudados, fica evidente que a retroprojeção filtrada (\acs{FBP}) ainda é a mais utilizada por equipamentos comerciais. Porém os métodos iterativos são promissores devido a possibilidade de agregação de modelamentos matemáticos do ruído, conhecimentos \textit{a priori} e fácil adaptação à geometria. No entanto os mesmos demandam um alto custo computacional, mas tornam-se atrativos com o avanço da computação paralela em unidades de processamento gráfico (\textit{Graphics Processing Unit} - \acs{GPU}). Grandes empresas já vêm apostando em métodos iterativos para seus respectivos equipamentos.
 
-\colorbox{pink}{Elias: Utilizar métodos específicos para ângulo limitado!}
-\colorbox{pink}{Elias: FISTA para otimizar!}
-\colorbox{pink}{Alexandre: Compressive sensing reconstrução de sinal usando min norma L0}
-\colorbox{pink}{Alexandre: Restrição Tikonov Miller}
-\colorbox{pink}{Alexandre: EM-MPM}
+Foram analisados também as imagens \acs{DBT} após a reconstrução, em termos do valor médio dos \textit{pixels}, variância do ruído, \acs{SNR} e \acs{NPS}. Além disso, foi observada a mesma dependência espacial e do sinal, referente ao ruído nas fatias de reconstrução, como apresentado em trabalhos anteriores no domínio das projeções.
+
+Este trabalho focou nas propriedades espaciais da variância do ruído, e nenhuma suposição foi feita em relação às propriedades espectrais, como apresentadas na seção \ref{Correlação}. Devido a geometria do procedimento de reconstrução, é criada uma correlação anisotrópica nos dados reconstruídos, e isso deve ser levado em conta para gerar modelos de ruído mais precisos. No entanto esse trabalho limitou-se a análise espacial da variância do ruído, bem como na medida preliminar da correlação do processo de reconstrução.
+
+Por fim, de uma maneira ampla, a disponibilização de códigos em uma plataforma aberta para a comunidade científica com o intuito de difusão do conhecimento e ampliação das pesquisas é de extrema importância e deve ser levado em consideração pelos diversos pesquisadores. 
 
 
-\includepdf{docs/Cronograma.pdf}
+
+
+
+
+
+
+

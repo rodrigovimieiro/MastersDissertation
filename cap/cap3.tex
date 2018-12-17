@@ -3,9 +3,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%												  Introdução    															%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Com o objetivo de obter imagens radiográficas feitas através de um exame de tomografia, seja esse advindo de qualquer equipamento, é necessário a aplicação de procedimentos para a reconstrução dessas imagens dado as informações que o equipamento gera. Esses procedimentos envolvem aplicação de técnicas matemáticas, físicas e computacionais. As informações geradas pelo equipamento são comumente denominadas de projeções, pois representam ``sombras'' que o objeto produz ao ser irradiado por feixes de raios X. Essas sombras, ou mais precisamente projeções, são informações das atenuações sofridas pelos raios X quando esses interagem com o tecido biológico ao longo de seu caminho \cite{buzug2008computed,avinash1988principles}.
+Com o objetivo de obter imagens radiográficas feitas através de um exame de tomografia, seja esse advindo de qualquer equipamento, é necessária a aplicação de procedimentos para a reconstrução dessas imagens, dado as informações que o equipamento gera. Tais procedimentos envolvem aplicações de técnicas matemáticas, físicas e computacionais. As informações geradas pelo equipamento são comumente denominadas de projeções, pois representam ``sombras'' que o objeto produz ao ser irradiado por feixes de raios X. As sombras, ou mais precisamente, projeções, fornecem informações das atenuações sofridas pelos raios X quando estes interagem com o tecido biológico ao longo de seu caminho \cite{buzug2008computed,avinash1988principles}.
  
-Os métodos de reconstrução atuais destinados à tomossíntese foram primeiramente desenvolvidos para a tomografia computadorizada. Posteriormente, esses foram adaptados às necessidades específicas de cada equipamento e em geral todos os métodos utilizados para \acs{CT} são aplicáveis à tomossíntese, respeitando as devidas particularidades. Contudo o desenvolvimento de algoritmos para tomossíntese é considerado um desafio pelo fato dessa técnica possuir poucas projeções em uma estreita extensão angular e baixa dose de radiação \cite{levakhina2014three,yang2012numerical}.   
+Os métodos de reconstrução atuais destinados à tomossíntese foram primeiramente desenvolvidos para \acs{CT}. Posteriormente, estes foram adaptados as necessidades específicas de cada equipamento e em geral, os métodos utilizados para \acs{CT} são aplicáveis à tomossíntese, respeitando as devidas particularidades. Contudo o desenvolvimento de algoritmos para tomossíntese é considerado um desafio pelo fato dessa técnica possuir poucas projeções em uma estreita extensão angular e baixa dose de radiação \cite{levakhina2014three,yang2012numerical}.   
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%											Problemas Inversos	    														%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -18,41 +18,40 @@ Em geral, reconstruções de imagens tomográficas são consideradas, do ponto d
 \begin{figure}[H]
 	\centering
 	
-	\caption{Processo de recuperação de imagens 2D através de suas projeções em diferentes ângulos.}
+	\caption{Processo de reconstrução de objetos \acs{2D} através de: (a) suas projeções em diferentes ângulos e a (b) formulação do problema inverso.}
 	
-	\subfloat[Exemplo de projeções do objeto em diferentes ângulos.]{\includegraphics[scale=0.4]{imgs/cap3/ProbInverA.png}	\label{fig:imgCap3ProbInverA}}
-	\hfil
-	\subfloat[Exemplo de problema inverso.]{\includegraphics[scale=0.4]{imgs/cap3/ProbInverB.png} \label{fig:imgCap3ProbInverB}}
-	\hfil
+	\subfloat[]{\includegraphics[scale=0.8, clip, trim=12.6cm 7.5cm 12.3cm 3.2cm]{imgs/cap3/ProbInverA.pdf}	\label{fig:imgCap3ProbInverA}}
+	\hfill
+	\subfloat[]{\includegraphics[scale=0.8, clip, trim=12.6cm 7.5cm 12.3cm 3.2cm]{imgs/cap3/ProbInverB.pdf} \label{fig:imgCap3ProbInverB}}
 	
-	\legend{Fonte: do autor, 2018.}
+	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap3ProbInver}
 \end{figure}
 
-Em geral, os equipamentos de raios X por transmissão tem como modelo físico básico a formulação de \textit{Beer-Lambert} \cite{zeng2010medical}. Essa fórmula relaciona a função de atenuação $\mu(s)$ do feixe de radiação quando esse interage com um certo material por um determinado caminho. Considerando um feixe de raio X ideal, infinitamente pequeno, monoenergético e sem espalhamento, sua intensidade de energia inicial $I_{0}$ interage com a matéria por um caminho de comprimento $l$ e sua intensidade de energia final $I(l)$ é dada por \eqref{eq:eqCap3BeerLambert1}, segundo \citeonline[p. 13]{levakhina2014three}:
+Os equipamentos de raios X por transmissão têm como modelo físico básico a formulação de \textit{Beer-Lambert} \cite{zeng2010medical}. Essa fórmula relaciona a função de atenuação $\mu(\sigma)$ do feixe de radiação quando este interage com um certo material por um determinado caminho. Considerando um feixe de raio X ideal, infinitamente pequeno, monoenergético e sem espalhamento, sua intensidade de energia inicial $I_{0}$ interage com a matéria por um caminho de comprimento $l$ e sua intensidade de energia final $I$ é dada por \eqref{eq:eqCap3BeerLambert1}, segundo \citeonline[p. 13]{levakhina2014three}:
 
 \begin{equation}
- I(l) = I_{0} \, e \, ^{-\int_{0}^{l} \,\mu(s) \, ds}.
+ I = I_{0} \, e \, ^{-\int_{L}^{} \,\mu(\sigma) \, d\sigma}.
 \label{eq:eqCap3BeerLambert1}
 \end{equation}
 
-Considerando a Equação \ref{eq:eqCap3BeerLambert1}, se tomarmos o logaritmo da razão entre a intensidade final e a inicial com seu sinal negativo e denotarmos essa formulação como $p(l)$, ou seja, $p(l) = -\ln \, \left(\frac{I(l)}{I_{0}}\right)$, tem-se o seguinte resultado:
+Considerando a Equação \ref{eq:eqCap3BeerLambert1}, se tomarmos o logaritmo da razão entre a intensidade final e a inicial com seu sinal negativo e denotarmos essa formulação como $p_{L}$, ou seja, $p_{L} = -\ln \, \left(\frac{I}{I_{0}}\right)$, tem-se o seguinte resultado:
 
 \begin{equation}
-p(l) = {\int_{0}^{l} \,\mu(s) \, ds},
+p_{L} = {\int_{L}^{} \,\mu(\sigma) \, d\sigma},
 \label{eq:eqCap3BeerLambert2}
 \end{equation}
 
-\noindent onde $s$ denota as atenuações ao longo de $l$ e o problema inverso, ou de reconstrução, passa a ser a recuperação da função  $\mu(s)$ tomando um conjunto de integral de linha $p(l)$, segundo \citeonline[p. 33]{levakhina2014three}, como na transformada de Radon detalhada na seção seguinte.  
+\noindent onde $\sigma$ é o incremento ao longo de $l$ e o problema inverso, ou de reconstrução, passa a ser a recuperação da função  $\mu(\sigma)$, tendo disponível um conjunto de integrais de linha $p_{L}$, calculadas através da transformada de Radon detalhada na seção seguinte \cite[p. 33]{levakhina2014three}.  
  
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%											Transformada de Radon    														%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Transformada de Radon}\label{TransformadaRadon2D}
 
-No ano de 1917, o matemático Johann Radon publicou um estudo detalhando a solução para os ditos problemas inversos em tomografia computadorizada, tornando-se assim a transformada mais importante no aspecto teórico matemático da área atualmente \cite{radon1917uber}. Esse trabalho foi posteriormente traduzido para a língua inglesa \cite{radon1986determination}.
+No ano de 1917, o matemático Johann Radon publicou um estudo detalhando a solução para os ditos problemas inversos em \acs{CT}, tornando assim a transformada mais importante no aspecto teórico matemático da área atualmente \cite{radon1917uber}. Esse trabalho foi posteriormente traduzido para a língua inglesa \cite{radon1986determination}.
 
-Essencialmente a transformada de Radon direta visa calcular as projeções $P(\rho,\theta)$ de um objeto com coordenadas $f(x,y)$ a partir de determinados ângulos $\theta_{x}$ e feixes $L_{n}$, como ilustra a Figura \ref{fig:imgCap3Radon}. Essas projeções são obtidas através de um conjunto de integrais de linha de $f(x,y)$ ao longo de feixes paralelos  $L_{n}$, como demonstra a Equação \ref{eq:eqCap3Radon1}, onde $d\sigma$ é o incremento ao longo dos feixes. Já a sua transformada inversa é a simples tomada dos valores de projeção e a distribuição desses ao longo do caminho percorrido pelo feixe paralelo. Se tomarmos suficientes projeções do objeto, podemos ao final reconstruir sua estrutura espacial. 
+Essencialmente, a transformada de Radon direta visa calcular as projeções $P(\rho,\theta)$ de um objeto com coordenadas $f(x,y)$ a partir de determinados ângulos $\theta$ e feixes $L_{n}$, como ilustra a Figura \ref{fig:imgCap3Radon}. Essas projeções são obtidas através de um conjunto de integrais de linha de $f(x,y)$ ao longo de feixes paralelos  $L_{n}$, como demonstra a Equação \ref{eq:eqCap3Radon1}, onde $d\sigma$ é o incremento ao longo dos feixes. Já a sua transformada inversa é a simples tomada dos valores da projeção e a distribuição destes ao longo do caminho percorrido pelo feixe paralelo. Se tomarmos suficientes projeções do objeto, podemos ao final reconstruir sua estrutura espacial. 
 
 \begin{equation} 
 P(\rho,\theta) = {\int_{L}^{} f(x,y) \, d\sigma}.
@@ -61,15 +60,15 @@ P(\rho,\theta) = {\int_{L}^{} f(x,y) \, d\sigma}.
 
 
 \begin{figure}[H]
-	\caption{Ilustração da Transformada de Radon direta.}
+	\caption{Ilustração da transformada de Radon direta.}
 	\begin{center}
-		\includegraphics[scale=0.6]{imgs/cap3/Radon.png}
+		\includegraphics[scale=0.8, clip, trim=12cm 4.5cm 12.8cm 5.2cm]{imgs/cap3/Radon.pdf}
 	\end{center}
-	\legend{Fonte: do autor, 2018.}
+	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap3Radon}
 \end{figure}
 
-Como pode ser visto na Figura \ref{fig:imgCap3Radon} a projeção está em função das duas variáveis: $\rho$ e $\theta$. Isso pode ser feito, uma vez que, as retas que representam os feixes são parametrizadas na forma polar, onde $\rho$ é a distância entre a reta do feixe e a origem e $\theta$ é o ângulo formado entre o eixo $x$ e $\rho$ \cite{yang2012numerical}. Isto é, sua forma é dada pela seguinte equação:
+Como pode ser visto na Equação \ref{eq:eqCap3Radon1} e na Figura \ref{fig:imgCap3Radon} a projeção está em função das duas variáveis: $\rho$ e $\theta$. Isso pode ser feito, uma vez que, as retas $L$ que representam os feixes são parametrizadas na forma polar, ou seja, $L$ é perpendicular ao segmento de reta que liga  o ponto $(\rho, \theta)$ a origem do plano,  \cite{yang2012numerical}. Isto é, sua forma é dada pela seguinte equação:
 
 \begin{equation} 
 L_{n} = 
@@ -80,14 +79,14 @@ y = \rho \, sin(\theta) + \sigma \, cos(\theta)
 \label{eq:eqCap3Radon2}
 \end{equation}
 
-\noindent onde $\sigma$ é a distância entre $\rho$ e qualquer ponto na reta. A Figura \ref{fig:imgCap3RadonRhoTheta} ilustra a relação entre essas variáveis.
+\noindent na qual $\sigma$ é a distância entre $\rho$ e qualquer ponto na reta $L$. A Figura \ref{fig:imgCap3RadonRhoTheta} ilustra a relação entre essas variáveis.
 
 \begin{figure}[H]
 	\caption{Ilustração da relação entre $x$, $y$, $\rho$, $\theta$ e $\sigma$.}
 	\begin{center}
 		\includegraphics[scale=1.2]{imgs/cap3/RadonRhoTheta.pdf}
 	\end{center}
-	\legend{Fonte: \citeonline[p. 74]{yang2012numerical}}
+	\legend{Fonte: \citeonline[p. 74]{yang2012numerical}.}
 	\label{fig:imgCap3RadonRhoTheta}
 \end{figure}
 
@@ -98,39 +97,39 @@ P(\rho,\theta) = \int_{L}^{} f(x,y) \, d\sigma = {\int_{-\infty}^{+\infty} f\lef
 \label{eq:eqCap3Radon3}
 \end{equation}
 
-\noindent ou fazendo o uso da função \textit{Delta} de \textit{Dirac} $\delta(\rho)$ teremos:
+\noindent ou fazendo o uso da função delta de Dirac $\delta(\rho)$ teremos:
 
 \begin{equation} 
 P(\rho,\theta) = {\int_{-\infty}^{+\infty} \, \int_{-\infty}^{+\infty} f(x,y) \, \delta(\rho - (x\,cos(\theta)+y\,sin(\theta)))  \, dxdy},
 \label{eq:eqCap3Radon4}
 \end{equation} 
 
-\noindent no qual a Equação \ref{eq:eqCap3Radon4} é conhecida como a transformada direta de Radon da função $f(x,y)$. Um maior detalhamento dos equacionamentos pode ser encontrado em \citeonline[p. 73-74]{yang2012numerical}.
+\noindent na qual a Equação \ref{eq:eqCap3Radon4} é conhecida como a transformada direta de Radon da função $f(x,y)$. Um maior detalhamento dos equacionamentos pode ser encontrado em \citeonline[p. 73-74]{yang2012numerical}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%											Métodos de Reconstrução    														%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Métodos de Reconstrução}
 
-Após a formulação da transformada de Radon é possível obter a estrutura espacial do objeto a partir de suficientes projeções. Todo equacionamento, no entanto, é proposto em modo contínuo, fazendo o uso de integrais, por exemplo, e sendo necessário o uso de uma geometria com feixes de raios paralelos. Tendo dito isso, é eminente a necessidade da discretização dessa transformada e adequação ao sistema físico de cada equipamento para implementações práticas \cite{levakhina2014three}. 
+Após a formulação da transformada de Radon é possível obter a estrutura espacial do objeto a partir de suficientes projeções. Todo equacionamento, no entanto, é proposto em modo contínuo fazendo o uso de integrais, por exemplo, e sendo necessário o uso de uma geometria com feixes de raios paralelos. Tendo dito isso, é eminente a necessidade da discretização dessa transformada e adequação ao sistema físico de cada equipamento para implementações práticas \cite{levakhina2014three}. 
 
-As técnicas de projeção e retroprojeção são essenciais nos métodos de reconstrução, pois representam através de um modelo matemático o processo físico de aquisição da imagem. Para os métodos iterativos, a importância é ainda maior pelo fato da utilização de ambos a cada iteração \cite{levakhina2014three}.   
+As técnicas de projeção e retroprojeção são essenciais nos métodos de reconstrução, pois representam através de um modelo matemático o processo físico de aquisição da imagem. Para os métodos iterativos, a importância é ainda maior pelo fato da utilização de ambas a cada iteração \cite{levakhina2014three}.   
 
 \subsection{Discretização da Imagem}\label{DiscretizaçãodaImagem}
 
-Para a implementação prática da transformada é necessário a representação de um objeto contínuo de uma forma discreta, ou seja, transforma-lo em uma matriz de valores finitos em duas ou três dimensões, dependendo da aplicação. Isso se deve ao fato de que os coeficientes de atenuação ao longo de um objeto, por exemplo uma mama, são dados em uma forma contínua e são dependentes de fatores como: número atômico, densidade e espessura do meio \cite{yang2012numerical}.  
+Para a implementação prática da transformada é necessária a representação de um objeto contínuo de uma forma discreta, ou seja, transformá-lo em uma matriz de valores finitos em duas ou três dimensões, dependendo da aplicação. Isso porque os coeficientes de atenuação ao longo de um objeto, por exemplo uma mama, são dados em uma forma contínua e são dependentes de fatores como: número atômico, densidade e espessura do meio \cite{yang2012numerical}.  
 
-Portanto podemos fazer o uso de \textit{pixels} ou \textit{voxels} para representações em \acs{2D} ou \acs{3D} respectivamente. Além dessas duas representações também é possível a utilização de bolhas, ou \textit{blobs} do inglês. Um maior detalhamento sobre o modelamento dessas técnicas pode ser encontrado em  \citeonline[p. 45-69]{levakhina2014three}. A Figura \ref{fig:imgCap3DiscretizacaoImagem1} demonstra a discretização dos coeficientes de atenuações da mama representados por \textit{voxels} cúbicos, dado uma matriz de $m$ linhas por $n$ colunas e $l$ níveis.   
+Portanto é possível fazer o uso de \textit{pixels} ou \textit{voxels} para representações em \acs{2D} ou \acs{3D} respectivamente. Além dessas duas representações também é possível a utilização de bolhas, ou \textit{blobs} do inglês. Um maior detalhamento sobre o modelamento dessas técnicas pode ser encontrado em  \citeonline[p. 45-69]{levakhina2014three}. A Figura \ref{fig:imgCap3DiscretizacaoImagem1} demonstra a discretização dos coeficientes de atenuações da mama representados por \textit{voxels} cúbicos, dado uma matriz de $m$ linhas por $n$ colunas e $l$ níveis.   
 
 \begin{figure}[H]
 	\caption{Discretização dos coeficientes de atenuações da mama.}
 	\begin{center}
 		\includegraphics[scale=1.1]{imgs/cap3/DiscretizacaoImg1.pdf}
 	\end{center}
-	\legend{Fonte: \citeonline[p. 72]{yang2012numerical}}
+	\legend{Fonte: \citeonline[p. 72]{yang2012numerical}.}
 	\label{fig:imgCap3DiscretizacaoImagem1}
 \end{figure}
 
-Se tomarmos qualquer linha dessa matriz, temos a Figura \ref{fig:imgCap3DiscretizacaoImagem2}, ilustrando os coeficientes discretos e os níveis de energia final e inicial da respectiva linha considerando um feixe ideal. Dado isto, pode-se adaptar a Equação \ref{eq:eqCap3BeerLambert1} para a sua forma discreta, demonstrada a seguir:
+Se tomarmos qualquer linha dessa matriz, temos a Figura \ref{fig:imgCap3DiscretizacaoImagem2}, ilustrando os coeficientes discretos e os níveis de energia inicial e final da respectiva linha, considerando um feixe ideal. Dado isto, pode-se adaptar a Equação \ref{eq:eqCap3BeerLambert1} para a sua forma discreta, demonstrada a seguir:
 
 \begin{equation}
 I_{l} = I_{0} \, e \, ^{-\sum_{i=1}^{n} \mu_{i}}.
@@ -142,30 +141,30 @@ I_{l} = I_{0} \, e \, ^{-\sum_{i=1}^{n} \mu_{i}}.
 	\begin{center}
 		\includegraphics[scale=1.3]{imgs/cap3/DiscretizacaoImg2.pdf}
 	\end{center}
-	\legend{Fonte: \citeonline[p. 72]{yang2012numerical}}
+	\legend{Fonte: \citeonline[p. 72]{yang2012numerical}.}
 	\label{fig:imgCap3DiscretizacaoImagem2}
 \end{figure}
 
 \subsection{Projeção e Retroprojeção 2D}
 
- Os operadores de projeção, essencialmente, visam projetar um objeto em (\acs{3D} ou \acs{2D}) em um anteparo (\acs{2D} ou \acs{1D}) respectivamente, ou seja, somar as contribuições de cada objeto ao longo do eixo de projeção. A Figura \ref{fig:imgCap3ProjeçãoDireta} ilustra a projeção de objetos em \acs{2D} para sensores em \acs{1D}, tomados ângulos de $0\degree$, $45\degree$, $90\degree$ e $135\degree$. 
+ Os operadores de projeção, essencialmente, visam projetar um objeto em (\acs{3D} ou \acs{2D}) em um anteparo (\acs{2D} ou \acs{1D}) respectivamente, ou seja, somam as contribuições de cada objeto ao longo do eixo de projeção. A Figura \ref{fig:imgCap3ProjeçãoDireta} ilustra a projeção de objetos em \acs{2D} para sensores em \acs{1D}, tomando ângulos de $0\degree$, $45\degree$, $90\degree$ e $135\degree$. 
 
 \begin{figure}[H]
-	\caption{Exemplo de projeção \acs{2D} para \acs{1D}}
+	\caption{Exemplo de projeção \acs{2D} para \acs{1D}.}
 	\begin{center}
-		\includegraphics[scale=0.55]{imgs/cap3/FP.pdf}
+		\includegraphics[scale=0.55, clip, trim=8cm 1cm 7cm 3.7cm]{imgs/cap3/FP.pdf}
 	\end{center}
-	\legend{Fonte: do autor, 2018.}
+	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap3ProjeçãoDireta}
 \end{figure}
 
 
-Já os operadores de retroprojeção atuam no processo inverso, de reprojetar os dados (\acs{2D} ou \acs{1D}) para um espaço (\acs{3D} ou \acs{2D}) respectivamente, isto é, distribuir os dados de projeção ao longo do eixo que foram adquiridos. Assim como na seção anterior, a Figura \ref{fig:imgCap3BPMosaico} ilustra o processo de retroprojeção dos dados, no espaço da imagem, adquiridos pelos sensores da Figura \ref{fig:imgCap3ProjeçãoDireta} nos respectivos ângulos que foram gerados. 
+Já os operadores de retroprojeção atuam no processo inverso, de reprojetar os dados (\acs{2D} ou \acs{1D}) para um espaço (\acs{3D} ou \acs{2D}) nesta ordem, isto é, distribuir os dados de projeção ao longo dos eixos que foram adquiridos. Assim como na seção anterior, a Figura \ref{fig:imgCap3BPMosaico} ilustra o processo da retroprojeção dos dados no espaço da imagem, adquiridos pelos sensores da Figura \ref{fig:imgCap3ProjeçãoDireta} nos respectivos ângulos que foram gerados. 
 
 \begin{figure}[H]
 	\centering
 	
-	\caption{Exemplo de retroprojeção \acs{1D} para \acs{2D}. Onde as figuras de (a) até (d) representam o \acs{BP} de $0\degree$, $45\degree$, $90\degree$ e $135\degree$ respectivamente.}
+	\caption{Exemplo de retroprojeção \acs{1D} para \acs{2D}, onde as figuras de (a) até (d) representam os ângulos de $0\degree$, $45\degree$, $90\degree$ e $135\degree$ respectivamente.}
 	
 	\subfloat[]{\includegraphics[scale=0.2]{imgs/cap3/iRadon_0deg.png}\label{fig:imgCap3BPMosaico0}}
 	\hfil
@@ -176,35 +175,35 @@ Já os operadores de retroprojeção atuam no processo inverso, de reprojetar os
 	\subfloat[]{\includegraphics[scale=0.2]{imgs/cap3/iRadon_135deg.png}\label{fig:imgCap3BPMosaico135}}
 	\hfil
 	
-	\legend{Fonte: do autor, 2018.}
+	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap3BPMosaico}
 \end{figure}
 
 
-Se somarmos as contribuições de cada ângulo da Figura \ref{fig:imgCap3BPMosaico} a fim de reconstruir o objeto, obteremos a Figura \ref{fig:imgCap3BPParcial} como resultado. Nota-se que a partir dessa operação ainda não é possível identificar as estruturas espaciais com clareza. Já se considerarmos mais projeções com uma maior faixa de ângulo, como por exemplo $0\degree$ \text{a} $180\degree$, tornam-se visíveis os objetos, porém ainda de uma forma borrada como demostra a Figura \ref{fig:imgCap3BPFinal}. Não há a necessidade de se utilizar $360\degree$, visto que as projeções do primeiro e segundo quadrante serão as mesmas se tomadas em ângulos contidos no terceiro e quarto quadrante \colorbox{pink}{Corrigir}.   
+Ao somar as contribuições de cada ângulo da Figura \ref{fig:imgCap3BPMosaico} a fim de reconstruir o objeto, a Figura \ref{fig:imgCap3BPParcial} é obtida como resultado. Nota-se que a partir dessa operação ainda não é possível identificar as estruturas espaciais com clareza. Já se forem consideradas mais projeções com uma maior faixa de ângulo, como por exemplo de $0\degree$ \text{a} $180\degree$, tornam-se visíveis os objetos, porém ainda de maneira borrada como demostra a Figura \ref{fig:imgCap3BPFinal}. Não há a necessidade de se utilizar $360\degree$, já que as projeções do primeiro e do segundo quadrante são espelhadas em relação ao terceiro e quarto quadrante.   
 
 \begin{figure}[H]
 	\centering
 	
-	\caption{Recuperação dos objetos \acs{2D} através da soma de suas retroprojeções em diferentes ângulos. Onde (a) representa a técnica considerando apenas 4 projeções, ilustrado pela Figura \ref{fig:imgCap3BPMosaico}, e (b) representa a utilização de 180 projeções na faixa de $180\degree$.}
+	\caption{Recuperação dos objetos \acs{2D} através da soma de suas retroprojeções em diferentes ângulos. Onde (a) representa a técnica considerando apenas 4 projeções, ilustrada pela Figura \ref{fig:imgCap3BPMosaico}, e (b) representa a utilização de 180 projeções na faixa de $180\degree$.}
 	
 	\subfloat[]{\includegraphics[scale=0.3]{imgs/cap3/Backprojection_Parcial.png}\label{fig:imgCap3BPParcial}}
 	\hfil
 	\subfloat[]{\includegraphics[scale=0.3]{imgs/cap3/Backprojection_Final.png}\label{fig:imgCap3BPFinal}}
 	\hfil
 	
-	\legend{Fonte: do autor, 2018.}
+	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap3BPSoma}
 \end{figure}
 
-O método descrito acima é o mais simples encontrado na literatura e é conhecido como \textit{Pixel Driven} (Figura \ref{fig:imgCap3Projetores1}) segundo \citeonline[p. 47]{levakhina2014three}. Em seu operador de projeção direta, esse consiste em projetar o centro de cada \textit{pixel} no detector e o seu valor de atenuação ser repartido entre os detectores vizinhos por meio de métodos de interpolação linear ou outros mais complexos. O mesmo princípio é aplicado para o operador de retroprojeção, no qual os \textit{pixels} da imagem recebem os valores obtidos por sensores vizinhos também através de métodos de interpolação.
+O método descrito acima é o mais simples encontrado na literatura e é conhecido como \textit{Pixel Driven} (Figura \ref{fig:imgCap3Projetores1}) \cite[p. 47]{levakhina2014three}. Em sua projeção direta, o método consiste em projetar o centro de cada \textit{pixel} no detector e o seu valor de atenuação é repartido entre os detectores vizinhos por meio da interpolação linear ou por outros métodos mais complexos. O mesmo princípio é aplicado para o operador de retroprojeção, no qual os \textit{pixels} da imagem recebem os valores obtidos por sensores vizinhos também através de métodos de interpolação.
 
-Outras técnicas mais sofisticadas também são aplicadas como: \textit{Ray Casting} ou \textit{Ray Driven}, \textit{Distance-Driven} e \textit{Trapezoid footprint} como demonstra a Figura \ref{fig:imgCap3Projetores}. Um maior detalhamento das técnicas mencionadas pode ser encontrado em \citeonline[p. 47-49]{levakhina2014three} ou ainda métodos do estado da arte como demostrado em \citeonline[]{zheng2017segmented}.
+Outras técnicas mais sofisticadas também são aplicadas como: \textit{Ray Casting} ou \textit{Ray Driven}, \textit{Distance-Driven} \cite{de2002distance,de2004distance} e \textit{Trapezoid footprint} como demonstra a Figura \ref{fig:imgCap3Projetores}. Um maior detalhamento das técnicas mencionadas pode ser encontrado em \citeonline[p. 47-49]{levakhina2014three} ou ainda, métodos do estado da arte como demostrado em \citeonline[]{liu2017gpu} e \citeonline[]{zheng2017segmented}.
 
 \begin{figure}[H]
 	\centering
 	
-	\caption{Projetores utilizados para técnicas de projeção e retroprojeção para modelos de representação utilizando \textit{Pixels}. Onde os diferentes métodos são ilustrados por: (a) \textit{Pixel Driven}, (b) \textit{Ray Casting}, (c) \textit{Distance-Driven} e (d) \textit{Trapezoid footprint}.}
+	\caption{Projetores utilizados para técnicas de projeção e retroprojeção para modelos de representação utilizando \textit{Pixels}, onde os diferentes métodos são ilustrados por: (a) \textit{Pixel Driven}, (b) \textit{Ray Casting}, (c) \textit{Distance-Driven} e (d) \textit{Trapezoid footprint}.}
 	
 	\subfloat[]{\includegraphics[scale=1.1]{imgs/cap3/Projetor1.pdf}\label{fig:imgCap3Projetores1}}
 	\hfil
@@ -215,58 +214,56 @@ Outras técnicas mais sofisticadas também são aplicadas como: \textit{Ray Cast
 	\subfloat[]{\includegraphics[scale=1.1]{imgs/cap3/Projetor4.pdf}\label{fig:imgCap3Projetores4}}
 	\hfil
 	
-	\legend{Fonte: \citeonline[p. 47]{levakhina2014three}}
+	\legend{Fonte: \citeonline[p. 47]{levakhina2014three}.}
 	\label{fig:imgCap3Projetores}
 \end{figure}  
   
 \subsection{Projeção e Retroprojeção 3D}\label{ProjeçãoeRetroprojeção3D}
 
-Os problemas para a reconstrução de imagens em tomossíntese são relacionados a estruturas tridimensionais, sendo assim é importante discorrer sobre os operadores de projeção e retroprojeção aplicados a essa técnica. A Figura \ref{fig:imgCap33DGeometry} ilustra como um feixe de raio X é atenuando e quais \textit{voxels} são responsáveis por esta interação. Em geral, os operadores utilizados para \acs{2D} são também atribuídos as geometrias \acs{3D}, porém sendo necessários ajustes dependente de cada técnica e geometria. O processamento é feito então plano por plano, passando por todos os \textit{voxels} daquele nível. 
+Os problemas para a reconstrução de imagens em tomossíntese estão relacionados à estruturas tridimensionais, sendo assim é importante discorrer sobre os operadores de projeção e retroprojeção aplicados a essa técnica. A Figura \ref{fig:imgCap33DGeometry} ilustra como um feixe de raio X é atenuando e quais \textit{voxels} são responsáveis por esta interação. Em geral, os operadores utilizados para \acs{2D} são também atribuídos as geometrias \acs{3D}, porém sendo necessários ajustes para cada técnica e geometria. O processamento é feito então plano por plano, passando por todos os \textit{voxels} daquele nível. 
 
 \begin{figure}[H]
-	\caption{Ilustração da geometria de tomossíntese e a atenuação dos feixes pelos \textit{voxels}}
+	\caption{Ilustração da geometria de meio cone referente a tomossíntese e a atenuação do feixe de raio X pelos respectivos \textit{voxels}.}
 	\begin{center}
 		\includegraphics[scale=0.9]{imgs/cap3/3DGeometry.pdf}
 	\end{center}
-	\legend{Fonte: \citeonline[p. 71]{Duarte2009}}
+	\legend{Fonte: \citeonline[p. 71]{Duarte2009}.}
 	\label{fig:imgCap33DGeometry}
 \end{figure}
 
-Para a implementação do operador \textit{Pixel Driven} é necessário encontrar a posição específica onde cada \textit{voxel} será projetado. Segundo \citeonline[p. 77]{dobbins2003digital}, os equipamentos de tomossíntese, em geral, são caracterizados por um movimento isocêntrico. Isto porque tubo e detector ou somente o tubo se movem em um arco com o mesmo centro de movimento.  
+Para a implementação do operador \textit{Pixel Driven} é necessário encontrar a posição específica onde cada \textit{voxel} será projetado. Segundo \citeonline[p. 77]{dobbins2003digital}, os equipamentos de tomossíntese, em geral, são caracterizados por um movimento isocêntrico. Isso porque tubo e detector ou apenas o tubo se move em um arco com o mesmo centro de movimento. 
 
-Um dos tipos de geometria de movimento isocêntrico foi primeiramente apresentado por \citeonline[]{niklason1997digital}, como ilustra a Figura \ref{fig:imgCap3ProjectionGeometry}, onde o detector se mantêm estacionário e o tubo se move em um arco com um determinado centro de rotação. 
+Uma das geometrias de movimento isocêntrico foi primeiramente apresentada por \citeonline[]{niklason1997digital}, como ilustra a Figura \ref{fig:imgCap3ProjectionGeometry}, na qual o detector se mantém estacionário e o tubo se move em um arco com um determinado centro de rotação. 
 
 \begin{figure}[H]
-	\caption{Geometria de movimento isocêntrico apresentado por \citeonline[]{niklason1997digital}.}
+	\caption{Geometria de movimento isocêntrico apresentado por \citeonline[]{niklason1997digital}, em que o tubo se move em um determinado arco e o detector se mantêm estacionário.}
 	\begin{center}
 		\includegraphics[scale=0.4]{imgs/cap3/ProjectionGeometry.png}
 	\end{center}
-	\legend{Fonte: \citeonline[p. 76]{dobbins2003digital}}
+	\legend{Fonte: Adaptado de \citeonline[p. 76]{dobbins2003digital}.}
 	\label{fig:imgCap3ProjectionGeometry}
 \end{figure}
 
-Os passos necessários para a formação da imagem com esse tipo de movimento foram apresentados no trabalho do autor, onde o mesmo descreve as equações para a projeção de um objeto no plano da imagem. Se tomarmos um ponto qualquer com coordenadas $(X,Y,Z)$ e ângulo do tubo $\theta$, temos que a posição $y_{i}$ de sua projeção é dada por:
+Os passos necessários para a formação da imagem com este tipo de movimento foram apresentados no trabalho do autor, onde o mesmo descreve as equações para a projeção de um objeto no plano da imagem. Dado um ângulo de projeção $\theta$ e um ponto qualquer $(X,Y,Z)$ no espaço \acs{3D}, a coordenada \acs{2D} $(X_{i},Y_{i})$ projetada no plano da imagem é dada pelas seguintes equações:
 
 \begin{equation}
-y_{i} = Y \, + \dfrac{ Z(L \, sin(\theta) \, + Y)}{L \, cos(\theta) \, + D - Z} \; \forall \, \theta ,
+Y_{i}(\theta,Y,Z) = Y \, + \dfrac{ Z(L \, sin(\theta) \, + Y)}{L \, cos(\theta) \, + D - Z},
 \label{eq:eqCap3ProjectionY}
 \end{equation} 
 
-\noindent e a projeção no eixo X é dada pela equação a seguir:
-
 \begin{equation}
-x_{i} = \dfrac{X \, (L \, cos(\theta)\,+\, D)}{L \, cos(\theta) \, + D - Z} \; \forall \, \theta.
+X_{i}(\theta,X,Z) = \dfrac{X \, (L \, cos(\theta)\,+\, D)}{L \, cos(\theta) \, + D - Z}.
 \label{eq:eqCap3ProjectionX}
 \end{equation} 
 
-Já a \textbf{retroprojeção} dos dados projetados é dada a partir da inversão dessas equações a fim de calcular os valores de  coordenada $(X,Y)$ para cada fatia em $Z$. O procedimento é executado a partir de cada projeção obtida em um determinado ângulo $\theta$ e por fim são somadas a contribuições de cada projeção para cada fatia em $Z$. O fluxograma contido na Figura \ref{fig:imgCap3FluxogramaBP} ilustra o procedimento que deve ser feito para a reconstrução do volume. Em geral a combinação matemática utilizada para os planos retroprojetados é uma simples soma ou média, mas pode-se levar em conta aspectos mais avançados como comentado na seção \ref{ReduçãodeArtefatosdeAltaAtenuação}.
+Já a retroprojeção dos dados é dada a partir da inversão dessas equações a fim de calcular os valores da coordenada $(X,Y)$ para cada fatia em $Z$. O procedimento é executado a partir de cada projeção obtida em um determinado ângulo $\theta$ e por fim são somadas a contribuições de cada projeção para cada fatia em $Z$. O fluxograma da Figura \ref{fig:imgCap3FluxogramaBP} ilustra o procedimento que deve ser feito para a reconstrução do volume. Em geral a combinação matemática utilizada para os planos retroprojetados é uma simples soma ou um média ponderada. Técnicas mais sofisticadas para a redução de artefatos de alta atenuação são apresentadas em \citeonline{levakhina2013weighted} e \citeonline{borges2017metal}.
 
 \begin{figure}[H]
-	\caption{Fluxograma para o processo de simples retroprojeção para a reconstrução do volume.}
+	\caption{Fluxograma representando o processo de simples retroprojeção a fim de reconstruir o volume \acs{3D}.}
 	\begin{center}
-		\includegraphics[scale=0.5]{imgs/cap3/FluxogramaBP.pdf}
+		\includegraphics[scale=0.5, clip, trim= 5.5cm 0cm 6cm 0cm]{imgs/cap3/FluxogramaBP.pdf}
 	\end{center}
-	\legend{Fonte: do autor, 2018.}
+	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap3FluxogramaBP}
 \end{figure}
 
@@ -275,60 +272,60 @@ Já a \textbf{retroprojeção} dos dados projetados é dada a partir da inversã
 
 \subsection{Reconstrução Analítica}
 
-As técnicas utilizadas para a reconstrução em equipamentos de tomossíntese são provenientes de \acs{CT}, pelo fato de já estarem consolidadas e serem vastamente conhecidas na literatura. Isso não é diferente quando o assunto é reconstrução de forma analítica. Todo processo vêm da teoria da transformada inversa de Radon, que foi discutida com mais detalhes no item \ref{TransformadaRadon2D}. É importante notar que devido ao problema de reconstrução ser mal condicionado, tal como uma aquisição incompleta de dados, a resolução de forma analítica é uma solução aproximada e não leva em conta diversos fatores, como o ruído quântico presente nas projeções. A melhor forma de explicar esse método é a partir de duas dimensões e posteriormente sua extensão para a terceira dimensão, como é demonstrado nos itens a seguir \cite{mertelmeier2014filtered,xu2014tomographic}.  
+As técnicas utilizadas para a reconstrução em equipamentos de tomossíntese são provenientes de \acs{CT}, pelo fato de já estarem consolidadas e serem vastamente conhecidas na literatura. Isso não é diferente quando o assunto é reconstrução de forma analítica. Todo processo vem da teoria da transformada inversa de Radon, que foi discutida com mais detalhes no item \ref{TransformadaRadon2D}. É importante notar que devido ao problema de reconstrução ser mal condicionado, tal como uma aquisição incompleta de dados, a resolução de forma analítica é uma solução aproximada e não leva em conta diversos fatores, como o ruído quântico presente nas projeções. A melhor forma de explicar esse método é partindo de duas dimensões e posteriormente a extensão para a terceira dimensão, como é demonstrado nos itens a seguir \cite{mertelmeier2014filtered,xu2014tomographic}.  
 
 
 \subsubsection{Retroprojeção Filtrada}\label{RetroprojeçãoFiltrada}
 
-Um grande problema relacionado com a simples retroprojeção dos dados do detector é a soma das baixas frequências que ocorre a partir dos diferentes ângulos (Figura \ref{fig:imgCap3BPMosaico} e \ref{fig:imgCap3BPParcial}). Isso é facilmente observado quando faz-se o uso do \textit{Fourier Slice Theorem}, também conhecido como \textit{Central Slice Theorem}, ou traduzindo para o português como Teorema do Corte de Fourier. O problema dito acima pode ser observado na ilustração abaixo (Figura \ref{fig:imgCap3FourierSliceTheorem}) caso sejam tomados diferentes ângulos de projeção. Aplicando a transformada de Fourier inversa no domínio da frequência em toda a faixa de ângulo, é possível recuperar a estrutura espacial do objeto, porém de forma ``borrada'' devido a sobreposição de baixas frequências. \colorbox{pink}{Alexandre: Essa é a motivação para processamento de sinais, mas há uma justificativa que envolve o Jacobiano da transformada de coordenadas.}    
+Um grande problema relacionado com a simples retroprojeção dos dados do detector é a soma das baixas frequências que ocorre a partir dos diferentes ângulos, como foi demosntrado pela Figura \ref{fig:imgCap3BPMosaico} e \ref{fig:imgCap3BPParcial}. Isso é facilmente observado quando faz-se o uso do \textit{Fourier slice theorem}, também conhecido como \textit{central slice theorem}, ou traduzindo para o português como teorema do corte de Fourier. O problema dito acima pode ser observado na Figura \ref{fig:imgCap3FourierSliceTheorem}, caso sejam tomados diferentes ângulos de projeção. A formulação matemática desse teorema é encontrada em \citeonline[p. 61-65]{hsieh2009computed}. Aplicando a transformada de Fourier inversa no domínio da frequência, ao serem adquiridas diversas projeções em toda a faixa de ângulo, é possível recuperar a estrutura espacial do objeto, porém de forma ``borrada'' devido a sobreposição de baixas frequências.     
 
 \begin{figure}[H]
-	\caption{Ilustração do Teorema do Corte de Fourier.}
+	\caption{Ilustração do teorema do corte de Fourier.}
 	\begin{center}
-		\includegraphics[scale=0.4]{imgs/cap3/FourierSliceTheorem.png}
+		\includegraphics[scale=0.75, clip, trim=8.5cm 4cm 10.4cm 5.6cm]{imgs/cap3/FourierSliceTheorem.pdf}
 	\end{center}
-	\legend{Fonte: do autor, 2018.}
+	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap3FourierSliceTheorem}
 \end{figure}
 
-Com o propósito de contornar esse problema, é aplicado em cada projeção um filtro de rampa \acs{1D}, conhecido como \textit{Ramp Filter} (\ref{fig:imgCap3FBPFiltersA}), até a frequência de Nyquist $\frac{1}{2 \varDelta x}$, onde $\varDelta x$ é o tamanho espacial do \textit{pixel}. Esse filtro faz com que as baixas frequências sejam atenuadas mantendo somente as altas, porém devido ao seu formato, o ruído que predomina na alta frequência é amplificado. 
+Com o propósito de contornar esse problema, é aplicado em cada projeção um filtro de rampa \acs{1D}, conhecido como \textit{ramp filter} (\ref{fig:imgCap3FBPFiltersA}), até a frequência de Nyquist $\frac{1}{2 \varDelta x}$, no qual $\varDelta x$ é o tamanho espacial do \textit{pixel}. Esse filtro faz com que as baixas frequências sejam atenuadas mantendo somente as altas, porém devido ao seu formato, o ruído que predomina na alta frequência é amplificado. 
 
 \begin{figure}[H]
 	\centering
 	
-	\caption{Ilustração do filtro (a) rampa no domínio da frequência e (b) o mesmo ``janelado'' por uma função Hanning para redução de ruídos. \colorbox{pink}{Resolução baixa, mudar pra .pdf}}
+	\caption{Ilustração (a) do filtro de rampa no domínio da frequência (passa alta) e (b) o mesmo ``janelado'' por uma função Hanning para redução de ruídos (passa faixa).}
 	
-	\subfloat[\colorbox{pink}{Alexandre: Passa Alta}]{\includegraphics[scale=0.2]{imgs/cap3/RampFilter.png}\label{fig:imgCap3FBPFiltersA}}
+	\subfloat[]{\includegraphics[scale=0.5, clip, trim=3.5cm 8.5cm 4.1cm 8.6cm]{imgs/cap3/FiltroRampa.pdf}\label{fig:imgCap3FBPFiltersA}}
 	\hfil
-	\subfloat[\colorbox{pink}{Alexandre: Passa banda}]{\includegraphics[scale=0.2]{imgs/cap3/RampFilterHanning.png}\label{fig:imgCap3FBPFiltersB}}
+	\subfloat[]{\includegraphics[scale=0.5, clip, trim=3.5cm 8.5cm 4.1cm 8.6cm]{imgs/cap3/FiltroRampaHanning.pdf}\label{fig:imgCap3FBPFiltersB}}
 	\hfil
 	
-	\legend{Fonte: do autor, 2018.}
+	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap3FBPFilters}
 \end{figure}
 
 Devido a esse impasse é aplicado um ``janelamento'' no filtro, como por exemplo: Hamming, Hanning, Shepp-Logan ou cosseno. A Figura \ref{fig:imgCap3FBPFiltersA} ilustra o filtro rampa no domínio da frequência e a Figura \ref{fig:imgCap3FBPFiltersB} demonstra o mesmo após um ``janelamento'' pela função Hanning. Seguido do procedimento de filtragem, os dados são retomados para o domínio do espaço e então são retroprojetados para a formação da estrutura espacial do objeto \cite{xu2014tomographic}. 
 
-Já para a aplicação em tomossíntese, diversas aproximações devem ser feitas, pois essa técnica abrange somente uma pequena extensão de ângulo com poucas projeções quando comparado com equipamentos de \acs{CT}. Outro problema é com a geometria de emissão dos feixes, que são dispostos em formato de meio cone (\textit{Half Cone Beam}) \cite{mertelmeier2014filtered}. 
+Já para a aplicação em tomossíntese, diversas aproximações devem ser feitas, pois esta técnica abrange somente uma pequena extensão de ângulo com poucas projeções, quando comparada aos equipamentos de \acs{CT}. Outro problema é com a geometria de emissão dos feixes, que são dispostos em formato de meio cone (\textit{half cone beam}) \cite{mertelmeier2014filtered}. 
 
-Tendo em vista todos esses fatores, com uma aproximação da geometria dos feixes, dispondo-os paralelamente, pode-se utilizar o Teorema do Corte de Fourier para analisar as consequências desses problemas e suas devidas soluções. A Figura \ref{fig:imgCap3FourierSliceTheorem3D} ilustra a aproximação feita para a aplicação do teorema. Mais detalhes podem ser encontrados em \citeonline[p. 101-106]{mertelmeier2014filtered}.
+Tendo em vista esses fatores, com uma aproximação da geometria dos feixes, dispondo-os paralelamente, pode-se utilizar o teorema do corte de Fourier para analisar o comportamento das projeções no domínio da frequência. Isso pode ser feito para grandes distâncias entre o tubo e o detector. A Figura \ref{fig:imgCap3FourierSliceTheorem3D} ilustra a utilização do teorema na técnica de tomossíntese para a análise das projeções no domínio da frequência \cite[p. 101-106]{mertelmeier2014filtered}.
 
 \begin{figure}[H]
-	\caption{Ilustração do Teorema do Corte de Fourier aproximado para tomossíntese.}
+	\caption{Ilustração do teorema do corte de Fourier aproximado para a técnica de tomossíntese.}
 	\begin{center}
 		\includegraphics[scale=1.3]{imgs/cap3/FourierSliceTheorem3D.pdf}
 	\end{center}
-	\legend{Fonte: \citeonline[p. 102]{mertelmeier2014filtered}}
+	\legend{Fonte: Adaptado de \citeonline[p. 102]{mertelmeier2014filtered}.}
 	\label{fig:imgCap3FourierSliceTheorem3D}
 \end{figure} 
 
-O algoritmo de \citeonline[]{feldkamp1984practical} é o mais utilizado para tomossíntese da mama. De maneira geral o método apresenta uma aproximação do algoritmo de \acs{FBP} para uma geometria de cone (\textit{Cone-beam}). Esse algoritmo foi implementado em tomossíntese por \citeonline[]{wu2004comparison}. Basicamente, a implementação da técnica de \acs{FBP} para tomossíntese se dá em 5 passos \cite[p. 16]{xu2014tomographic}, como descrito a seguir:   
+O algoritmo de \citeonline[]{feldkamp1984practical} é amplamente utilizado para \acs{CT} e \acs{DBT}. De maneira geral, o método apresenta uma aproximação do algoritmo de \acs{FBP} utilizado em \acs{CT} proveniente da geometria de feixe em formato de leque (\textit{fan-beam}) para uma geometria de feixe cônico (\textit{cone-beam}) \cite{fessler2014fundamentals}. Este algoritmo foi implementado em tomossíntese por \citeonline[]{wu2004comparison}. Basicamente, a implementação da técnica para tomossíntese ocorre em 5 passos \cite[p. 16]{xu2014tomographic}, como descrito a seguir:   
 
 \begin{enumerate}
-	\item Fazer a transformada de Fourier da projeção em cada linha paralela a trajetória do tubo.
-	\item Aplicar o filtro de rampa no domínio da frequência.
-	\item Aplicar o filtro de ``janelamento'' para redução de ruído e artefatos.
-	\item Fazer a transformada inversa de Fourier das projeções filtradas.
+	\item Transformada de Fourier da projeção em cada linha paralela a trajetória do tubo;
+	\item Aplicar o filtro de rampa no domínio da frequência;
+	\item Aplicar o filtro de ``janelamento'' para redução de ruído e artefatos;
+	\item Transformada inversa de Fourier das projeções filtradas;
 	\item Retroprojetar os dados no domínio espacial.   
 \end{enumerate} 
 
@@ -337,22 +334,22 @@ O algoritmo de \citeonline[]{feldkamp1984practical} é o mais utilizado para tom
 
 \subsection{Reconstrução Iterativa}
 
-Como mencionado anteriormente, os algoritmos de \acs{FBP} têm sido os mais utilizados atualmente em tomossíntese da mama \cite{zheng2018detector}, pelo fato de serem rápidos e obterem resultados aproximados considerados bons \cite{das2011penalized}, porém devido à baixa amostragem no domínio da frequência, esses algoritmos introduzem erros na reconstrução e sofrem dificuldade de confecção dos filtros no domínio da frequência \cite{xu2015statistical}.
+Como mencionado, os algoritmos de \acs{FBP} têm sido os mais utilizados atualmente em tomossíntese da mama \cite{michell2018role}, pelo fato de serem rápidos e obterem resultados aproximados que são considerados bons \cite{das2011penalized}. Entretanto devido a baixa amostragem no domínio da frequência, esses algoritmos introduzem erros na reconstrução e sofrem dificuldades de confecção dos filtros no domínio de Fourier \cite{xu2015statistical}.
 
-Os métodos iterativos demandam um alto custo computacional para a resolução dos problemas de reconstrução. Devido a esse fato, os mesmos não eram utilizados por equipamentos comerciais no passado e somente eram alvo de pesquisas científicas. Com o avanço do poder computacional essas técnicas tem chamado a atenção para aplicações em reconstrução de imagens médicas e demonstram ser promissoras para \acs{DBT} \cite{zeng2010medical,zheng2018detector}.
+Os métodos iterativos demandam um alto custo computacional para a resolução dos problemas de reconstrução. Devido a isto, os mesmos não eram utilizados por equipamentos comerciais no passado, sendo somente alvos de pesquisas científicas. Com o avanço do poder computacional essas técnicas têm chamado a atenção para aplicações em reconstrução de imagens médicas e demonstram ser promissoras para \acs{DBT} \cite{zeng2010medical,zheng2018detector}.
 
-Para a resolução do problema de maneira iterativa é necessário primeiramente a discretização do modelo físico do sistema, como foi dito na seção \ref{DiscretizaçãodaImagem}. Após essa etapa, faz-se o uso de equações lineares para a solução do problema, de acordo com \citeonline[p. 125]{zeng2010medical}. Cada \textit{voxel} é denotado por $f_{j} (j=1,2,...,N)$ e cada projeção por $p_{i} (i=1,2,...,M)$. A Figura \ref{fig:imgCap3SistemaMatriz} ilustra um exemplo da retirada de um plano vertical da Figura \ref{fig:imgCap33DGeometry}, onde cada elemento de detector recebe somente um feixe de raio em cada projeção e cada \textit{voxel} possui tamanho unitário.  
+Para solucionar o problema de maneira iterativa é necessário primeiramente a discretização do modelo físico do sistema, como foi dito na seção \ref{DiscretizaçãodaImagem}. Após essa etapa, faz-se o uso de equações lineares para o modelamento e resolução do problema \cite[p. 125]{zeng2010medical}. Cada \textit{voxel} é denotado por $f_{j} \mid (j=1,2,...,N)$ e cada raio da projeção por $p_{i} \mid (i=1,2,...,M)$. A Figura \ref{fig:imgCap3SistemaMatriz} ilustra um exemplo da retirada de um plano vertical da Figura \ref{fig:imgCap33DGeometry}, onde cada elemento do detector recebe somente um feixe de raio X  e cada \textit{voxel} possui tamanho unitário.  
 
 \begin{figure}[H]
-	\caption{Ilustração do princípio de reconstrução algébrico através de equações lineares simples.}
+	\caption{Ilustração do princípio de reconstrução iterativa através de equações lineares simples.}
 	\begin{center}
-		\includegraphics[scale=0.55]{imgs/cap3/SistemaMatriz.pdf}
+		\includegraphics[scale=0.55, clip, trim=10cm 3cm 10cm 2.3cm]{imgs/cap3/SistemaMatriz.pdf}
 	\end{center}
-	\legend{Fonte: Adaptado de \citeonline[p. 202]{buzug2008computed}}
+	\legend{Fonte: Adaptado de \citeonline[p. 202]{buzug2008computed}.}
 	\label{fig:imgCap3SistemaMatriz}
 \end{figure} 
 
-Pode-se então relacionar o valor de cada \textit{voxel} com as projeções através das seguintes equações lineares:
+Pode-se então relacionar o valor de cada projeção com os valores dos \textit{voxels}, nos quais cada feixe de raio interage, através das seguintes equações lineares:
 
 \begin{equation}
 \begin{cases}
@@ -364,14 +361,14 @@ f_{1} \, + f_{2} \, = p_{4}, \\
 \label{eq:eqCap3EquacoesLineares}
 \end{equation} 
 
-\noindent sendo também possível reescrever o sistema acima na sua forma matricial, como é representado na equação abaixo:
+\noindent sendo também possível reescrever o sistema acima na sua forma matricial, representado pela equação abaixo:
 
 \begin{equation}
 P \, = A \, f,
 \label{eq:eqCap3MatrizEquacoesLineares1}
 \end{equation}
 
-\noindent onde $P = [p_{1},p_{2},p_{3},...,p_{M}]^{T}$ é um vetor coluna que representa o valores do sinograma no espaço de Radon, ou seja as projeções, {$f = [f_{1},f_{2},f_{3},...,f_{N}]^{T}$ é um vetor coluna que representa os coeficientes de atenuação dos \textit{voxels} no espaço tridimensional e $A$ é uma matriz $MxN$, onde seu elemento $a_{ij}$ representa a contribuição que o ``j-ésimo'' \textit{voxel} $f_{j}$ apresenta para a atenuação do feixe de raio X que forma a ``i-ésima'' projeção $p_{i}$, por exemplo o valor de $\sqrt{2}$ em $f_{1}$ e $f_{4}$ para $p_{3}$. Tratando-se da matriz $A$, $M$ significa o número de elementos detectores vezes o número de projeções e $N$ representa o número de \textit{voxels} total do objeto \cite{zeng2010medical,levakhina2014three}.
+\noindent na qual $P = [p_{1},p_{2},p_{3},...,p_{M}]^{T}$ é um vetor coluna que representa os valores do sinograma no espaço de Radon, ou seja as projeções, {$f = [f_{1},f_{2},f_{3},...,f_{N}]^{T}$ é um vetor coluna que representa os coeficientes de atenuação dos \textit{voxels} no espaço \acs{3D} e $A$ é uma matriz $MxN$, onde cada elemento $a_{ij}$ representa a contribuição que o ``j-ésimo'' \textit{voxel} $f_{j}$ apresenta para a atenuação do feixe de raio X que forma a ``i-ésima'' projeção $p_{i}$, por exemplo, o valor $\sqrt{2}$ em $f_{1}$ e $f_{4}$ para $p_{3}$. Tratando-se da matriz $A$, sua dimensão $M$ significa o número de elementos detectores vezes o número de projeções e $N$ representa o número total de \textit{voxels} do objeto \cite{zeng2010medical,levakhina2014three}.
 
 Como o objetivo da reconstrução é encontrar os coeficientes de atenuação do objeto, deve-se então solucionar $f$. Para isso, se a matriz $A$ é inversível, a imagem reconstruída pode ser facilmente encontrada algebricamente através da equação abaixo:
 
@@ -380,76 +377,82 @@ Como o objetivo da reconstrução é encontrar os coeficientes de atenuação do
  \label{eq:eqCap3MatrizEquacoesLineares2}
  \end{equation}      
 
-\noindent porém na prática esse processo é inviável devido a reconstrução tomográfica ser um problema mal condicionado e ao grande número de equações no sistema \cite{levakhina2014three}. Tendo isso em mente, a melhor alternativa é encontrar uma \textbf{solução aproximada} através de métodos matemáticos de otimização de problemas de uma forma iterativa \cite{buzug2008computed}.  
+\noindent porém na prática esse processo é inviável devido a reconstrução tomográfica ser um problema mal condicionado e ao grande número de equações no sistema, em outras palavras, a matriz $A$ é muito grande e esparsa \cite{levakhina2014three}. Considerando o que foi dito, a melhor alternativa é encontrar uma \textbf{solução aproximada} através de métodos matemáticos de otimização de problemas de uma forma iterativa \cite{buzug2008computed}.  
 
-Para isso, deve-se otimizar uma função $E(x)$, normalmente chamada de função de custo, objetiva ou de energia, com o intuito de encontrar a melhor solução $\hat{x}$, ou a mais aproximada. Visto isso, é necessário minimizar ou maximizar os resultados de $E(x)$, de acordo com as equações a seguir:
+Para isso, deve-se otimizar uma função $E(x)$, normalmente chamada de função de custo, objetivo ou de energia, com o intuito de encontrar a melhor solução $\hat{x}$, ou a mais aproximada. Assim, é necessário minimizar ou maximizar a função $E(x)$, de acordo com as equações a seguir:
  
 \begin{equation}
-\hat{x} = \underset{x\geq 0}{\arg\min} \; E(x) \;\;\;\; \text{ou} \;\;\;\; \hat{x} = \underset{x\geq 0}{\arg\max} \; E(x).
+\hat{x} = \underset{}{\arg\min} \; E(x) \;\;\;\; \text{ou} \;\;\;\; \hat{x} = \underset{}{\arg\max} \; E(x).
 \label{eq:eqCap3Minimizacao}
 \end{equation} 
 
-Segundo \citeonline[p. 206]{buzug2008computed}, uma solução generalizada para a Equação \ref{eq:eqCap3MatrizEquacoesLineares1} é dada pela minimização de \eqref{eq:eqCap3MinimosQuadrados} dita como método dos mínimos quadrados, caracterizando-se por um problema de otimização:
+Segundo \citeonline[p. 206]{buzug2008computed}, uma solução generalizada para a Equação \ref{eq:eqCap3MatrizEquacoesLineares1} é dada pela minimização de \eqref{eq:eqCap3MinimosQuadrados} dita como norma mínima dos mínimos quadrados, caracterizando-se por um problema de otimização:
 
 \begin{equation}
 \chi^{2} \, = \left\| A \, f \, - \,P \right\|^{2},
 \label{eq:eqCap3MinimosQuadrados}
 \end{equation} 
 
-\noindent onde $E(x) = \chi^{2}$, ou seja, \eqref{eq:eqCap3MinimosQuadrados} é a função de energia. Outras técnicas são encontradas na literatura para a otimização de funções de custo, tais como métodos de gradientes descendentes, iterativos algébricos e estatísticos, os quais são abordados nos próximos itens.
+\noindent onde $E(x) = \chi^{2}$, ou seja, \eqref{eq:eqCap3MinimosQuadrados} é a função de energia. Outras técnicas são encontradas na literatura para a otimização das funções de custo, tais como métodos de gradientes descendentes, iterativos algébricos e estatísticos, os quais são abordados nos próximos itens.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%						               Reconstrução Iterativa (Método Algébrico)    										%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection{Método Algébrico}
 
-Como já foi dito, para a resolver o problema de reconstrução deve-se encontrar a solução para as equações demonstradas em \eqref{eq:eqCap3EquacoesLineares}, porém as aplicações práticas tendem a ter uma enorme quantidade de equações, tornando inviável a resolução por métodos usuais \cite[p. 210]{buzug2008computed}. 
+Como já foi dito, para a resolver o problema de reconstrução é necessário encontrar a solução para as equações demonstradas em \eqref{eq:eqCap3EquacoesLineares}, porém as aplicações práticas tendem a ter uma enorme quantidade de equações, tornando inviável a resolução por procedimentos usuais \cite[p. 210]{buzug2008computed}. 
 
-Baseado nisso, um método muito encontrado na literatura é a técnica de reconstrução algébrica (\textit{Algebraic Reconstruction Technique} - \acs{ART}). Esse método visa resolver iterativamente um sistema enorme de equações lineares satisfazendo-as uma a uma, em outras palavras, estima uma imagem que solucione uma equação por vez \cite{rangayyan2004biomedical}. 
+Baseado nisso, um método comumente encontrado na literatura é a técnica de reconstrução algébrica (\textit{Algebraic Reconstruction Technique} - \acs{ART}). Esse método visa resolver iterativamente um sistema enorme de equações lineares satisfazendo-as uma a uma, em outras palavras, estima-se uma imagem (coeficientes de atenuação) que solucione uma equação por vez \cite{rangayyan2004biomedical}. 
 
-Segundo \citeonline[p. 211]{buzug2008computed}, esse método idealmente estima que a solução da imagem, i.e. o vetor {$f = [f_{1},f_{2},f_{3},...,f_{N}]^{T}$, seja um ponto no espaço $N$ dimensional, onde as $M$ equações de \eqref{eq:eqCap3EquacoesLineares} sejam hiperplanos que cruzam esse ponto, dado como solução.
+Segundo \citeonline[p. 211]{buzug2008computed}, esse método idealmente estima que a solução da imagem, i.e. o vetor {$f = [f_{1},f_{2},f_{3},...,f_{N}]^{T}$, seja um ponto no espaço $\mathcal{N}$ dimensional, onde as $M$ equações \eqref{eq:eqCap3EquacoesLineares} sejam hiperplanos que cruzam esse ponto, dado como solução.
 
 Acompanhando a linha do autor, o exemplo abaixo ilustra como é dada a solução do problema através do método especificado. Para o exemplo, o mesmo é simplificado para $N = 2$, ou seja, são considerados somente dois \textit{pixels} e cada um é interceptado por somente um feixe de raio, tendo como resultado duas projeções $M=2$. Através disso, as equações podem ser modeladas seguindo o mesmo raciocínio de \eqref{eq:eqCap3EquacoesLineares}, demonstradas a seguir:
 
 \begin{equation}
 \begin{cases}
 a_{11}f_{1} \, + a_{12}f_{2} \, = p_{1} \\ 
-a_{21}f_{2} \, + a_{22}f_{2} \, = p_{2} \\  
+a_{21}f_{1} \, + a_{22}f_{2} \, = p_{2} \\  
 \end{cases}.
 \label{eq:eqCap3ARTEquacoesLineares}
 \end{equation}
 
-Cada equação, nesse caso, simboliza uma reta no espaço bidimensional, como demonstra a Figura \ref{fig:imgCap3ART}. Uma estimativa inicial $f^{(0)}$ deve ser feita e então esse vetor deve ser projetado perpendicularmente na reta que representa $p_{1}$ para obter a nova imagem $f^{(1)}$. O processo volta a se repetir, projetando $f^{(1)}$ em $p_{2}$ e assim até convergir para a solução desejada $f = (f_{1},f_{2})^{T}$. \colorbox{pink}{Elias: Corrigir a figura?}
+Cada equação, nesse caso, simboliza uma reta no espaço bidimensional, como demonstra a Figura \ref{fig:imgCap3ART}. Uma estimativa inicial $f^{(0)}$ deve ser feita e então esse ponto deve ser projetado perpendicularmente na reta, ou hiperplano, que representa $p_{1}$ para obter a nova imagem $f^{(1)}$. O processo volta a se repetir, projetando $f^{(1)}$ no hiperplano definido pela equação de $p_{2}$ e assim até convergir para a solução desejada $f = (f_{1},f_{2})^{T}$.
 
 
 \begin{figure}[H]
-	\caption{Ilustração do processo de reconstrução através do método \acs{ART}.}
+	\caption{Ilustração geométrica do processo de reconstrução através do método \acs{ART}.}
 	\begin{center}
 		\includegraphics[scale=1]{imgs/cap3/ART1.pdf}
 	\end{center}
-	\legend{Fonte: \citeonline[p. 212]{buzug2008computed}}
+	\legend{Fonte: \citeonline[p. 212]{buzug2008computed}.}
 	\label{fig:imgCap3ART}
 \end{figure} 
 
-A equação abaixo demonstra a forma representativa para o cálculo do algoritmo \acs{ART}, retirado de \citeonline[p. 131]{zeng2010medical}: \colorbox{pink}{Elias: Corrigir a equação?}
+A equação abaixo demonstra a fórmula para o cálculo do método \acs{ART}, na qual os \textit{voxels} referentes ao raio $i$ são atualizados ao final do processamento desse mesmo raio, ou seja, a atualização de $\hat{f}$ é feita raio por raio \cite{buzug2008computed, levakhina2014three}:
+
 
 \begin{equation}
-f^{Próximo} = f^{Atual} - Retroprojeção_{raio}\{\dfrac{Projeção_{raio}(f^{Atual})- Medição_{raio}}{Fator\,Normalização}\}.  
-\label{eq:eqCap3ARTEquacoesSimbolica}
+f^{n} = f^{n-1} - \dfrac{(a_{i} \, f^{n-1}- p_{i})}{a_{i}\,(a_{i})^{T}}   (a_{i})^{T}   .  
+\label{eq:eqCap3ARTEquacao}
 \end{equation}
 
-Os métodos ditados acima assumem um caso ideal. As projeções dos feixes em sistemas reais sofrem de inconsistências como ruídos e artefatos, bem como na prática o problema é constituído de inúmeras equações. Dispondo disso, a solução para as ditas equações lineares não é encontrada em somente um ponto, mas sim em uma região que possui múltiplas soluções. Nesse caso uma solução aproximada $\hat{f}$ deve ser estimada, no sistema caracterizado como possível e indeterminado \cite[p. 218]{buzug2008computed}. A Figura \ref{fig:imgCap3ARTIndeterminado} exemplifica o caso acima. 
+%\begin{equation}
+%f^{Próximo} = f^{Atual} - Retroprojeção_{raio}\{\dfrac{Projeção_{raio}(f^{Atual})- Medição_{raio}}{Fator\,Normalização}\}.  
+%\label{eq:eqCap3ARTEquacoesSimbolica}
+%\end{equation}
+
+Os métodos ditados acima assumem um caso ideal. As projeções dos feixes em sistemas reais sofrem de inconsistências de ruídos e artefatos, bem como na prática o problema é constituído de inúmeras equações. Dado isso, a solução para as equações lineares não é encontrada em somente um ponto, mas sim em uma região que possui múltiplas soluções. Nesse caso uma solução aproximada $\hat{f}$ deve ser estimada no sistema caracterizado como possível e indeterminado \cite[p. 218]{buzug2008computed}. A Figura \ref{fig:imgCap3ARTIndeterminado} exemplifica o caso acima. 
 
 \begin{figure}[H]
-	\caption{Ilustração geométrica para a reconstrução de um sistema possível indeterminado.}
+	\caption{Ilustração geométrica de como ocorre a reconstrução de um sistema possível indeterminado por meio do método \acs{ART}.}
 	\begin{center}
 		\includegraphics[scale=1]{imgs/cap3/ART2.pdf}
 	\end{center}
-	\legend{Fonte: \citeonline[p. 218]{buzug2008computed}}
+	\legend{Fonte: \citeonline[p. 218]{buzug2008computed}.}
 	\label{fig:imgCap3ARTIndeterminado}
 \end{figure}
 
-\colorbox{pink}{Elias: Corrigir essas afirmações} Variações do método algébrico, dito acima, são encontradas na literatura. O algoritmo que utiliza a técnica de reconstrução iterativa simultânea (\textit{Simultaneous Iterative Reconstruction Technique} - \acs{SIRT}) é uma evolução do método convencional algébrico e visa resolver todo o sistema de equações lineares e atualizar a estimativa da imagem $f$ ao fim de cada iteração, ao contrário do \acs{ART} que atualiza a cada raio \cite{yang2012numerical,zeng2010medical}. Já o método que utiliza a técnica de reconstrução algébrica simultânea (\textit{Simultaneous Algebraic Reconstruction Technique} - \acs{SART}), produz resultados superiores aos ditos anteriormente \cite{levakhina2014three,yang2012numerical}.   
+Variações do método algébrico, dito acima, são encontradas na literatura. O algoritmo que utiliza a técnica de reconstrução iterativa simultânea (\textit{Simultaneous Iterative Reconstruction Technique} - \acs{SIRT}) é uma modificação do método convencional algébrico que atualiza a estimativa da imagem $f$ somente depois do processamento de todas as projeções, ao contrário do \acs{ART} que atualiza a cada raio \cite{zhang2006comparative,yang2012numerical,zeng2010medical}. Já o método que utiliza a técnica de reconstrução algébrica simultânea (\textit{Simultaneous Algebraic Reconstruction Technique} - \acs{SART}), atualiza $f$ ao final de cada projeção geométrica \cite{zhang2006comparative,levakhina2014three,yang2012numerical}.   
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%						               Reconstrução Iterativa (Método Estatístico)    										%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -468,23 +471,23 @@ ImgReconstruida = \underset{ImgEstimada}{\arg\max} \; l(ImgEstimada \mid Medidas
 \noindent onde $l(ImgEstimada)$ é a função de verossimilhança a ser otimizada tendo as medidas das projeções.
 
 
-De acordo com \citeonline[p. 230]{buzug2008computed}, em um equipamento que utiliza raios X de transmissão, o número de \textit{quanta} emitido pelo tubo e recebido pelo detector seguem a distribuição de Poisson, descrita matematicamente por:
+De acordo com \citeonline[p. 230]{buzug2008computed}, em um equipamento que utiliza raios X de transmissão, o número de \textit{quanta} emitido pelo tubo e recebido pelo detector segue a distribuição de Poisson, descrita matematicamente por:
 
 \begin{equation}
 P(Y_{i} = y_{i} \mid \hat{y_{i}}(f) ) = \dfrac{e^{-\hat{y_{i}}(f) } \, [\hat{y_{i}}(f)] ^{y_{i}}}  {y_{i}!},
 \label{eq:eqCap3DistribuicaoPoisson}
 \end{equation}
 
-\noindent onde $Y_{i}$ é uma variável aleatória contando o número de \textit{quanta} em cada observação da projeção $y_{i}$. O valor observado $y_{i}$ difere do valor esperado $\hat{y_{i}}(f)$ , pelo fato do detector ser um contador de fótons que obedece a distribuição descrita acima, por radiações espalhadas de Comptom, \textit{crosstalk}\footnote{Interferência entre \textit{pixels} vizinhos que ocorrem em detectores indiretos de \acs{DBT}, causados pela difusão da luz no fósforo ou através dos cintiladores \cite{zheng2018detector}.} entre os detectores e também o tamanho finito dos mesmos contrariando as situações ideais da Equação \ref{eq:eqCap3BeerLambert1} \cite[p. 6]{Fessler2000handbook}. Esse valor esperado pode ser calculado segundo uma aproximação da lei de Beer-Lambert, demonstrada abaixo \cite[p. 9]{Fessler2000handbook}:
+\noindent tal que $Y_{i}$ é uma variável aleatória contando o número de \textit{quanta} em cada observação da projeção $y_{i}$. O valor observado $y_{i}$ difere do valor esperado $\hat{y_{i}}$ pelo fato do detector ser um contador de fótons que obedece a distribuição descrita acima, por radiações espalhadas de Comptom, \textit{crosstalk}\footnote{Interferência entre \textit{pixels} vizinhos que ocorrem em detectores indiretos de \acs{DBT}, causados pela difusão da luz no fósforo ou através dos cintiladores \cite{zheng2018detector}.} entre os detectores e também pelo tamanho finito dos mesmos, contrariando as situações ideais da Equação \ref{eq:eqCap3BeerLambert1} \cite[p. 6]{Fessler2000handbook}. Esse valor esperado pode ser calculado segundo uma aproximação da lei de Beer-Lambert, demonstrada abaixo \cite[p. 9]{Fessler2000handbook}:
 
 \begin{equation}
 \hat{y_{i}}(f) = b_{i} \, e \, ^{-\hat{p_{i}}(f)} \, + r_{i},
 \label{eq:eqCap3BeerLambertDiscreto2}
 \end{equation}
 
-\noindent onde $\hat{p_{i}}(f)$ é a função de atenuação que cada raio sofre, $b_{i}$ é o número médio de \textit{quanta} recebido pelo detector caso não haja nenhum objeto entre o tubo e o detector e $r_{i}$ modela os fatores externos mencionados acima. 
+\noindent em que $\hat{p_{i}}(f)$ é a função de atenuação que cada raio sofre, $b_{i}$ é o número médio de \textit{quanta} recebido pelo detector caso não exista nenhum objeto entre o tubo e o detector e $r_{i}$ modela os fatores externos mencionados acima. 
 
-A função $\hat{p_{i}}(f)$ é calculada pela soma dos produtos da contribuição $a_{ij}$ para a atenuação $f_{j}$ de todos os \textit{voxel} $j$ no percurso do feixe de raio $i$, dado por: 
+A função $\hat{p_{i}}(f)$ é calculada pelo somatório dos produtos da contribuição $a_{ij}$ para a atenuação $f_{j}$ de todos os \textit{voxels} $j$ no percurso do feixe de raio $i$, dado por: 
 
 
 \begin{equation}
@@ -492,23 +495,23 @@ A função $\hat{p_{i}}(f)$ é calculada pela soma dos produtos da contribuiçã
 \label{eq:eqCap3BeerEsperancaAtenuacao}
 \end{equation}
 
-A probabilidade conjunta $P \mid (P = {y_{1},y_{2},y_{3},...,y_{M}})$ das projeções independentes $y_{i}$, dado a esperança $\hat{y_{i}}(f)$, é dado pela seguinte equação:   
+A probabilidade conjunta $P \mid (P = {y_{1},y_{2},y_{3},...,y_{M}})$ das projeções independentes $y_{i}$, dado o valor esperado $\hat{y_{i}}(f)$, é dada pela seguinte equação:   
 
 \begin{equation}
 P(P = p\mid f ) = \prod_{i=1}^{M}  \dfrac{e^{-\hat{y_{i}}(f)} \, [\hat{y_{i}}(f)]^{y_{i}}}  {y_{i}!},
 \label{eq:eqCap3DistribuicaoPoissonConjunta}
 \end{equation}
 
-\noindent porém segundo \citeonline[p. 225]{buzug2008computed}, não faz sentido analisar a probabilidade de uma projeção $P$, ou seja uma observação, dado o valor esperado $\hat{y_{i}}(f)$ calculado através dos coeficientes de atenuação $f$, já que o intuito da resolução do problema é estimar os valores desses coeficientes $\hat{f}$. Nesse sentido, pode-se fazer o uso da \textbf{função de verossimilhança} para a resolução do problema.
+\noindent porém segundo \citeonline[p. 231]{buzug2008computed}, não faz sentido analisar a probabilidade de uma projeção $P$, ou seja uma observação, dado o valor esperado $\hat{y_{i}}(f)$ calculado através dos coeficientes de atenuação $f$, já que o intuito da resolução do problema é estimar os valores desses coeficientes $\hat{f}$. Nesse sentido, pode-se fazer o uso da \textbf{função de verossimilhança} para a resolução do problema.
 
-A \textbf{verossimilhança} diz que uma observação qualquer $Y = y$ é uma evidência que favorece a hipótese A sobre a hipótese B, dado as duas hipóteses inicialmente, se a condição abaixo é satisfeita \cite{morettin2010}:
+A \textbf{verossimilhança} diz que uma observação qualquer $Y = y$ é uma evidência que favorece a hipótese A sobre a hipótese B, dada as duas hipóteses inicialmente, se a condição abaixo é satisfeita \cite{morettin2010}:
 
 \begin{equation}
 p_{A}(y) >p_{B}(y).
 \label{eq:eqCap3LeiVerossimilhanca}
 \end{equation}
 
-Existe uma diferença entre probabilidade e verossimilhança. Quando em uma função de densidade, e.g. Equação \ref{eq:eqCap3DistribuicaoPoisson}, o parâmetro fixo é a esperança $\hat{y_{i}}(f)$ e o variável são as observações $y_{i}$, essa é denominada de função de probabilidade. Já se a observação é fixa e o parâmetro esperado é variável denomina-se \textbf{função de verossimilhança} \cite{morettin2010}.
+Existe uma diferença entre probabilidade e verossimilhança. Quando em uma função de distribuição de probabilidade, e.g. a Equação \ref{eq:eqCap3DistribuicaoPoisson}, o parâmetro fixo é o valor esperado $\hat{y_{i}}(f)$ e o variável é a observação $y_{i}$, esta é denominada de função de probabilidade. Já se a observação é fixa e o parâmetro esperado é variável denomina-se \textbf{função de verossimilhança} \cite{morettin2010}.
 
 Dito esses conceitos junto ao problema encontrado com a Equação \ref{eq:eqCap3DistribuicaoPoissonConjunta}, é plausível a utilização da função de verossimilhança para a resolução do mesmo, tendo como resultado a equação abaixo: 
 
@@ -517,7 +520,7 @@ l(f \mid P = p) = \prod_{i=1}^{M}  \dfrac{e^{-\hat{y_{i}}(f)} \, [\hat{y_{i}}(f)
 \label{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca1}
 \end{equation} 
   
-Sendo assim, a finalidade da função acima é de variar os valores de $f$ buscando o máximo valor de verossimilhança $l$, dado um conjunto de observações $P$ \cite[p. 231]{buzug2008computed}. A busca pelo valor máximo da equação está intimamente ligada com o conceito de verossimilhança ditada acima que busca a melhor hipótese $\hat{f}$ para os valores de $f$ dado o conjunto de observações $P$, como ilustra a figura abaixo. 
+Sendo assim, a finalidade da função acima é de variar os valores de $f$ buscando o valor ótimo de verossimilhança $l$, dado um conjunto de observações $P$ \cite[p. 231]{buzug2008computed}. A busca pelo valor máximo da equação está intimamente ligada com o conceito de verossimilhança ditado acima, que busca a melhor hipótese $\hat{f}$ para os valores de $f$ dado o conjunto de observações $P$, como ilustra a figura abaixo. 
 
 
 \begin{figure}[H]
@@ -525,48 +528,48 @@ Sendo assim, a finalidade da função acima é de variar os valores de $f$ busca
 	\begin{center}
 		\includegraphics[scale=0.4]{imgs/cap3/Verossimilhanca.pdf}
 	\end{center}
-	\legend{Fonte: do autor, 2018.}
+	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap3Verossimilhanca}
 \end{figure}   
 
-Substituindo a Equação \ref{eq:eqCap3BeerLambertDiscreto2} na Equação \ref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca1} e fazendo o uso da função logaritmo, a fim de simplificar os cálculos e por conveniência, resulta na Equação \ref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca2}, desprezando constantes independentes de $f$ \cite[p. 10]{Fessler2000handbook}. 
+Substituindo a Equação \ref{eq:eqCap3BeerLambertDiscreto2} na Equação \ref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca1} e fazendo o uso da função logaritmo a fim de simplificar os cálculos e por conveniência, tem-se a Equação \ref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca2}, desprezando constantes independentes de $f$ \cite[p. 10]{Fessler2000handbook}. 
 
 \begin{equation}
 L(f \mid P = p) = \log (l(f \mid P = p)) = \sum_{i=1}^{M} \, y_{i} \log (b_{i} \, e \, ^{-\hat{p_{i}}(f)} \, + r_{i}) \,-\,(b_{i} \, e \, ^{-\hat{p_{i}}(f)} \, + r_{i}),
 \label{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca2}
 \end{equation} 
 
-\noindent onde a equação acima é a log-verossimilhança para \acs{CT} de transmissão e reescrevendo-a de maneira mais simples abaixo, podendo fazer uma analogia com a Equação \ref{eq:eqCap3ModeloVerossimilhança}. \colorbox{pink}{Alexandre: Minimizar ou maximizar? Analisar isso!}
+\noindent onde a equação acima é a log-verossimilhança para \acs{CT} de transmissão e reescrevendo-a de maneira mais simples abaixo, podendo fazer uma analogia com a Equação \ref{eq:eqCap3ModeloVerossimilhança}.
 
 \begin{equation}
-\hat{f} = \underset{f\geq 0}{\arg\min} \; L(f \mid P),
+\hat{f} = \underset{f\geq 0}{\arg\max} \; L(f \mid P),
 \label{eq:eqCap3VerossimilhançaFinal}
 \end{equation}
 
-Ainda de acordo com \citeonline[p. 11]{Fessler2000handbook}, devido ao problema de reconstrução tomográfica ser mal condicionado, a maximização de $l(f)$ por si só leva a resultados de imagens ruidosas. Isso porque existe um grande conjunto de mapas de atenuação que se encaixam bem como o resultado da equação. Então, segundo o autor, a função de verossimilhança por si só não consegue encontrar o melhor resultado. Uma das soluções encontradas para esse problema, que é vastamente conhecida na literatura, é a introdução de um termo de regularização na função objetiva, ou seja, incorporar informações já conhecidas para limitar o espaço de soluções de um vasto conjunto para um subconjunto menor. Então a maximização da sua nova forma ``penalizada'' é feita para encontrar a melhor solução contida nesse subconjunto, como é demonstrado abaixo:     
+Ainda de acordo com \citeonline[p. 11]{Fessler2000handbook}, devido ao problema de reconstrução tomográfica ser mal condicionado, a maximização de $L(f)$ por si só leva a resultados de imagens ruidosas. Isso porque existe um grande conjunto de mapas de atenuação que se encaixam bem, como o resultado da equação. Então, segundo o autor, a função de verossimilhança por si só não consegue encontrar o melhor resultado. Uma das soluções encontradas para esse problema, que é vastamente conhecida na literatura, é a introdução de um termo de regularização na função objetivo, ou seja, incorporar informações já conhecidas para limitar o espaço de soluções de um vasto conjunto para um subconjunto menor. Então a maximização da sua nova forma ``penalizada'' é feita para encontrar a melhor solução contida nesse subconjunto, como é demonstrado abaixo:     
 
 \begin{equation}
-\hat{f} = \underset{f\geq 0}{\arg\max} \; \Phi(f), \;\; \text{onde} \;\; \Phi(f) = l(f) - \beta R(f),
+\hat{f} = \underset{f\geq 0}{\arg\max} \; \Phi(f), \;\; \text{onde} \;\; \Phi(f) = L(f) - \beta R(f),
 \label{eq:eqCap3VerossimilhançaPenalizada}
 \end{equation}
 
-\noindent ou simbolicamente:  \colorbox{pink}{Elias: letras acentuadas não estão em itálico}
+\noindent ou simbolicamente:
 
 \begin{equation}
-(Função \;a \;posteriori) = (Função \;de \;Verossimilhança) - \beta (Função \;a \;priori).
+(\text{Função \textit{a posteriori}}) = (\text{Função de Verossimilhança}) - \beta (\text{Função \textit{a priori}}).
 \label{eq:eqCap3VerossimilhançaPenalizadaSimbolica}
 \end{equation}
 
-Nessa notação, a função $R(f)$ modela a restrição do sistema \colorbox{pink}{Elias: Mudar a descrição de R(f)}, o fator $\beta$ controla a força de influência dessa função e $l(f)$ é a função objetiva formulada anteriormente. Os algoritmos que introduzem essas técnicas são conhecidos como: \ac{PML}, métodos \textit{Bayesianos} ou \ac{MAP} \colorbox{pink}{Alexandre: MAP não está certo. Analisar}. 
+Nessa notação, $R(f)$ modela a função de regularização do sistema, o fator $\beta$ controla a força de influência dessa função e $L(f)$ é a função objetivo formulada anteriormente. O algoritmos que introduz essa técnica é conhecido como \ac{PML}. 
 
-A formulação de \eqref{eq:eqCap3VerossimilhançaPenalizada} é dada a partir do modelo Bayesiano, ou teorema de Bayes, demonstrado abaixo, que utiliza de conhecimentos de probabilidade \textit{a priori} para a estimativa de parâmetros \textit{a posteriori}, dado as probabilidades condicionais, de acordo com \citeonline[p. 144]{zeng2010medical}.  
+Da mesma maneira, a formulação de \eqref{eq:eqCap3VerossimilhançaPenalizada} pode ser dada também a partir do modelo Bayesiano, ou teorema de Bayes, demonstrado abaixo, que utiliza de conhecimentos de probabilidade \textit{a priori} para a estimativa de parâmetros \textit{a posteriori}, dado as probabilidades condicionais \cite[p. 144]{zeng2010medical}. Esses algoritmos são conhecidos como métodos \textit{Bayesianos} ou \ac{MAP}. O cálculo da estimativa \acs{MAP} ocorre através do teorema de Bayes:
 
 \begin{equation}
-Prob(f \mid P) = \dfrac{Prob(P \mid f) Prob(f)}{Prob(P)}.
+Prob(f \mid P) = \dfrac{Prob(P \mid f) Prob(f)}{Prob(P)},
 \label{eq:eqCap3TeoremaBayes}
 \end{equation}  
 
-Aplicando o logaritmo na equação acima, tem-se \eqref{eq:eqCap3TeoremaBayesLog}, onde o elemento que não depende do coeficiente de atenuação $f$ é desprezado, gerando \eqref{eq:eqCap3TeoremaBayesLogSimplificada}:
+\noindent tal qual,  aplicando o logaritmo na equação acima, tem-se \eqref{eq:eqCap3TeoremaBayesLog}, onde o elemento que não depende do coeficiente de atenuação $f$ é desprezado, gerando \eqref{eq:eqCap3TeoremaBayesLogSimplificada}:
 
 \begin{equation}
 \log(Prob(f \mid P)) = \log(Prob(P \mid f)) + \log(Prob(f)) - \log(Prob(P)),
@@ -578,14 +581,14 @@ Aplicando o logaritmo na equação acima, tem-se \eqref{eq:eqCap3TeoremaBayesLog
 \label{eq:eqCap3TeoremaBayesLogSimplificada}
 \end{equation}
 
-\noindent onde o primeiro termo é o modelo estatístico da aquisição física do sistema, i.e. função de máxima verossimilhança \eqref{eq:eqCap3VerossimilhançaFinal}, e o segundo termo é o modelo estatístico que faz a restrição do sistema para que esse possa convergir para um solução apropriada. Simplificadamente tem-se a equação abaixo, sendo possível sua assimilação com a Equação \ref{eq:eqCap3VerossimilhançaPenalizadaSimbolica}.
+\noindent onde o primeiro termo é o modelo estatístico da aquisição física do sistema, i.e. função de máxima verossimilhança \eqref{eq:eqCap3VerossimilhançaFinal}, e o segundo termo é o modelo estatístico que faz a restrição do sistema para que este possa convergir para um solução apropriada. Simplificadamente tem-se a equação abaixo, sendo possível sua assimilação com a Equação \ref{eq:eqCap3VerossimilhançaPenalizadaSimbolica}.
 
 \begin{equation}
 \Phi(f) = l(f) - \beta R(f).
 \label{eq:eqCap3TeoremaBayesLogSimplificadaFinal}
 \end{equation}
 
-É conhecido da literatura que os mapas de atenuações não variam bruscamente em uma pequena faixa de extensão, ou seja, os níveis de cinza entre os \textit{pixels} vizinhos não alteram significantemente em relação à média local \cite{Fessler2000handbook,buzug2008computed}. Essa informação pode ser considerada como um conhecimento \textit{a priori} sobre a imagem desejada e a partir desse fato, pode ser incorporado uma equação que desestimule a ``rispidez'' sobre a imagem processada, impondo restrições de suavidade. Sendo assim, essa equação pode ser modelada através de funções matemáticas e incorporada como uma restrição para o conjunto de soluções do modelo estatístico.
+É conhecido da literatura que os mapas de atenuações não variam bruscamente em uma pequena faixa de extensão, ou seja, os níveis de cinza entre os \textit{pixels} vizinhos não alteram significantemente em relação a média local \cite{Fessler2000handbook,buzug2008computed}. Essa informação pode ser considerada como um conhecimento \textit{a priori} sobre a imagem desejada e a partir desse fato, pode ser incorporado uma equação que desestimule a ``rispidez'' sobre a imagem processada, impondo restrições de suavidade. Sendo assim, essa equação pode ser modelada através de funções matemáticas e incorporada como uma restrição para o conjunto de soluções do modelo estatístico.
 
 Um das maneiras mais simples de modelar uma função de restrição de suavidade na imagem é através da discrepância existente entre os valores dos \textit{pixels} vizinhos \cite[p. 12]{Fessler2000handbook}. Esse modelamento pode ser feito de acordo com \citeonline[p. 4]{das2011penalized}:
 
@@ -594,7 +597,7 @@ R(f) = \sum_{j=1}^{N}  \sum_{k=1}^{N_{i}} \omega_{jk} \, \psi(f_{j}-f_{k}),
 \label{eq:eqCap3DiscrepanciaPixels}
 \end{equation}  
 
-\noindent onde $f$ é o coeficiente de atenuação, $\psi$ mede a discrepância entre $f_{j}$ e $f_{k}$, $N_{i}$ são os índices da vizinhança, $\omega_{jk} = \omega_{kj}$ define a influência do ``k-ésimo'' \textit{voxel} no ``j-ésimo'' \textit{voxel}. A influência de cada \textit{voxel} em seu vizinho é definida por: $\omega_{jk} = 1$ para os seis \textit{voxels} vizinhos, sendo dois em cada direção do eixo, $\omega_{jk} = 1/\sqrt{2}$ para os diagonais e $\omega_{jk} = 0$ para qualquer outro. A Figura \ref{fig:imgCap3PesosVizinhanca} exemplifica os pesos dados a cada vizinho, em um espaço \acs{2D}, sendo que esses pesos são normalizados.
+\noindent no qual $f$ é o coeficiente de atenuação, $\psi$ mede a discrepância entre $f_{j}$ e $f_{k}$, $N_{i}$ é o número de \textit{voxels} vizinhos, $\omega_{jk} = \omega_{kj}$ define a influência do ``k-ésimo'' \textit{voxel} no ``j-ésimo'' \textit{voxel}. A influência de cada \textit{voxel} em seu vizinho é definida por: $\omega_{jk} = 1$ para os seis \textit{voxels} vizinhos, sendo dois em cada direção do eixo, $\omega_{jk} = 1/\sqrt{2}$ para os diagonais e $\omega_{jk} = 0$ para qualquer outro. A Figura \ref{fig:imgCap3PesosVizinhanca} exemplifica os pesos dados a cada vizinho, em um espaço \acs{2D}, sendo que esses pesos são normalizados.
 
 
 \begin{figure}[H]
@@ -604,110 +607,114 @@ R(f) = \sum_{j=1}^{N}  \sum_{k=1}^{N_{i}} \omega_{jk} \, \psi(f_{j}-f_{k}),
 	
 	\subfloat[]{\includegraphics[scale=0.8]{imgs/cap3/PesoVizinhancaB.pdf}	\label{fig:imgCap3PesosVizinhancaA}}
 	
-	\subfloat[]{\includegraphics[scale=0.8]{imgs/cap3/PesoVizinhancaA.pdf} \label{fig:imgCap3PesosVizinhancaB}}
+	\subfloat[]{\includegraphics[scale=0.8]{imgs/cap3/PesoVizinhancaA.pdf} \label{fig:imgCap3PesosVizinhancaB}.}
 	
-	\legend{Fonte: \citeonline[p. 2]{chen2009bayesian}}
+	\legend{Fonte: \citeonline[p. 2]{chen2009bayesian}.}
 	\label{fig:imgCap3PesosVizinhanca}
 \end{figure}   
 
+%\rv{Corta daqui pra baixo}
+%
+%Ainda no contexto da restrição de suavidade, outra técnica utilizada é o modelamento da função de restrição por meio do Campo Aleatório Markoviano (Markov Random Field - \acs{MRF}), através do uso de distribuição de probabilidades que levam em conta o contexto espacial dos \textit{pixels} \cite[p. 71]{salvadeo2013filtragem}.  
+%
+%Segundo a definição de \citeonline[p. 8]{li2009markov}, a teoria do Campo Aleatório Markoviano é um ramo da teoria de probabilidade que tem como função analisar as \textbf{dependências espaciais} ou contextuais de dado \textbf{fenômeno físico}. 
+%
+%Com a finalidade de explicar todo o conceito por trás dessa teoria, é necessário a utilização de notações formais que auxiliarão todo o processo de formulação. Todas essas notações estão contidas no Apêndice \ref{ApendiceA:CamposAleatóriosMarkovianos}, junto com conceitos teóricos importantes a serem definidos. Recomenda-se ao leitor investir um tempo analisando esse capítulo a fim de compreender melhor a teoria descrita com detalhes a seguir.    
+%
+%Dado todos os conceitos apresentados, um campo aleatório $F$ (\ref{ApendiceA:CampoAleatorio}) em $S$ (\ref{ApendiceA:SitesRotulos}) em relação a sua vizinhança $\nu$ (\ref{ApendiceA:sVizinhancaCliques}) é dito ser de Markov quando o campo atende as duas condições ditadas abaixo:  
+%
+%
+%\begin{enumerate}
+%	\item \textbf{Positividade}: $P(f) > 0, \;\; \forall\, f \,\in\, \varPsi$,
+%	\item \textbf{Markovianidade}: $P(f_{i} \mid f_{j},\;\; \forall \; j \in S,\; j \neq i) = P(f_{i}\mid f_{\nu_{i}})$,
+%\end{enumerate}
+%
+%\noindent onde $f_{\nu_{i}} = \{f_{i^{'}} \mid i^{'} \in \nu_{i} \} $ é o conjunto de rótulos admitidos para os \textit{sites} na vizinhança de $i$. Em outras palavras, a \textbf{Markovianidade} dita as características locais do campo, onde somente a vizinhança tem influência direta no valor do \textit{site}, ou \textit{pixel} nesse caso. Já a \textbf{positividade}, quando satisfeita, diz que a probabilidade conjunta do campo $P(f)$ é determinada pelas probabilidades condicionais locais do campo \cite{li2009markov}.  
+%
+%De acordo com \citeonline[p. 4]{won2013stochastic}, os \acs{MRF} em \acs{2D} são uma generalização não-causal das cadeias de Markov \acs{1D} proveniente das análises de sequências. Devido a representação de uma dependência de características locais do campo com a sua vizinhança de um modo não-causal, a probabilidade conjunta não pode ser fatorada\footnote{A fatoração é a conexão entre a probabilidade conjunta e a probabilidade condicional local, segundo \citeonline[p. 18]{won2013stochastic}} em probabilidades das características locais como é feito nas cadeias de Markov \acs{1D}. Tendo isso em mente é necessário a busca de um método que especifique a probabilidade conjunta de um \acs{MRF} por meio de suas características locais, ou seja, probabilidades condicionais locais. 
+%
+%Isso só foi possível devido a equivalência entre o \acs{MRF} e o Campo Aleatório de Gibbs (\textit{Gibbs Random Field} - \acs{GRF}) dada pelo teorema de \citeonline[]{hammersley1971markov}. Com isso foi possível estabelecer uma relação entre a \textbf{probabilidade conjunta global} (\acs{GRF}) e a \textbf{probabilidade condicional local} (\acs{MRF}) e vice-versa.  
+%
+%O teorema mencionado acima diz que: \textit{$F$ é um \acs{MRF} em $S$, dado uma vizinhança $\nu$, se e somente se $F$ é um \acs{GRF} em $S$, dado uma vizinhança $\nu$}. Em outras palavras, $F$ é dito ser de Markov somente se a sua probabilidade conjunta $P(f)$ seguir a distribuição de Gibbs (Apêndice \ref{ApendiceB:CamposAleatóriosdeGibbs}).
+%
+%Diversos modelos distintos de \acs{MRF} podem ser encontrados na literatura \cite{li2009markov,won2013stochastic}, sendo que cada um é utilizado para uma determinada aplicação de acordo com suas funções potenciais. O modelo Gaussiano, denominado \ac{GMRF}, é bastante utilizado em problemas de restauração e reconstrução de imagens \cite{salvadeo2016nonlocal,xu2015statistical,jeng1991compound}. Sua equação de probabilidade condicional local é definida segundo \citeonline[p. 18]{li2009markov}:
+%
+%\begin{equation}
+%P(f_{i} \mid f_{\nu_{i}}) = \dfrac{1}{\sqrt{2 \pi \sigma^{2}_{i}}}  e^{-\frac{1}{2\sigma^{2}_{i}} \, [f_{i}-\mu_{i}-\sum_{i^{'}\in \,\nu_{i}}^{} \beta_{i,i^{'}}(f_{i^{'}} - \mu_{i^{'}}) ]^{2} },
+%\label{eq:eqCap3GMRF1}
+%\end{equation} 
+%
+%\noindent onde $\sigma^{2}_{i}$ e $\mu_{i}$ correspondem a variância e a média local respectivamente e $\beta_{i,i^{'}}$ corresponde aos coeficientes de interação dos cliques. 
+%
+%A probabilidade conjunta é dada de maneira generalizada segundo \citeonline[p. 4]{xu2015statistical}:
+%
+%\begin{equation}
+%P(f) \sim \prod_{i}^{N} \prod_{i^{'}}^{\nu_{i}} e^{\rho(\varDelta_{ii^{'}})},
+%\label{eq:eqCap3GMRF2}
+%\end{equation} 
+%
+%\noindent onde: 
+%
+%\begin{equation}
+%\rho(\varDelta_{ii^{'}}) = - \omega_{ii^{'}} \dfrac{\varDelta_{ii^{'}}^{2}}{2\sigma^{2}},
+%\label{eq:eqCap3GMRF3}
+%\end{equation}
+%
+%\noindent $\varDelta_{ii^{'}}^{2} = (f_{i}-f_{i^{'}})^{2}$ é a função potencial quadrática e $\omega_{ii^{'}}$ são os pesos da vizinhança, calculados pelo inverso da distância euclidiana entre o \textit{pixel} central e seus vizinhos, dado por:
+%
+%\begin{equation}
+%\omega_{ii^{'}} = \dfrac{1}{((x_{i}-x_{i^{'}})^{2}+((y_{i}-y_{i^{'}}))^{2})^{1/2}}.
+%\label{eq:eqCap3GMRF4}
+%\end{equation}
+%
+%No ano de 2005, o trabalho de \citeonline[]{buades2005non} propôs a filtragem de imagens corrompidas por ruído Gaussiano por meio de um filtro da média não-local. Esse filtro explora o fato de que imagens em sua grande maioria possuem um alto grau de redundância. Basicamente, a filtragem é feita através da similaridade entre conjuntos de \textit{pixels}, denominados \textit{patches}, ao invés de ser feita somente com a vizinhança local como era anteriormente, em outras palavras, a remoção do ruído da imagem $I$ se dá através de uma média ponderada $w_{st}$ entre os \textit{patches} similares $P_{s}\, \text{e}\, P_{t} \, \forall \, t \in SW_{s}$. O \textit{patch} $P_{s}$ de um determinado \textit{pixel} $i_{s}$ pode ser caracterizado por uma região quadrada ao entorno daquele \textit{pixel}, e.g. $7x7$. Buscando a redução do custo computacional do método, uma janela de busca $SW$, e.g. $17x17$, é estipulada para a comparação dos \textit{patches}. O valor estimado $\hat{i}_{s}$ do \textit{pixel} livre de ruído é dado por meio de \eqref{eq:eqCap3NLM}, para todo $s$ pertencente a imagem $I$. A Figura \ref{fig:imgCap3Patches} ilustra como é feito o procedimento não-local. 
+%
+%\begin{equation}
+%NLM(\hat{i}_{s}) = \sum_{t \,\in\, SW_{s}}^{} w_{st} \cdot i_{t},
+%\label{eq:eqCap3NLM}
+%\end{equation}
+%
+%
+%%\begin{figure}[H]
+%%	\caption{Ilustração do procedimento não-local baseado na similaridade entre os \textit{patches}.}
+%%	\begin{center}
+%%		\includegraphics[scale=1.3]{imgs/cap3/Patches.pdf}
+%%	\end{center}
+%%	\legend{Fonte: \citeonline[p. 2]{salvadeo2016nonlocal}}
+%%	\label{fig:imgCap3Patches}
+%%\end{figure}
+%
+%\noindent onde o peso da similaridade $w_{st}$ entre os \textit{patches} é obtido por meio de \eqref{eq:eqCap3NLMw}, calculado pela distância Euclidiana entre os vetores $P_{s}\, \text{e}\, P_{t}$ de forma normalizada. É importante ressaltar que a soma dos pesos dentro da janela deve somar 1, em outras palavras, $\sum_{t\,\in \,SW_{s}}^{}w_{st} = 1$, o que leva a normalização dada pelo denominador da equação abaixo.
+%
+%\begin{equation}
+%w(s,t) = \dfrac{e^{-\|P_{s} - P_{t}\|^{2}/h^{2}}}{\sum_{t\,\in \,SW_{s}}^{}e^{-\|P_{s} - P_{t}\|^{2}/h^{2}}},
+%\label{eq:eqCap3NLMw}
+%\end{equation}
+%
+%\noindent onde $h$ é um parâmetro que controla o nível de borramento do filtro. 
+%
+%Baseado no conceito não-local de similaridade, o trabalho de \citeonline[]{zhang2017applications} propõe a expansão dessa técnica para problemas inversos tais como: remoção de ruído, redução de borramento, reconstrução e reconstrução com alta resolução. O trabalho de \citeonline[]{salvadeo2016nonlocal} explorou os conceitos de \acs{MRF} não-local para remover ruídos de imagens.
+%
+%Adicionando o conceito não-local no cálculo dos coeficientes de interação dos cliques da equação de \acs{GMRF}, temos a equação \eqref{eq:eqCap3GMRF1} modificada para:
+%
+%\begin{equation}
+%P(f_{i} \mid f_{\nu_{i}}) = \dfrac{1}{\sqrt{2 \pi \sigma^{2}_{i}}}  e^{-\frac{1}{2\sigma^{2}_{i}} \, [f_{i}-\mu_{i}-\sum_{i^{'}\in \,\nu_{i}}^{} \omega(i,i^{'})\beta_{i,i^{'}}(f_{i^{'}} - \mu_{i^{'}}) ]^{2} },
+%\label{eq:eqCap3GMRFNL}
+%\end{equation}     
+%
+%
+%\rv{Voltar a partir daqui}
 
 
-Ainda no contexto da restrição de suavidade, outra técnica utilizada é o modelamento da função de restrição por meio do Campo Aleatório Markoviano (Markov Random Field - \acs{MRF}), através do uso de distribuição de probabilidades que levam em conta o contexto espacial dos \textit{pixels} \cite[p. 71]{salvadeo2013filtragem}.  
-
-Segundo a definição de \citeonline[p. 8]{li2009markov}, a teoria do Campo Aleatório Markoviano é um ramo da teoria de probabilidade que tem como função analisar as \textbf{dependências espaciais} ou contextuais de dado \textbf{fenômeno físico}. 
-
-Com a finalidade de explicar todo o conceito por trás dessa teoria, é necessário a utilização de notações formais que auxiliarão todo o processo de formulação. Todas essas notações estão contidas no Apêndice \ref{ApendiceA:CamposAleatóriosMarkovianos}, junto com conceitos teóricos importantes a serem definidos. Recomenda-se ao leitor investir um tempo analisando esse capítulo a fim de compreender melhor a teoria descrita com detalhes a seguir.    
-
-Dado todos os conceitos apresentados, um campo aleatório $F$ (\ref{ApendiceA:CampoAleatorio}) em $S$ (\ref{ApendiceA:SitesRotulos}) em relação a sua vizinhança $\nu$ (\ref{ApendiceA:sVizinhancaCliques}) é dito ser de Markov quando o campo atende as duas condições ditadas abaixo:  
-
-
-\begin{enumerate}
-	\item \textbf{Positividade}: $P(f) > 0, \;\; \forall\, f \,\in\, \varPsi$,
-	\item \textbf{Markovianidade}: $P(f_{i} \mid f_{j},\;\; \forall \; j \in S,\; j \neq i) = P(f_{i}\mid f_{\nu_{i}})$,
-\end{enumerate}
-
-\noindent onde $f_{\nu_{i}} = \{f_{i^{'}} \mid i^{'} \in \nu_{i} \} $ é o conjunto de rótulos admitidos para os \textit{sites} na vizinhança de $i$. Em outras palavras, a \textbf{Markovianidade} dita as características locais do campo, onde somente a vizinhança tem influência direta no valor do \textit{site}, ou \textit{pixel} nesse caso. Já a \textbf{positividade}, quando satisfeita, diz que a probabilidade conjunta do campo $P(f)$ é determinada pelas probabilidades condicionais locais do campo \cite{li2009markov}.  
-
-De acordo com \citeonline[p. 4]{won2013stochastic}, os \acs{MRF} em \acs{2D} são uma generalização não-causal das cadeias de Markov \acs{1D} proveniente das análises de sequências. Devido a representação de uma dependência de características locais do campo com a sua vizinhança de um modo não-causal, a probabilidade conjunta não pode ser fatorada\footnote{A fatoração é a conexão entre a probabilidade conjunta e a probabilidade condicional local, segundo \citeonline[p. 18]{won2013stochastic}} em probabilidades das características locais como é feito nas cadeias de Markov \acs{1D}. Tendo isso em mente é necessário a busca de um método que especifique a probabilidade conjunta de um \acs{MRF} por meio de suas características locais, ou seja, probabilidades condicionais locais. 
-
-Isso só foi possível devido a equivalência entre o \acs{MRF} e o Campo Aleatório de Gibbs (\textit{Gibbs Random Field} - \acs{GRF}) dada pelo teorema de \citeonline[]{hammersley1971markov}. Com isso foi possível estabelecer uma relação entre a \textbf{probabilidade conjunta global} (\acs{GRF}) e a \textbf{probabilidade condicional local} (\acs{MRF}) e vice-versa.  
-
-O teorema mencionado acima diz que: \textit{$F$ é um \acs{MRF} em $S$, dado uma vizinhança $\nu$, se e somente se $F$ é um \acs{GRF} em $S$, dado uma vizinhança $\nu$}. Em outras palavras, $F$ é dito ser de Markov somente se a sua probabilidade conjunta $P(f)$ seguir a distribuição de Gibbs (Apêndice \ref{ApendiceB:CamposAleatóriosdeGibbs}).
-
-Diversos modelos distintos de \acs{MRF} podem ser encontrados na literatura \cite{li2009markov,won2013stochastic}, sendo que cada um é utilizado para uma determinada aplicação de acordo com suas funções potenciais. O modelo Gaussiano, denominado \ac{GMRF}, é bastante utilizado em problemas de restauração e reconstrução de imagens \cite{salvadeo2016nonlocal,xu2015statistical,jeng1991compound}. Sua equação de probabilidade condicional local é definida segundo \citeonline[p. 18]{li2009markov}:
-
-\begin{equation}
-P(f_{i} \mid f_{\nu_{i}}) = \dfrac{1}{\sqrt{2 \pi \sigma^{2}_{i}}}  e^{-\frac{1}{2\sigma^{2}_{i}} \, [f_{i}-\mu_{i}-\sum_{i^{'}\in \,\nu_{i}}^{} \beta_{i,i^{'}}(f_{i^{'}} - \mu_{i^{'}}) ]^{2} },
-\label{eq:eqCap3GMRF1}
-\end{equation} 
-
-\noindent onde $\sigma^{2}_{i}$ e $\mu_{i}$ correspondem a variância e a média local respectivamente e $\beta_{i,i^{'}}$ corresponde aos coeficientes de interação dos cliques. 
-
-A probabilidade conjunta é dada de maneira generalizada segundo \citeonline[p. 4]{xu2015statistical}:
-
-\begin{equation}
-P(f) \sim \prod_{i}^{N} \prod_{i^{'}}^{\nu_{i}} e^{\rho(\varDelta_{ii^{'}})},
-\label{eq:eqCap3GMRF2}
-\end{equation} 
-
-\noindent onde: 
-
-\begin{equation}
-\rho(\varDelta_{ii^{'}}) = - \omega_{ii^{'}} \dfrac{\varDelta_{ii^{'}}^{2}}{2\sigma^{2}},
-\label{eq:eqCap3GMRF3}
-\end{equation}
-
-\noindent $\varDelta_{ii^{'}}^{2} = (f_{i}-f_{i^{'}})^{2}$ é a função potencial quadrática e $\omega_{ii^{'}}$ são os pesos da vizinhança, calculados pelo inverso da distância euclidiana entre o \textit{pixel} central e seus vizinhos, dado por:
-
-\begin{equation}
-\omega_{ii^{'}} = \dfrac{1}{((x_{i}-x_{i^{'}})^{2}+((y_{i}-y_{i^{'}}))^{2})^{1/2}}.
-\label{eq:eqCap3GMRF4}
-\end{equation}
-
-No ano de 2005, o trabalho de \citeonline[]{buades2005non} propôs a filtragem de imagens corrompidas por ruído Gaussiano por meio de um filtro da média não-local. Esse filtro explora o fato de que imagens em sua grande maioria possuem um alto grau de redundância. Basicamente, a filtragem é feita através da similaridade entre conjuntos de \textit{pixels}, denominados \textit{patches}, ao invés de ser feita somente com a vizinhança local como era anteriormente, em outras palavras, a remoção do ruído da imagem $I$ se dá através de uma média ponderada $w_{st}$ entre os \textit{patches} similares $P_{s}\, \text{e}\, P_{t} \, \forall \, t \in SW_{s}$. O \textit{patch} $P_{s}$ de um determinado \textit{pixel} $i_{s}$ pode ser caracterizado por uma região quadrada ao entorno daquele \textit{pixel}, e.g. $7x7$. Buscando a redução do custo computacional do método, uma janela de busca $SW$, e.g. $17x17$, é estipulada para a comparação dos \textit{patches}. O valor estimado $\hat{i}_{s}$ do \textit{pixel} livre de ruído é dado por meio de \eqref{eq:eqCap3NLM}, para todo $s$ pertencente a imagem $I$. A Figura \ref{fig:imgCap3Patches} ilustra como é feito o procedimento não-local. 
-
-\begin{equation}
-NLM(\hat{i}_{s}) = \sum_{t \,\in\, SW_{s}}^{} w_{st} \cdot i_{t},
-\label{eq:eqCap3NLM}
-\end{equation}
+Após a formulação da função objetivo e da restrição do sistema é necessário resolver essa equação para a obtenção da imagem reconstruída. Segundo \citeonline[p. 12]{Fessler2000handbook} não existe uma fórmula fechada para a resolução da Equação \ref{eq:eqCap3TeoremaBayesLogSimplificadaFinal} de forma analítica. Desse modo, o uso de algoritmos iterativos é uma alternativa para a solução do problema. Ainda segundo o autor, um algoritmo iterativo primeiro estima uma imagem inicial $f^{(0)}$ como hipótese e então recursivamente busca uma sequência $f^{(1)}, f^{(2)}, \dots , f^{(n)}$ até convergir para o máximo ou mínimo da função. A Figura \ref{fig:imgCap3ProcedimentoIterativo} ilustra o esquemático de um algoritmo iterativo.
 
 
 \begin{figure}[H]
-	\caption{Ilustração do procedimento não-local baseado na similaridade entre os \textit{patches}.}
+	\caption{Esquemático do procedimento geral realizado pelos algoritmos de reconstrução iterativa.}
 	\begin{center}
-		\includegraphics[scale=1.3]{imgs/cap3/Patches.pdf}
+		\includegraphics[scale=0.5, clip, trim= 7.5cm 2.8cm 5.3cm 3.5cm]{imgs/cap3/ProcedimentoIterativo.pdf}
 	\end{center}
-	\legend{Fonte: \citeonline[p. 2]{salvadeo2016nonlocal}}
-	\label{fig:imgCap3Patches}
-\end{figure}
-
-\noindent onde o peso da similaridade $w_{st}$ entre os \textit{patches} é obtido por meio de \eqref{eq:eqCap3NLMw}, calculado pela distância Euclidiana entre os vetores $P_{s}\, \text{e}\, P_{t}$ de forma normalizada. É importante ressaltar que a soma dos pesos dentro da janela deve somar 1, em outras palavras, $\sum_{t\,\in \,SW_{s}}^{}w_{st} = 1$, o que leva a normalização dada pelo denominador da equação abaixo.
-
-\begin{equation}
-w(s,t) = \dfrac{e^{-\|P_{s} - P_{t}\|^{2}/h^{2}}}{\sum_{t\,\in \,SW_{s}}^{}e^{-\|P_{s} - P_{t}\|^{2}/h^{2}}},
-\label{eq:eqCap3NLMw}
-\end{equation}
-
-\noindent onde $h$ é um parâmetro que controla o nível de borramento do filtro. 
-
-Baseado no conceito não-local de similaridade, o trabalho de \citeonline[]{zhang2017applications} propõe a expansão dessa técnica para problemas inversos tais como: remoção de ruído, redução de borramento, reconstrução e reconstrução com alta resolução. O trabalho de \citeonline[]{salvadeo2016nonlocal} explorou os conceitos de \acs{MRF} não-local para remover ruídos de imagens.
-
-Adicionando o conceito não-local no cálculo dos coeficientes de interação dos cliques da equação de \acs{GMRF}, temos a equação \eqref{eq:eqCap3GMRF1} modificada para:
-
-\begin{equation}
-P(f_{i} \mid f_{\nu_{i}}) = \dfrac{1}{\sqrt{2 \pi \sigma^{2}_{i}}}  e^{-\frac{1}{2\sigma^{2}_{i}} \, [f_{i}-\mu_{i}-\sum_{i^{'}\in \,\nu_{i}}^{} \omega(i,i^{'})\beta_{i,i^{'}}(f_{i^{'}} - \mu_{i^{'}}) ]^{2} },
-\label{eq:eqCap3GMRFNL}
-\end{equation}     
-
-Após a formulação da função objetiva e da restrição do sistema é necessário resolver essa equação para a obtenção da imagem reconstruída. Segundo \citeonline[p. 12]{Fessler2000handbook} não existe uma fórmula fechada para a resolução da Equação \ref{eq:eqCap3TeoremaBayesLogSimplificadaFinal} de forma analítica. Desse modo, o uso de algoritmos iterativos é uma alternativa para a solução do problema. Ainda segundo o autor, um algoritmo iterativo primeiro estima uma imagem inicial $f^{(0)}$ como hipótese e então recursivamente busca uma sequência $f^{(1)}, f^{(2)}, \dots , f^{(n)}$ até convergir para o máximo ou mínimo da função. A Figura \ref{fig:imgCap3ProcedimentoIterativo} ilustra o esquemático de um algoritmo iterativo.
-
-
-\begin{figure}[H]
-	\caption{Esquemático do procedimento geral dos algoritmos de reconstrução iterativa.}
-	\begin{center}
-		\includegraphics[scale=0.4]{imgs/cap3/ProcedimentoIterativo.png}
-	\end{center}
-	\legend{Fonte: \citeonline[p. 129]{zeng2010medical}}
+	\legend{Fonte: Adaptado de \citeonline[p. 129]{zeng2010medical}.}
 	\label{fig:imgCap3ProcedimentoIterativo}
 \end{figure}
 
@@ -715,77 +722,86 @@ Diversos algoritmos para a otimização das funções objetivo são encontrados 
 
 Considerando a constante $\beta = 0$ da Equação \ref{eq:eqCap3TeoremaBayesLogSimplificadaFinal} elimina-se a informação \textit{a priori} do sistema e então o problema volta a lidar somente com a equação de máxima verossimilhança \eqref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca2}, ou do inglês \acs{ML}.  
 
-Basicamente, o algoritmo de \acs{EM} é constituído por duas etapas \cite[p. 149]{zeng2010medical}. A primeira é a substituição da variável aleatória $y_{i}$ de \eqref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca2} por sua expectativa, caracterizando o passo ``E''. O próximo passo é maximizar a nova equação, igualando a derivada de $f_{j}$ a zero, sendo essa etapa caracterizada por ``M''. Daí então que é derivado o algoritmo de \acs{MLEM}. A derivação matemática dos passos apresentados pode ser encontrada em \citeonline[p. 148-150]{zeng2010medical}. A equação matemática do algoritmo de \acs{MLEM} é dada por:  \colorbox{pink}{Elias: EM para emissão?}
+Basicamente, seguindo o trabalho de \citeonline[p. 111]{sidky2014iterative}, a equação do método de \acs{MLEM} é dada por:
 
 \begin{equation}
-f_{j}^{Próximo} = \dfrac{f_{j}^{Atual}}{\sum_{i}^{} a_{ij}} \sum_{i}^{} a_{ij} \, \dfrac{y_{i}}{\sum_{j}^{} a_{ij}f_{j}^{Atual}},
+f^{n} = f^{n-1}  \left(A^{T} \, \dfrac{P}{A \, f^{n-1}}\right)   /    (A^{T}\,1),
 \label{eq:eqCap3MLEM}
-\end{equation}    
+\end{equation}
 
-\noindent ou de forma simbólicas:  \colorbox{pink}{Elias: Remover formar simbólica?}
+\noindent na qual $A$ é a matriz da projeção, a sua transposta $A^{T}$ representa a retroprojeção e o fator de normalização no denominador é calculado fazendo a retroprojeção com valores de P igual a 1.
 
-\begin{equation}
-f^{Próximo} = f^{Atual} \, \dfrac{Retroprojeção\left\{\dfrac{Medição}{Projeção(f^{Atual})}\right\}}{Retroprojeção\{1\}},
-\label{eq:eqCap3MLEMSimbolico}
-\end{equation} 
+%Basicamente, o algoritmo de \acs{EM} é constituído por duas etapas \cite[p. 149]{zeng2010medical}. A primeira é a substituição da variável aleatória $y_{i}$ de \eqref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca2} por sua expectativa, caracterizando o passo ``E''. O próximo passo é maximizar a nova equação, igualando a derivada de $f_{j}$ a zero, sendo essa etapa caracterizada por ``M''. Daí então que é derivado o algoritmo de \acs{MLEM}. A derivação matemática dos passos apresentados pode ser encontrada em \citeonline[p. 148-150]{zeng2010medical}. A equação matemática do algoritmo de \acs{MLEM} é dada por:  \rv{Elias: EM para emissão?}
+%
+%\begin{equation}
+%f_{j}^{Próximo} = \dfrac{f_{j}^{Atual}}{\sum_{i}^{} a_{ij}} \sum_{i}^{} a_{ij} \, \dfrac{y_{i}}{\sum_{j}^{} a_{ij}f_{j}^{Atual}},
+%\label{eq:eqCap3MLEM}
+%\end{equation}    
+%
+%\noindent ou de forma simbólicas:  
+%
+%\begin{equation}
+%f^{Próximo} = f^{Atual} \, \dfrac{Retroprojeção\left\{\dfrac{Medição}{Projeção(f^{Atual})}\right\}}{Retroprojeção\{1\}},
+%\label{eq:eqCap3MLEMSimbolico}
+%\end{equation} 
+%
+%\noindent onde a retroprojeção do vetor 1 no denominador significa uma constante de normalização do volume.
 
-\noindent onde a retroprojeção do vetor 1 no denominador significa uma constante de normalização do volume.
-
-Para incorporar a restrição \acs{MAP} no sistema, o algoritmo exposto acima pode ser modificado para sua forma denominada \textit{Green’s one-step late} \cite[p. 151]{zeng2010medical}, adicionando o termo de penalidade no denominador, demonstrado por: 
-
- \begin{equation}
- f_{j}^{Próximo} = \dfrac{f_{j}^{Atual}}{\sum_{i}^{} a_{ij} \, + \beta \dfrac{\partial U(F^{Atual})}{ \partial f_{j}^{Atual}}} \sum_{i}^{} a_{ij} \, \dfrac{y_{i}}{\sum_{j}^{} a_{ij}f_{j}^{Atual}},
- \label{eq:eqCap3MLEMMAP}
- \end{equation}
- 
- \noindent onde $U(F)$ é a função de energia do modelo \acs{MAP}, dado nesse trabalho por \eqref{eq:eqApendiceBDistribuicaoGibbsU1} ou mais precisamente em \eqref{eq:eqCap3GMRFNL} no modelo não-local \acs{GMRF}.
+%Para incorporar a restrição \acs{MAP} no sistema, o algoritmo exposto acima pode ser modificado para sua forma denominada \textit{Green’s one-step late} \cite[p. 151]{zeng2010medical}, adicionando o termo de penalidade no denominador, demonstrado por: 
+%
+% \begin{equation}
+% f_{j}^{Próximo} = \dfrac{f_{j}^{Atual}}{\sum_{i}^{} a_{ij} \, + \beta \dfrac{\partial U(F^{Atual})}{ \partial f_{j}^{Atual}}} \sum_{i}^{} a_{ij} \, \dfrac{y_{i}}{\sum_{j}^{} a_{ij}f_{j}^{Atual}},
+% \label{eq:eqCap3MLEMMAP}
+% \end{equation}
+% 
+% \noindent onde $U(F)$ é a função de energia do modelo \acs{MAP}, dado nesse trabalho por \eqref{eq:eqApendiceBDistribuicaoGibbsU1} ou mais precisamente em \eqref{eq:eqCap3GMRFNL} no modelo não-local \acs{GMRF}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%											Redução de Artefatos Metálicos	  												 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Redução de Artefatos de Alta Atenuação} \label{ReduçãodeArtefatosdeAltaAtenuação}
-
-Artefatos inter-planos de objetos com alta atenuação são motivos de pesquisa em \acs{DBT} \cite{hu2008image,levakhina2013weighted,borges2017metal}. Como foi abordado na seção \ref{ProjeçãoeRetroprojeção3D}, a simples retroprojeção calcula as coordenadas de $(X,Y)$ para cada nível das fatias em $Z$ para todas as projeções (\ref{fig:imgCap3wBP2}). 	
-
-\begin{figure}[H]
-	\centering
-	
-	\caption{Ilustração da (a) projeção de objetos em diferentes níveis, seguido da (b) retroprojeção dos mesmos, (c) mostrando como os objetos se dispõem nos planos retroprojetados em um mesmo nível.}
-	
-	\subfloat[Projeção]{\includegraphics[scale=0.6]{imgs/cap3/BpPonderado/wBP1.png}\label{fig:imgCap3wBP1}}
-	\hfil
-	\subfloat[Retroprojeção]{\includegraphics[scale=0.6]{imgs/cap3/BpPonderado/wBP2.png}\label{fig:imgCap3wBP2}}
-	\hfil
-	\subfloat[Foco no processo de retroprojeção]{\includegraphics[scale=0.6]{imgs/cap3/BpPonderado/wBP3.png}\label{fig:imgCap3wBP3}}
-		
-	\legend{Fonte: \citeonline[p. 3]{levakhina2013weighted}.}
-	\label{fig:imgCap3wBPIlustracao}
-\end{figure}
-
-A ocorrência desse tipo de artefato é inevitável devido ao fato da técnica de tomossíntese abranger uma estreita faixa de ângulo junto a um número limitado de projeções \cite{hu2008image}. 
-
-O entendimento desse acontecimento fica mais claro a partir da Figura \ref{fig:imgCap3wBP3}, onde no plano em evidência o círculo vermelho aparece três vezes de forma borrada devido a esse objeto não estar localizado naquele plano. Já o triângulo fica em evidência pois o mesmo está localizado no plano de interesse. É interessante notar que a interferência do círculo se dá pelo aparecimento de cópias de acordo com o número de projeções realizadas e essas cópias se localizam na direção em que cada projeção foi adquirida.
-
-De acordo com \citeonline[p. 4]{levakhina2013weighted}, o princípio do borramento se dá pelo fato de que na retroprojeção dos dados, as estruturas que estão contidas no plano de interesse se coincidem e mutuamente contribuem para aparecerem em foco, e.g. voxel $x_{1}$ na Figura \ref{fig:imgCap3wBP3}, já as estruturas que não pertencem àquele plano não se coincidem e então geram cópias borradas de suas estruturas, e.g. voxel $x_{2}$ na Figura \ref{fig:imgCap3wBP3}.
-
-Como mencionado anteriormente, normalmente a combinação matemática (Figura \ref{fig:imgCap3FluxogramaBP}) utilizada para os planos retroprojetados é uma simples soma ou média. Segundo \citeonline[]{borges2017metal}, uma solução para a diminuição dos artefatos de alta atenuação é a realização de uma média ponderada entre os planos retroprojetados.   
-
-No trabalho de \citeonline[]{borges2017metal} foi encontrado um \textit{patch} como sendo o referência entre os planos e a distância euclidiana entre o escolhido e os outros foi então calculada. Baseado nessa distância, foi estipulado um peso para os \textit{patches} de acordo com a função logística \eqref{eq:eqCap3wBPLogistic}. Após a estipulação dos pesos, foi realizado a média ponderada entre os \textit{pixels} centrais daqueles \textit{patches}. A Figura \ref{fig:imgCap3wBPPesos} ilustra o gráfico resultado da aplicação da função logística para o cálculo dos pesos em função da distância, variando o valor da constante M de inclinação da curva.
-
-\begin{equation}
-w_{x}(d_{x,y}) = 1 - \dfrac{1}{1 + e^{\frac{4,6}{M}(M-2d_{x,y})}} 
-\label{eq:eqCap3wBPLogistic}
-\end{equation}
-
-\begin{figure}[H]
-	\caption{Gráfico da atribuição dos pesos em relação a distância.}
-	\begin{center}		
-	\includegraphics[scale=0.6]{imgs/cap3/wBPPesos.pdf}
-	\end{center}
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap3wBPPesos}
-\end{figure} 
-
+%\section{Redução de Artefatos de Alta Atenuação} \label{ReduçãodeArtefatosdeAltaAtenuação}
+%
+%Artefatos inter-planos de objetos com alta atenuação são motivos de pesquisa em \acs{DBT} \cite{hu2008image,levakhina2013weighted,borges2017metal}. Como foi abordado na seção \ref{ProjeçãoeRetroprojeção3D}, a simples retroprojeção calcula as coordenadas de $(X,Y)$ para cada nível das fatias em $Z$ para todas as projeções (\ref{fig:imgCap3wBP2}). 	
+%
+%\begin{figure}[H]
+%	\centering
+%	
+%	\caption{Ilustração da (a) projeção de objetos em diferentes níveis, seguido da (b) retroprojeção dos mesmos, (c) mostrando como os objetos se dispõem nos planos retroprojetados em um mesmo nível.}
+%	
+%	\subfloat[Projeção]{\includegraphics[scale=0.6]{imgs/cap3/BpPonderado/wBP1.png}\label{fig:imgCap3wBP1}}
+%	\hfil
+%	\subfloat[Retroprojeção]{\includegraphics[scale=0.6]{imgs/cap3/BpPonderado/wBP2.png}\label{fig:imgCap3wBP2}}
+%	\hfil
+%	\subfloat[Foco no processo de retroprojeção]{\includegraphics[scale=0.6]{imgs/cap3/BpPonderado/wBP3.png}\label{fig:imgCap3wBP3}}
+%		
+%	\legend{Fonte: \citeonline[p. 3]{levakhina2013weighted}.}
+%	\label{fig:imgCap3wBPIlustracao}
+%\end{figure}
+%
+%A ocorrência desse tipo de artefato é inevitável devido ao fato da técnica de tomossíntese abranger uma estreita faixa de ângulo junto a um número limitado de projeções \cite{hu2008image}. 
+%
+%O entendimento desse acontecimento fica mais claro a partir da Figura \ref{fig:imgCap3wBP3}, onde no plano em evidência o círculo vermelho aparece três vezes de forma borrada devido a esse objeto não estar localizado naquele plano. Já o triângulo fica em evidência pois o mesmo está localizado no plano de interesse. É interessante notar que a interferência do círculo se dá pelo aparecimento de cópias de acordo com o número de projeções realizadas e essas cópias se localizam na direção em que cada projeção foi adquirida.
+%
+%De acordo com \citeonline[p. 4]{levakhina2013weighted}, o princípio do borramento se dá pelo fato de que na retroprojeção dos dados, as estruturas que estão contidas no plano de interesse se coincidem e mutuamente contribuem para aparecerem em foco, e.g. voxel $x_{1}$ na Figura \ref{fig:imgCap3wBP3}, já as estruturas que não pertencem àquele plano não se coincidem e então geram cópias borradas de suas estruturas, e.g. voxel $x_{2}$ na Figura \ref{fig:imgCap3wBP3}.
+%
+%Como mencionado anteriormente, normalmente a combinação matemática (Figura \ref{fig:imgCap3FluxogramaBP}) utilizada para os planos retroprojetados é uma simples soma ou média. Segundo \citeonline[]{borges2017metal}, uma solução para a diminuição dos artefatos de alta atenuação é a realização de uma média ponderada entre os planos retroprojetados.   
+%
+%No trabalho de \citeonline[]{borges2017metal} foi encontrado um \textit{patch} como sendo o referência entre os planos e a distância euclidiana entre o escolhido e os outros foi então calculada. Baseado nessa distância, foi estipulado um peso para os \textit{patches} de acordo com a função logística \eqref{eq:eqCap3wBPLogistic}. Após a estipulação dos pesos, foi realizado a média ponderada entre os \textit{pixels} centrais daqueles \textit{patches}. A Figura \ref{fig:imgCap3wBPPesos} ilustra o gráfico resultado da aplicação da função logística para o cálculo dos pesos em função da distância, variando o valor da constante M de inclinação da curva.
+%
+%\begin{equation}
+%w_{x}(d_{x,y}) = 1 - \dfrac{1}{1 + e^{\frac{4,6}{M}(M-2d_{x,y})}} 
+%\label{eq:eqCap3wBPLogistic}
+%\end{equation}
+%
+%\begin{figure}[H]
+%	\caption{Gráfico da atribuição dos pesos em relação a distância.}
+%	\begin{center}		
+%	\includegraphics[scale=0.6]{imgs/cap3/wBPPesos.pdf}
+%	\end{center}
+%	\legend{Fonte: do autor, 2019.}
+%	\label{fig:imgCap3wBPPesos}
+%\end{figure} 
+%
 
 
 

@@ -1,190 +1,575 @@
-\chapter[Resultados Preliminares e Discussão]{Resultados Preliminares  e Discussões}\label{Capitulo5}
+\chapter[Materiais e Métodos]{Materiais e Métodos}\label{Capitulo5}
+ 
 
-A partir dos métodos propostos no capítulo anterior, são apresentados nessa seção os resultados obtidos a partir da utilização da \textit{toolbox} desenvolvida nesse trabalho. São então discutidos os resultados de cada método de acordo com os gráficos, figuras e tabelas apresentadas. A \textit{toolbox} encontra-se disponível em \url{https://github.com/marcelo-vieira/DBT-Reconstruction.git}. 
+A seção de materiais e métodos é dividida em duas partes. A primeira está relacionada com a elaboração e validação dos algoritmos de reconstrução em forma de um \textit{software} de código aberto. Já a segunda parte é referente à análise das propriedades do sinal e do ruído nos equipamentos de \acs{DBT} em imagens reconstruídas. 
 
-\section{Reconstrução de Imagens}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%														Elaboração e Validação da \textit{Toolbox} de Reconstrução																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Elaboração e Validação da \textit{Toolbox} de Reconstrução}
 
-A Figura \ref{fig:imgCap5Resultados1} demonstra os resultados obtidos após a aplicação de cada método de reconstrução implementado na \textit{toolbox}. Foram escolhidas 10 fatias de um total de 128 geradas pela reconstrução, sendo que essas foram selecionadas pois representam partes distintas de todo o volume. A primeira coluna apresenta as fatias do \textit{phantom} original usado como referência, a segunda o resultado da simples retroprojeção dos dados, a terceira o método de \acs{FBP} e a última o algoritmo de \acs{MLEM} com 5 iterações. As linhas de 1 a 10 representam respectivamente as fatias: 1, 15, 30, 43, 64, 78, 85, 99, 113 e 128. 
+De modo geral, a Figura \ref{fig:imgCap4Toolbox} ilustra como foi desenvolvido o \textit{software} de reconstrução tomográfica para imagens de \acs{DBT}, nesse trabalho denominado de \textit{toolbox}. O desenvolvimento dessa ferramenta se deu pelo fato da indisponibilidade de \textit{softwares} abertos no início deste trabalho que exerciam a  função de reconstrução de imagens especificamente para \acs{DBT} . Nesse meio tempo, foi disponibilizado através de um repositório \textit{online} do setor de divisão de imagem, diagnóstico e confiabilidade de \textit{software} do órgão americano \acs{FDA} uma \textit{toolbox}, também de código aberto, para reconstrução de imagens \cite{Zengtoolbox}.  
 
-É importante destacar que houve um ajuste automático na faixa de exibição dos níveis de cinza que são mostrados, baseado nos locais onde se encontram os menores e os maiores níveis de cinza de cada imagem. 
-
-%\colorbox{pink}{É importante destacar que para o algoritmo de retroprojeção filtrada foram feitos ajustes automáticos de brilho e de contraste em uma determinada região da imagem através do \textit{software} Fiji\footnote{\url{www.fiji.sc}} \cite{schindelin2012fiji} para uma melhor visualização.}
-
-Levando em consideração somente o método \acs{MLEM}, a Figura \ref{fig:imgCap5Resultados3} demonstra os resultados obtidos por essa técnica e faz então uma comparação entre os diferentes números de iteração. São representas pela coluna de 1 até a 4 as iterações de número 5, 10, 15 e 20. Já para as fatias, em cada linha, são exibidas respectivamente as de número 43, 64, 78 e 85.  
-
-Comparando os três métodos através de uma análise subjetiva é possível observar que o \acs{MLEM} com cinco iterações obteve o melhor resultado em todo o volume, levando em consideração a estrutura dos objetos, quantidade de artefatos e a nitidez de uma maneira geral. A simples retroprojeção possui uma imagem sem detalhes, como já era esperado, mas mantendo o formato exterior do crânio. Na retroprojeção filtrada é possível observar mais detalhes quando comparada com sua versão simples, porém artefatos são gerados no processo de reconstrução, devido a confecção do filtro no domínio da frequência. 
-
-%devido ao filtro de rampa anular a frequência 0, cancelando o nível DC do sinal, o fundo não ficou com o valor 0. Devido a isso foi necessário a realização de operações de pós-processamento para a visualização da imagem. Problemas com a implementação da filtragem também foram encontrados. 
-
-Em todas as técnicas é possível observar que as fatias iniciais e as finais possuem artefatos de reconstrução, enquanto que no meio do volume o formato da imagem reconstruída é mais fiel à original. Esse fato pode ser observado também em todos os resultados objetivos através das Figuras \ref{fig:imgCap5GraficoMSSIM}, \ref{fig:imgCap5GraficoNRMSE} e \ref{fig:imgCap5GraficoSHARPDB}, onde os melhores valores encontram-se em torno das fatias centrais. Isso decorre da utilização de uma estreita faixa de ângulo na tomossíntese. 
-
-Analisando isoladamente os resultados da Figura \ref{fig:imgCap5Resultados3} é notável que quanto maior o número de iterações, maior é também o ruído e a quantidade de artefato nas imagens geradas. De certo modo isso era esperado como foi discutido na seção \ref{MétodoEstatístico} de métodos estatísticos.       
-
-Todo o processamento foi feito em \acs{CPU} e as configurações do respectivo computador são: Intel Core i7-7700k 4,2GHz com 16GB de memória RAM. O tempo gasto para a execução de cada método é demonstrado pelas tabelas abaixo, onde a Tabela \ref{tab:tabCap5Tempos1} expõe os tempos de projeção, retroprojeção e filtragem para as técnicas de \acs{BP} e \acs{FBP}. Já a Tabela \ref{tab:tabCap5Tempos2} mostra os tempos para o algoritmo \acs{MLEM} com os respectivos números de iterações. Cada iteração é caraterizada por um ciclo como foi demonstrado no pseudocódigo anteriormente.
-
-É incontestável a diferença existente entre o tempo gasto pelo método analítico e estatístico. Para cada iteração do método estatístico são necessárias uma projeção e uma retroprojeção, fazendo com que o custo computacional do método aumente muito. Já para o método analítico de \acs{FBP} é necessário somente uma retroprojeção e uma pré filtragem, tornando esse método mais eficiente quando se leva em consideração o tempo de execução. 
-
-\begin{table}[H]
-	\footnotesize
-	\centering
-	\caption{Tempo de execução em segundos dos algoritmos de \acs{BP} e \acs{FBP}.}
-	\label{tab:tabCap5Tempos1}
-	\begin{tabular}{l|c|c|c}
-		\textbf{Algoritmo}	    & \textbf{Retroprojeção} 	& \textbf{Filtragem} 	& \textbf{Soma}	\\ [5pt]
-		\hline
-		\hline
-		Retroprojeção 	 		& 0,55						& -						& 0,55			\\ 
-		\hline
-		Retroprojeção Filtrada	& 0,56 						& 0,03					& 0,59			\\
-		\hline
-	\end{tabular}
-	\vspace{2ex}
-	\legend{Fonte: do autor, 2018}
-\end{table}
-
-\begin{table}[H]
-	\footnotesize
-	\centering
-	\caption{Tempos de execução em segundos do algoritmo \acs{MLEM} e seus respectivo número de iterações}
-	\label{tab:tabCap5Tempos2}
-	\begin{tabular}{c|c|c|c|c}
-		\textbf{N\textsuperscript{\underline{o}}}&\textbf{5 Iterações}& \textbf{10 Iterações}& \textbf{15  Iterações}& \textbf{20 Iterações} 	\\ [5pt]
-		\hline
-		\hline
-		\textbf{1 }&1,65 & 1,68 & 1,74 & 1,65 \\
-		\hline
-		\textbf{2 }&1,71 & 1,66 & 1,68 & 1,67 \\
-		\hline
-		\textbf{3 }&1,67 & 1,74 & 1,70 & 1,71 \\
-		\hline
-		\textbf{4 }&1,71 & 1,77 & 1,69 & 1,73 \\
-		\hline
-		\textbf{5 }&1,67 & 1,77 & 1,78 & 1,76 \\
-		\hline
-		\textbf{6 }&     & 1,74 & 1,73 & 1,75 \\
-		\hline
-		\textbf{7 }&     & 1,72 & 1,71 & 1,72 \\
-		\hline
-		\textbf{8 }&     & 1,73 & 1,73 & 1,71 \\
-		\hline
-		\textbf{9 }&     & 1,69 & 1,67 & 1,72 \\
-		\hline
-		\textbf{10}&     & 1,69 & 1,63 & 1,70 \\
-		\hline
-		\textbf{11}&     &      & 1,69 & 1,69 \\
-		\hline
-		\textbf{12}&     &      & 1,70 & 1,68 \\
-		\hline
-		\textbf{13}&     &      & 1,70 & 1,70 \\
-		\hline
-		\textbf{14}&     &      & 1,64 & 1,69 \\
-		\hline
-		\textbf{15}&     &      & 1,69 & 1,67 \\
-		\hline
-		\textbf{16}&     &      &      & 1,70 \\
-		\hline
-		\textbf{17}&     &      &      & 1,72 \\
-		\hline
-		\textbf{18}&     &      &      & 1,66 \\
-		\hline
-		\textbf{19}&     &      &      & 1,67 \\
-		\hline
-		\textbf{20}&     &      &      & 1,65 \\
-		\hline
-		\rowcolor{lightgray}\textbf{Soma} &8,43   	   & 17,23      & 25,55      & 34,06  \\
-		\hline
-	\end{tabular}
-	\vspace{2ex}
-	\legend{Fonte: do autor, 2018}
-\end{table}  
-
-
-
-As Figuras \ref{fig:imgCap5GraficoMSSIM}, \ref{fig:imgCap5GraficoNRMSE} e \ref{fig:imgCap5GraficoSHARPDB} ilustram os gráficos de validação dos procedimentos executados fazendo uma análise objetivas dos resultados. 
-
-Para o \acs{SSIM}, o método iterativo obteve os melhores resultados, sendo que a maior similaridade foi obtida com 15 iterações. É interessante ressaltar que o maior índice de similaridade possível de se obter é o valor 1. 
-
-Já para o \acs{MSE}, o método iterativo com 20 iterações obteve o menor erro, sendo observado que todos o erros tendem a diminuir nas fatias centrais. 
-
-Por fim, para a validação através do \textit{Sharpness}, quando comparado com o \textit{phantom} virtual o método iterativo com 20 iterações obteve o melhor resultado. Novamente é possível observar uma tendência de crescimento do valor medido nas fatias centrais. Para o \textit{phantom}, a diminuição nas extremidades se deve aos valores de \textit{pixel} nulo nas imagens respectivas.   
-
-\section{Redução de Artefatos de Alta Atenuação}
-
-A partir da execução dos métodos ditos em \ref{MetodosReduçãodeArtefatosdeAltaAtenuação}, foram obtidos os resultados apresentados a seguir. A Figura \ref{fig:imgCap5ROIBP} demonstra a comparação entre retroprojeção simples e a técnica de redução de artefatos. Os conjuntos da esquerda significam a \acs{BP} e os da direita a \acs{BP} ponderada das fatias 1, 4, 7, 10, 13, 15 da \acs{ROI} mencionada para fins de comparação.
-
-É possível notar que os resultados não foram satisfatórios após a aplicação dos métodos. Alguns empecilhos foram encontrados ao aplicar as técnicas. Devido ao centro de rotação do equipamento estar localizado $40mm$ acima do detector o foco de raio X muda a sua posição fazendo com que a média dos valores dos \textit{pixels} aumente onde o foco está. Isso faz com que as escolhas dos \textit{patches} aconteça de maneira errada, pois o método utiliza a técnica de \acs{MSE} para a escolha do referência. A Figura \ref{fig:imgCap5ROIPatchA} ilustra o histograma do número de contagem em que cada \textit{patch} foi escolhido, exemplificando o problema ocorrido. Já a Figura \ref{fig:imgCap5ROIPatchB} ilustra o histograma após a correção através da média local em cada patch, retirando assim o nível DC. Mesmo após a correção da média para o cálculo dos pesos, o problema ainda persistiu, devido a soma ponderada entre \textit{pixels} com diferentes valores de média.
-
-O valor da constante M, como já foi dito, influencia na quantidade de sinal e de ruído presentes na imagem. A Figura \ref{fig:imgCap5FuncaoPesos} demonstra a relação existente entre essa constante e o formato da função. Nessa mesma figura está contido o histograma de distâncias calculadas em todos os \textit{pixels} de todas as fatias. É notável, através da Figura \ref{fig:imgCap5DiffM} que quanto menor o valor da constante M maior será o ruído na imagem. Caso contrário o resultado tende a ficar mais parecido com a simples média das imagens. 
+Para a elaboração da ferramenta de reconstrução, primeiramente foi utilizado como base um \textit{software} de reconstrução para \acs{CT} com geometria de feixe cônico. A partir daí, foi feito o desenvolvimento da geometria de meio feixe cônico, ou \textit{half-cone beam}, específico para a técnica de tomossíntese. Para avaliações através de métricas objetivas, a fim de  validar os métodos de reconstrução implementados, é necessário ter um padrão-ouro (\textit{ground-truth}), sendo assim, utilizou-se de \textit{phantoms} virtuais sintéticos. Imagens de pacientes e \textit{phantoms} físicos também foram utilizados para a validação. Diferentes técnicas de projeção e retroprojeção geométricas foram então aplicadas para a obtenção das projeções e retroprojeções dos \textit{phantoms} virtuais, para então ser possível a aplicação dos métodos de reconstrução. Métricas objetivas, bem como as subjetivas para casos clínicos foram aplicadas. Então, consolidou-se o desenvolvimento da ferramenta, possibilitando diversas aplicações, como a da análise de ruído proposta por esse trabalho.
 
 \begin{figure}[H]
-	\centering
-	
-	\caption{Comparação entre retroprojeção simples (Conjunto da esquerda) e a técnica de redução de artefatos (Conjunto da direita)  \colorbox{pink}{Elias: Imagem do equipamento?}.}
-	
-	\subfloat[1]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_1.png}\label{fig:imgCap5ROIBP1}}
-	\subfloat[4]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_4.png}\label{fig:imgCap5ROIBP4}}
-	\hfill
-	\subfloat[1]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_1.png}\label{fig:imgCap5ROIWBP1}}
-	\subfloat[4]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_4.png}\label{fig:imgCap5ROIWBP4}}
-	
-	\subfloat[7]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_7.png}\label{fig:imgCap5ROIBP7}}
-	\subfloat[10]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_10.png}\label{fig:imgCap5ROIBP10}}
-	\hfill
-	\subfloat[7]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_7.png}\label{fig:imgCap5ROIWBP7}}
-	\subfloat[10]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_10.png}\label{fig:imgCap5ROIWBP10}}
-	
-	\subfloat[13]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_13.png}\label{fig:imgCap5ROIBP13}}
-	\subfloat[15]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiBP_15.png}\label{fig:imgCap5ROIBP15}}
-	\hfill
-	\subfloat[13]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_13.png}\label{fig:imgCap5ROIWBP13}}
-	\subfloat[15]{\includegraphics[scale=.9]{imgs/cap5/ROI/RoiWBP_15.png}\label{fig:imgCap5ROIWBP15}}
-	
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap5ROIBP}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	
-	\caption{Histograma da ocorrência de cada \textit{patch} (a) sem a técnica da média local e (b) com a técnica.}
-	
-	\subfloat[]{\includegraphics[scale=0.6]{imgs/cap5/ROI/EscolhaPatchSemMedia.pdf}\label{fig:imgCap5ROIPatchA}}
-	\subfloat[]{\includegraphics[scale=0.6]{imgs/cap5/ROI/EscolhaPatchComMedia.pdf}\label{fig:imgCap5ROIPatchB}}
-	
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap5ROIPatch}
-\end{figure}
-
- \begin{figure}[H]
- 	\caption{Ilustração da função de pesos com diferentes valores da constante M junto com o histograma da ocorrência das distâncias.}
+	\caption{Fluxograma simplificado ilustrando o desenvolvimento do \textit{software} de reconstrução tomográfica para imagens de \acs{DBT}.}
 	\begin{center}
-		\includegraphics[scale=0.6]{imgs/cap5/ROI/FuncaoPesos.pdf}
+		\includegraphics[scale=0.65, clip, trim=7.4cm 3.3cm 5.9cm 3.2cm]{imgs/cap4/Toolbox.pdf}
 	\end{center}
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCap4Toolbox}
+\end{figure}
+
+Como mencionado, utilizou-se \textit{phantoms} e imagens de pacientes para validar os métodos de reconstrução. Um \textit{phantom} pode ser físico ou virtual e tem como objetivo simular condições reais de exame para que os métodos alvos de pesquisas possam ser estudados e testados de maneira sistemática. Isso se deve ao fato de que exames clínicos, ou seja, com pacientes, não podem ser realizados toda vez que um novo método necessitar ser testado.
+
+\subsection{\textit{Phantom} Virtual}
+
+Dois modelos virtuais diferentes foram aplicados para a validação.  O primeiro, uma versão modificada de \citeonline[]{shepp1974fourier}. O \textit{phantom} originalmente é constituído por uma seção da cabeça, que foi desenvolvido para testar o algoritmo proposto pelos autores naquela época. Esse \textit{phantom} simula diversas estruturas anatômicas com diferentes densidades $D$ como: a água ($D=1$) nos ventrículos, massa cinzenta ($D=1,2$), tumores ($D=1,03;1,04$) e para o crânio ($D=2$). A Figura \ref{fig:imgCap4SheppLogan2D} ilustra o \textit{phantom} de Shepp-Logan em sua versão modificada.
+
+Como esse trabalho visa a reconstrução de estruturas anatômicas em \acs{3D} pela técnica de tomossíntese, é necessário a utilização de um objeto tri-dimensional para validar as técnicas aplicadas. Para isso, foi aplicado um algoritmo que gera uma extensão em \acs{3D} do \textit{phantom} Shepp-Logan \cite{Schabel2006}. Esse código permite a criação do simuluador com um número de fatias qualquer. A Figura \ref{fig:imgCap4SheppLogan3D} ilustra o objeto \acs{3D} criado pelo respectivo algoritmo.
+
+\begin{figure}[H]
+	\centering
 	
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap5FuncaoPesos}
+	\caption{Ilustração do \textit{phantom} de Shepp-Logan na sua versão modificada em (a) \acs{2D} e (b) \acs{3D}.}
+	
+	\subfloat[\acs{2D}.]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/Phantom.pdf}\label{fig:imgCap4SheppLogan2D}}
+	\hfil
+	\subfloat[\acs{3D}.]{\includegraphics[scale=0.6, clip, trim=14cm 4.6cm 15cm 5.6cm]{imgs/cap4/SheppLogan3D.pdf}\label{fig:imgCap4SheppLogan3D}}
+	
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCap4SheppLogan}
+\end{figure}
+
+Para uma avaliação mais de acordo com a realidade dos exames de mamografia, utilizou-se de forma semelhante um \textit{phantom} antropomórfico virtual da mama \cite{bakic2002mammogram1,bakic2002mammogram2,bakic2003mammogram}, gerado pelo \textit{software} gratuito de ensaios clínicos virtuais (\textit{Virtual Clinical Trials} - \acs{VCT}), denominado OpenVCT \cite{BakicVCT}, desenvolvido na Universidade da Pensilvânia nos Estados Unidos. Esse programa possibilita a geração de modelos de mama customizados, deformações como a compressão exercida pelo prato, inserção de lesões como microcalcificações e também proporciona a simulação das projeções de raios X geradas pelo mamógrafo \cite{barufaldi2018openvct}. A Figura \ref{fig:imgCap4PhantomVCT} ilustra uma fatia retirada do volume do \textit{phantom} antropomórfico simulado, assim como uma ilustração de seu volume \acs{3D}. Foi simulado uma mama de espessura $63.3mm$ advinda de uma paciente com idade de 48 anos, $1.65m$ de altura e $60Kg$. Lesões que mimetizam microcalcificações foram inseridas na altura de $54mm$ do volume aproximadamente. 
+
+\begin{figure}[H]
+	\centering
+	
+	\caption{Ilustração de uma (a) fatia retirada do volume do \textit{phantom} antropomórfico gerada pelo \acs{VCT} e (b) seu respectivo volume \acs{3D} .}
+	
+	\subfloat[\acs{2D}.]{\includegraphics[scale=0.5, clip, trim=0cm 0cm 0cm 0cm]{imgs/cap4/PhantomVCT.png}}
+	\hfil
+	\subfloat[\acs{3D}.]{\includegraphics[scale=0.5, clip, trim=11.2cm 0cm 10.5cm 0cm]{imgs/cap4/PhantomVCT3D.pdf}}
+	\hfil
+
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCap4PhantomVCT}
+\end{figure}
+
+\subsection{\textit{Phantom} Físico}
+
+ O modelo antropomórfico físico da mama BR3D \cite{PhantomBR3D} foi empregado da mesma forma. Esse simulador de tecido é constituído de 6 fatias, cada uma com $10mm$ de espessura, com um material heterogêneo que representa uma mistura de tecido $100\%$ adiposo e $100\%$ glandular de uma mama com razão de 50/50. Junto a uma fatia específica, estão contidas microcalcificações, fibras e massas que simulam os indicadores do câncer de mama, na qual a Tabela \ref{tab:tabCap4BR3D} especifica suas respectivas dimensões. Todas essas estruturas possuem diferentes tamanhos e buscam mimetizar os aspectos reais encontrados em uma mama com possíveis lesões, como ilustra a Figura \ref{fig:imgCap4BR3D}.
+ 
+ \begin{table}[H]
+ 	\centering
+ 	\caption{Dimensões dos indicadores de câncer simulados.}
+ 	\label{tab:tabCap4BR3D}
+ 	\begin{tabular}{c|c|c}
+ 		\textbf{Fibras {\O}mm}                                              & \textbf{Massas esferoidais {\O}mm} & \textbf{Microcalcificações {\O}mm} \\
+ 		[4pt]
+ 		\hline
+ 		\hline
+ 		\rule[0ex]{0pt}{1ex}
+ 		0,6 							 &             6,3             &            0,400            \\ \hline
+ 		\rule[0ex]{0pt}{1ex}
+ 		0,41                             &             4,7             &            0,290            \\ \hline
+ 		\rule[0ex]{0pt}{1ex}
+ 		0,38                             &             3,9             &            0,230            \\ \hline
+ 		\rule[0ex]{0pt}{1ex}
+ 		0,28                             &             3,1             &            0,196            \\ \hline
+ 		\rule[0ex]{0pt}{1ex}
+ 		0,23                             &             2,3             &            0,165            \\ \hline
+ 		\rule[0ex]{0pt}{1ex}
+ 		0,18                             &             1,8             &            0,130            \\ \hline
+ 		\rule[0ex]{0pt}{1ex}
+ 		0,15                             &                             &            	             \\ \hline
+ 	\end{tabular}
+ 	\vspace{2ex}
+ 	\legend{Fonte: \citeonline{PhantomBR3D}.}
+ \end{table}
+
+\begin{figure}[H]
+	\caption{Ilustração das fatias do \textit{phantom} BR3D.}
+	\begin{center}
+		\includegraphics[scale=0.5, clip, trim=5.6cm 12.8cm 5.4cm 5cm]{imgs/cap4/BR3D.pdf}
+	\end{center}
+	\legend{Fonte: \citeonline{PhantomBR3D}.}
+	\label{fig:imgCap4BR3D}
 \end{figure} 
 
+\subsection{Imagens Clínicas}
+
+Através de uma parceria com o Hospital de Amor da cidade de Barretos, São Paulo, foram adquiridas imagens clínicas tanto de equipamento da \acs{GE}, denominado nesse trabalho por sistema \#1, quanto de equipamento da Hologic, denominados por sistema \#2. Junto às projeções adquiridas nos equipamentos, as respectivas reconstruções também foram capturadas permitindo uma comparação visual direta com as reconstruções feitas pela \textit{toolbox}, avaliando a similaridade entre as mesmas. Esse projeto foi aprovado segundo o comitê de ética número CAAE: 78625417.1.1001.5437.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%													Geometria																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\subsection{Geometria de Aquisição} 
+
+
+Como mencionado na seção \ref{ParâmetrosFísicoseGeométricos}, a geometria de cada equipamento comercial muda de acordo com o fabricante. As projeções de raios X dos \textit{phantoms} e das imagens clínicas foram adquiridas pelo sistema 1 ou 2. 
+
+Para ambos os \textit{phantoms} antropomórficos, a geometria de aquisição do sistema 1 foi utilizada. 
+
+No caso do simulador de tecidos virtual, as projeções de raios X foram adquiridas através do OpenVCT, ilustrado pela projeção central na Figura \ref{fig:imgCap4PhantomVCT_CentralProj}. Uma exposição de raios X, com a tensão de pico do tubo de $35kVp$ e o produto da corrente elétrica vezes o tempo de $70mAs$, foi simulada. Do mesmo modo, utilizou-se o anodo de tungstênio com o filtro de alumínio. As projeções simuladas não levaram em consideração o ruído e foram quantizadas em 14\textit{bits}.
+
+\begin{figure}[H]
+	\caption{Projeção central do \textit{phantom} antropomórfico virtual gerada através do OpenVCT.}
+	\begin{center}
+		\includegraphics[scale=0.18, clip, trim=9cm 4cm 0cm 4cm]{imgs/cap4/PhantomVCT_CentralProj.png}
+	\end{center}
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCap4PhantomVCT_CentralProj}
+\end{figure} 
+
+No caso do \textit{phantom} físico, utilizou-se  o equipamento comercial de \acs{DBT} modelo Senographe Essential{\footnotesize \texttrademark} \space da empresa \acs{GE}, como ilustra a Figura \ref{fig:imgCap4BR3D}. Foi feita uma exposição de raios X com $29kVp$ e $63mAs$. O equipamento foi configurado com o ânodo de ródio e com o filtro também de ródio. Foram geradas projeções com resolução em nível de cinza de 14 \textit{bits}.
+
 \begin{figure}[H]
 	\centering
 	
-	\caption{Influência da constante M no nível de ruído nas \acs{ROI}s. A primeira linha representa as fatias 67 e 74 para o valor de $M=0.0014$, a segunda $M=0.0033$ e a terceira $M=0.0051$.}
+	\caption{(a) Equipamento de tomossíntese modelo Senographe Essential{\footnotesize \texttrademark} \ utilizado para realizar as projeções e (b) o mesmo com o \textit{phantom} BR3D.}
 	
-	\subfloat[67]{\includegraphics[scale=1]{imgs/cap5/ROI/M1_67.png}\label{fig:imgCap5M1_67}}
-	\subfloat[74]{\includegraphics[scale=1]{imgs/cap5/ROI/M1_74.png}\label{fig:imgCap5M1_74}}
+	\subfloat[]{\includegraphics[scale=0.08]{imgs/cap4/EquipamentoGE.jpg}\label{fig:imgCap4EquipamentoGEA}}
+	\hfil
+	\subfloat[]{\includegraphics[scale=.49]{imgs/cap4/BR3Deq.jpeg}\label{fig:imgCap4EquipamentoGEB}}
 	
-	\subfloat[67]{\includegraphics[scale=1]{imgs/cap5/ROI/M2_67.png}\label{fig:imgCap5M2_67}}
-	\subfloat[74]{\includegraphics[scale=1]{imgs/cap5/ROI/M2_74.png}\label{fig:imgCap5M2_74}}
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCap4EquipamentoGE}
+\end{figure} 
+
+Já para as imagens clínicas, ambos sistemas foram empregados. A Tabela \ref{tab:tabCap4ParametrosEquipamentos} expõe os parâmetros físicos dos equipamentos comerciais que foram utilizados.
+
+\begin{table}[H]
+	\centering
+	\caption{Parâmetros físicos dos sistemas comerciais.}
+	\label{tab:tabCap4ParametrosEquipamentos}
+	\begin{tabular}{l|c|c}
+		\textbf{Sistema}                            &   \textbf{\#1}   &   \textbf{\#2}\\
+		[5pt]
+		\hline
+		\hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Fabricante												& \acs{GE} & Hologic \\ \hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Modelo													&  Senographe Essential &  Selenia Dimensions\\ \hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Tamanho do detector 						  &      24x30cm  &      24x29cm      \\ \hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Tamanho do \textit{pixel}                     &     100$\mu$m  &     140$\mu$m     \\ \hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Número de projeções                           &         9 &         15         \\ \hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Angulação do tubo                             &    25$\degree$   &    15$\degree$    \\ \hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Angulação do detector                         &    Estacionário  &    4,2$\degree$  \\ \hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Tamanho do \textit{Voxel}                     &   0,1x0,1x0,5mm   &   0,112x0,112x1mm \\ \hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Distância fonte para detector                 &       660mm  &       700mm       \\ \hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Distância detector para centro de rotação     &        40mm     &        0mm   \\ \hline
+		\rule[-0.5ex]{-3pt}{1ex}
+		Tamanho lacuna de ar                          &        22mm   &        25mm     \\ \hline
+	\end{tabular}
+	\vspace{2ex}
+	\legend{Fonte: \citeonline{michell2018role,vedantham2015digital,sechopoulos2013review,baker2011breast}.}
+\end{table}
+
+A \textit{toolbox} desenvolvida nesse trabalho permite simular as projeções de raios X , quando o volume do objeto está expresso em valores de coeficientes de atenuação, ou seja, somente a projeção geométrica é simulada, não levando em conta as interações da radiação com a matéria como é feito no OpenVCT. Esse procedimento foi feito com o \textit{phantom} de Shepp-Logan com uma geometria semelhante ao do sistema 1 e a Figura \ref{fig:imgCap4Projecoes} ilustra as projeções geradas.
+
+\begin{figure}[H]
+	\centering
 	
-	\subfloat[67]{\includegraphics[scale=1]{imgs/cap5/ROI/M3_67.png}\label{fig:imgCap5M3_67}}
-	\subfloat[74]{\includegraphics[scale=1]{imgs/cap5/ROI/M3_74.png}\label{fig:imgCap5M3_74}}
+	\caption{Projeções geradas a partir do volume ilustrado na Figura \ref{fig:imgCap4SheppLogan3D}, onde de (a) até (i) representam as projeções de 1 a 9 respectivamente.}
 	
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap5DiffM}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/1.png}\label{fig:imgCap4Projecao1}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/2.png}\label{fig:imgCap4Projecao2}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/3.png}\label{fig:imgCap4Projecao3}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/4.png}\label{fig:imgCap4Projecao4}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/5.png}\label{fig:imgCap4Projecao5}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/6.png}\label{fig:imgCap4Projecao6}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/7.png}\label{fig:imgCap4Projecao7}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/8.png}\label{fig:imgCap4Projecao8}}
+	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/9.png}\label{fig:imgCap4Projecao9}}
+	
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCap4Projecoes}
 \end{figure}
 
+ 
+A Figura \ref{fig:imgCap4GeometriaProjecao} ilustra parte da animação gerada pela \textit{toolbox} quando é feita a projeção geométrica  disponível no programa, sendo que a Figura \ref{fig:imgCap4GeometriaProjecao2} representa a projeção central, \ref{fig:imgCap4GeometriaProjecao1} a primeira e \ref{fig:imgCap4GeometriaProjecao3} a última. O cubo azul ilustra espacialmente o \textit{phantom} virtual da Figura \ref{fig:imgCap4SheppLogan3D}, o retângulo em amarelo a projeção do objeto no plano da imagem, as linhas pontilhadas de cor preta as extremidades do detector, as linhas coloridas os feixes de raio X  e o ponto vermelho o tubo de raios X. 
+
+\begin{figure}[h]
+	\centering
+	
+	\caption{Parte da animação gerada pela \textit{toolbox} no procedimento de projeção geométrica, na qual (a) representa a projeção central, (b) a primeira e (c) a última.}
+	
+	\subfloat[]{\includegraphics[scale=.3, clip, trim=1.8cm 3.1cm 1.5cm 4cm]{imgs/cap4/Proj5.pdf}\label{fig:imgCap4GeometriaProjecao2}}
+	
+	\subfloat[]{\includegraphics[scale=.3, clip, trim=1.8cm 3.1cm 1.5cm 4cm]{imgs/cap4/Proj1.pdf}\label{fig:imgCap4GeometriaProjecao1}}
+	\subfloat[]{\includegraphics[scale=.3, clip, trim=1.8cm 3.1cm 1.5cm 4cm]{imgs/cap4/Proj9.pdf}\label{fig:imgCap4GeometriaProjecao3}}
+	
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCap4GeometriaProjecao}
+\end{figure}
+
+\subsection{Projeção e Retroprojeção Simples} 
+
+Para a implementação da projeção e retroprojeção simples foi utilizado o método de \textit{Pixel Driven} (Figura \ref{fig:imgCap3Projetores1}) descrito nos capítulos anteriores. Para isso, foram aplicadas as Equações \ref{eq:eqCap3ProjectionY} e \ref{eq:eqCap3ProjectionX}.
+
+ Os cálculos das projeções e retroprojeções são feitos com o objetivo de converter as coordenadas do mundo, e.g. $(X,Y,Z)$, para as coordenadas da imagem, e.g. $(X_{i},Y_{i})$, porém após isso ainda são necessárias as conversões das coordenadas da imagem para as coordenadas em \textit{pixel}, e.g. $(i,j)$. Isso pode ser feito segundo as Equações \ref{eq:eqCap4ConversaoCoordImgparaPixelY} e \ref{eq:eqCap4ConversaoCoordImgparaPixelX}, seguidas por uma interpolação entre as coordenadas em \textit{pixel} da projeção e as coordenadas em \textit{pixel} do detector:
+ 
+ \begin{equation}
+ i = \dfrac{Y_{i}}{dy} + y_{0}  
+ \label{eq:eqCap4ConversaoCoordImgparaPixelY}
+ \end{equation} 
+ 
+ \begin{equation}
+ j = -\dfrac{X_{i}}{dx} + x_{0},
+ \label{eq:eqCap4ConversaoCoordImgparaPixelX}
+ \end{equation} 
+ 
+ \noindent nas quais $dx\,\text{e}\,dy$ são os tamanhos dos \textit{pixels} do detector em (mm) para as coordenadas $x\,\text{e}\,y$ respectivamente e $x_{0}$ e $y_{0}$ são as coordenadas em \textit{pixel} do tubo de raios X. A Figura \ref{fig:imgCap4ConversaoCoord} ilustra a relação entre as coordenadas e os pseudocódigos \ref{alg:algProjecao} e \ref{alg:algRetroprojecao} resumem todo o processo.  
+ 
+ \begin{figure}[H]
+ 	\caption{Ilustração da relação entre as coordenadas da imagem e as coordenadas do detector em \textit{pixel}.}
+ 	\begin{center}
+ 		\includegraphics[scale=0.8]{imgs/cap4/ConversaoCoord.pdf}
+ 	\end{center}
+ 	\legend{Fonte: do autor, 2019.}
+ 	\label{fig:imgCap4ConversaoCoord}
+\end{figure} 
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\Entrada{Volume3D, Parâmetros} 
+	\Saida{Projeções}
+	\Inicio{
+		
+		\Para{cada Projeção $\in$ Projeções}{
+			$\theta \leftarrow$ Ângulo(Projeção)
+			
+			\Para{cada Fatia $\in$ Volume3D}{
+				
+				Calcular $Y \;\text{e}\; X \; \forall \; (y_{i}, x_{i}) \; \in \text{Projeção}$
+				
+				Calcular $i \;\text{e}\; j \; \forall \; (Y, X)$
+				
+				Projeção $\leftarrow$ Projeção $+$ Interpolação(Fatia$\,,\,(i,j)\,)$			
+			}
+		}
+	}
+	\Retorna{Projeções}
+	\LinesNumberedHidden
+	\caption{Projeção}
+	\label{alg:algProjecao}	
+\end{algorithm}
+
+
+\begin{algorithm}[H]
+%	\SetAlgoLined
+	\Entrada{Projeções, Parâmetros} 
+	\Saida{Volume3D}
+	\Inicio{
+		
+		\Para{cada Projeção $\in$ Projeções}{
+			$\theta \leftarrow$ Ângulo(Projeção)
+			
+			\Para{cada Fatia $\in$ Volume3D}{
+				
+				Calcular $y_{i} \;\text{e}\; x_{i} \; \forall \; (X,Y,Z) \; \in$ Fatia
+				
+				Calcular $i \;\text{e}\; j \; \forall \; (y_{i}, x_{i})$
+				
+				Fatia $\leftarrow$ Fatia + Interpolação(Projeção$\,,\,(i,j)\,)$			
+			}
+		}
+	}
+	\Retorna{Volume3D}
+	\caption{Retroprojeção}
+	\label{alg:algRetroprojecao}
+\end{algorithm} 
+
+\subsection{Projeção e Retroprojeção \textit{Distance Driven}} 
+
+O método denominado \textit{Distance Driven} (Figura \ref{fig:imgCap3Projetores3}) é uma combinação dos métodos \textit{Pixel Driven} e \textit{Ray Driven}. Nessa técnica, as coordenadas do plano do detector e as do objeto são projetadas em um plano comum, e então a sobreposição entre as coordenadas de ambos são calculadas, tal como o comprimento do raio X que intercede cada \textit{voxel}. Tais valores são utilizados como pesos para os cálculos de projeção e retroprojeção. Esse método foi implementado nesse trabalho segundo o passo a passo descrito em \citeonline{levakhina2014three}. O código implementado está disponível de maneira aberta em sua versão \acs{2D}\footnote{\url{https://github.com/rodrigovimieiro/OpenCodes}} e \acs{3D} no diretório da \textit{toolbox} \cite{de2002distance,de2004distance}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%												Reconstrução																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Métodos de Reconstrução de Imagens} 
+
+Após o detalhamento das técnicas de projeção e retroprojeção, os métodos de reconstrução implementados na \textit{toolbox} são detalhados. As quatro técnicas apresentadas nos capítulos anteriores foram aplicadas através dos algoritmos de \acs{BP}, \acs{FBP}, \acs{MLEM} e \acs{SART}. 
+
+Os pseudocódigos \ref{alg:algFBP}, \ref{alg:algMlEM} e \ref{alg:algSART} resumem o procedimento para os métodos de \acs{FBP}, \acs{MLEM} e \acs{SART} respectivamente, enquanto que o método de \acs{BP} foi ilustrado no pseudocódigo \ref{alg:algRetroprojecao}.  
+
+\begin{algorithm}[ht]
+%	\SetAlgoLined
+	\Entrada{Projeções, Parâmetros} 
+	\Saida{Volume3D}
+	\Inicio{
+		
+		\Para{cada Projeção $\in$ Projeções}{
+			Projeção $ \leftarrow$ \textbf{Filtrar} (Projeção)	
+		}
+		Volume3D $\leftarrow$ \textbf{Retroprojeção} (Projeções)
+	}
+	\Retorna{Volume3D}
+	\caption{\acs{FBP}}
+	\label{alg:algFBP}
+\end{algorithm}
+
+\begin{algorithm}[ht]
+%	\SetAlgoLined
+	\Entrada{Projeções, Parâmetros} 
+	\Saida{Volume3D}
+	\Inicio{
+	Volume3D $\leftarrow$ EstimativaInicial	
+		
+	FatorNormVolume $\leftarrow$ \textbf{Retroprojeção} (1)	
+	
+		\Para{cada Iteração}{
+		EstimativaProjeções $\leftarrow$ \textbf{Projeção} (Volume3D)
+		
+		RazãoProjeções $\leftarrow$ Projeções $\;/\;$ EstimativaProjeções
+		
+		VolumeEstimado $\leftarrow$ \textbf{Retroprojeção} (RazãoProjeções)
+		
+		FatorModificação $\leftarrow$ VolumeEstimado $\;/\;$ FatorNormVolume
+		
+		Volume3D $\leftarrow$ Volume3D $\;\times\;$ FatorModificação
+		}
+	}
+	\Retorna{$Volume3D$}
+	\caption{\acs{MLEM}}
+	\label{alg:algMlEM}
+\end{algorithm}
+
+\begin{algorithm}[ht]
+	%	\SetAlgoLined
+	\Entrada{Projeções, Parâmetros} 
+	\Saida{Volume3D}
+	\Inicio{
+		Volume3D $\leftarrow$ EstimativaInicial	
+		
+		FatorNormVolume $\leftarrow$ \textbf{Retroprojeção} (1)	
+		
+		FatorNormProjeção $\leftarrow$ \textbf{Projeção} (1)
+		
+		\Para{cada Iteração}{
+			\Para{cada Projeção $\in$ Projeções}{
+			EstimativaProjeção $\leftarrow$ \textbf{Projeção} (Volume3D)
+			
+			DiferençaProjeção $\leftarrow$ Projeção $\;-\;$ EstimativaProjeção
+			
+			DiferençaProjeçãoNorm $\leftarrow$ DiferençaProjeção $\;/\;$ FatorNormProjeção
+			
+			VolumeEstimado $\leftarrow$ \textbf{Retroprojeção} (DiferençaProjeçãoNorm)
+			
+			FatorModificação $\leftarrow$ VolumeEstimado $\;/\;$ FatorNormVolume
+			
+			Volume3D $\leftarrow$ Volume3D $\;+\;$ FatorModificação
+		}
+		}
+	}
+	\Retorna{$Volume3D$}
+	\caption{\acs{SART}}
+	\label{alg:algSART}
+\end{algorithm}
+
+O número de iterações dos métodos iterativos foi escolhido através do estudo de trabalhos da literatura e em alguns casos através de análises visuais \cite{wu2004comparison,zhang2006comparative}. Isso se deve ao fato de que os métodos não convergem para uma solução, devido ao mal condicionamento da técnica de tomossíntese como discutido anteriormente, sendo necessário parar antecipadamente para evitar a amplificação do ruído. Foram utilizadas 8 iterações para todas as reconstruções iterativas, exceto para o \textit{phantom} antropomórfico virtual, o qual utilizou-se somente 2.
+
+A confecção do filtro para o algoritmo de retroprojeção filtrada se dá a partir dos passos ditos na seção \ref{RetroprojeçãoFiltrada}. No caso das imagens reais, foi utilizado o janelamento de Hanning, com frequência de corte em 75\% da máxima frequência.
+
+\subsection{Validação da \textit{Toolbox}} 
+
+Para a validação da \textit{toolbox} foram utilizados os \textit{phantoms} virtuais, reais e as imagens clínicas. Para cada tipo de validação foi feita uma análise de modo quantitativo ou qualitativo.
+
+Para o simulador de Shepp-Logan, tanto a análise visual quanto a quantitativa foram feitas. As projeções foram reconstruídas através dos quatro métodos de reconstrução e a qualidade de cada imagem foi comparada com o padrão-ouro através da métrica de índice de similaridade estrutural (\textit{Structural Similarity Index} - \acs{SSIM}). Uma equação polinomial foi calculada para converter os níveis de cinza das imagens reconstruídas para os níveis de cinza do \textit{phantom} padrão-ouro.
+
+Já para o BR3D, uma simples comparação visual foi feita, dado que encontrava-se disponível a imagem reconstruída pelo equipamento comercial. Foram analisados os resultados dos quatro métodos, comparando-os em aspectos visuais como ruído, contraste e objetos em foco na mesma altura. 
+
+Especificamente, no \textit{phantom} gerado pelo OpenVCT, foi feita uma comparação entre a \textit{toolbox} desenvolvida nesse trabalho e outra apresentada pelo \acs{FDA}. Para isso, foram reconstruídas as projeções em ambos \textit{softwares} pelos métodos de \acs{BP}, \acs{FBP} e \acs{SART}. O método de \acs{MLEM} não foi comparado, visto que a implementação dessa técnica se difere entre ambos os \textit{softwares}. Então, as fatias reconstruídas por cada \textit{toolbox} foram comparadas entre si quantitativamente através das métricas de \acs{SSIM} e do erro quadrático médio (\textit{Mean Square Error} - \acs{MSE}). Em outras palavras, o \textit{software} do órgão \acs{FDA} foi tido como o padrão para as reconstruções.  Um ajuste polinomial de primeira ordem foi feito para combinar os níveis de cinza das fatias de ambas \textit{toolboxes} entre métodos de reconstrução iguais, como apresentado no trabalho de \citeonline {borges2018restoration}. A métrica de medida de artefatos fora do foco, denominada de função de espalhamento de artefatos (\textit{Artifact Spread Function} - \acs{ASF}) foi aplicada nas reconstruções de ambas \textit{toolboxes} e também no \textit{phantom} original.
+
+Por fim, para as imagens clínicas, as mesmas foram reconstruídas seguindo o método que mais se aproxima do equipamento comercial. Ou seja, para o sistema \#1 e \#2 foram utilizados os métodos \acs{SART} e \acs{FBP} respectivamente. As imagens reconstruídas cedidas pelo equipamento foram tomadas como padrão e então uma comparação visual foi feita em termos de objetos em foco na mesma altura e também de similaridade. As projeções utilizadas referentes ao sistema \#1 foram do tipo ``não processadas'', enquanto as do sistema \#2 do tipo ``processadas''. Isso se deve ao fato de não termos acesso a ambos os tipos nos dois sistemas.  
+
+
+\subsubsection{Métricas Objetivas} 
+
+Para analisar de maneira objetiva os resultados das imagens, utilizou-se métricas de avaliação da qualidade da imagem, conhecidas na literatura, como as descritas abaixo.
+
+O  \acs{MSE} é uma forma de medida pontual que analisa as diferenças de intensidade entre uma imagem referência e outra estimada. Esse método é utilizado devido a sua simplicidade de cálculo, obtenção de resultados com fácil interpretação e baixa complexidade computacional. Porém críticas são feitas a este devido a sua ineficiência quando comparado com as métricas subjetivas da percepção humana \cite{gonzalez2008digital,wang2004image}. Sua equação matemática é dada por:
+
+\begin{equation}
+MSE = \dfrac{1}{MN} \sum_{x=1}^{M} \sum_{y=1}^{N} [f(x,y) - \hat{f}(x,y)]^{2},
+\label{eq:eqCap4MSE}
+\end{equation} 
+
+\noindent ou em sua versão aplicando a raiz quadrada:
+
+\begin{equation}
+RMSE = \sqrt{MSE(f,\hat{f})},
+\label{eq:eqCap4RMSE}
+\end{equation}
+ 
+\noindent ou ainda em sua versão normalizada, como demonstrado em \citeonline{brito2018application}:
+
+\begin{equation}
+NRMSE = \dfrac{RMSE(f,\hat{f})}{max(\hat{f}) - min(\hat{f})},
+\label{eq:eqCap4NRMSE}
+\end{equation}
+
+%\noindent onde:
+%
+%\begin{equation}
+%S_{f} = \dfrac{1}{MN} \sum_{x=1}^{M} \sum_{y=1}^{N} f(x,y)  \;\; S_{\hat{f}} = \dfrac{1}{MN} \sum_{x=1}^{M} \sum_{y=1}^{N} \hat{f}(x,y).
+%\label{eq:eqCap4NRMSESxSy}
+%\end{equation}
+
+
+A métrica de \acs{SSIM} tem como função fazer uma avaliação que seja mais fiel a percepção humana e a formação das imagens \cite[]{wang2004image}. Esse método avalia componentes como a  luminância $l(\cdot)$, o contraste $c(\cdot)$ e a estrutura dos objetos $s(\cdot)$. Sua formulação matemática é dada por:
+
+\begin{equation}
+SSIM(x,y) = [l(x,y)]^{\alpha} \cdot [c(x,y)]^{\beta} \cdot [s(x,y)]^{\gamma},
+\label{eq:eqCap4SSIM}
+\end{equation}
+
+\noindent na qual $\alpha,\beta \text{ e } \gamma$ são constantes de ajuste da métrica. É importante ressaltar que o \acs{SSIM} retorna os índices de similaridade para diversas regiões da imagem, porém quando se fala em similaridade é interessante que exista somente um índice para toda a imagem. Portanto é feito então uma média dos M índices retornados, dado pela equação:
+
+\begin{equation}
+MSSIM(x,y) = \dfrac{1}{M} \sum_{j=1}^{M} SSIM(x_{j},y_{j})
+\label{eq:eqCap4MSSIM}
+\end{equation} 
+
+Por fim, a avaliação do \acs{ASF} tem a finalidade de medir a quantidade de artefatos fora de foco presentes na reconstrução \cite{zhang2006comparative,borges2017metal}. Essa métrica calcula basicamente a diferença no valor médio dos \textit{pixels} entre o objeto e o fundo na altura em foco, e em diferentes alturas, avaliando o quanto o objeto se espalha para outras fatias, como mostra sua equação matemática:
+
+\begin{equation}
+ASF(z) = \dfrac{\overbar{\mu}_{A}(z) - \overbar{\mu}_{BG}(z)}{\overbar{\mu}_{F}(z_{0}) - \overbar{\mu}_{BG}(z_{0})}
+\label{eq:eqCap4ASF}
+\end{equation} 
+
+\noindent na qual, $\overbar{\mu}_{F}$ é o valor médio dos \textit{pixels} na área do objeto em foco na altura $z_{0}$, $\overbar{\mu}_{A}$ o valor médio dos \textit{pixels} na área do objeto fora de foco e $\overbar{\mu}_{BG}$ o valor médio dos \textit{pixels} na área do fundo em diferentes alturas.
+
+%A métrica de \textit{Sharpness} tem como função avaliar o nível de borramento em uma imagem. Isso é importante pois os métodos de restauração ou reconstrução tendem a borrar as imagens, fazendo com que haja perda de detalhes, como por exemplo em uma microcalcificação nos exames mamografias. É importante notar que esse método não necessita de uma imagem referência. A estimativa é feita através das seguintes equações:
+%
+%\begin{equation}
+%Sharpness = \sum_{r}^{} \sum_{c}^{}  w_{x}G^{2}_{x} + w_{y} G^{2}_{y}, 
+%\label{eq:eqCap4SHARPDB}
+%\end{equation}
+%
+%\noindent onde $G_{x}$ e $G_{y}$ são gradientes direcionais, $w_{x}$ e $w_{y}$ são pesos baseados em uma vizinhança local, dados por:
+%
+%\begin{equation}
+%w_{x} = [M(x+1,y)-M(x-1,y)]^{2},
+%\label{eq:eqCap4SHARPDB1}
+%\end{equation}
+%
+%\begin{equation}
+%w_{y} = [M(x,y+1)-M(x,y-1)]^{2}.
+%\label{eq:eqCap4SHARPDB2}
+%\end{equation}
+%
+%\colorbox{pink}{Alexandre: Arrumar essas equações de Sharpness}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%														Caracterização do sinal  \& ruído																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Caracterização do Sinal  \& Ruído}
+
+Com o desenvolvimento da \textit{toolbox} na seção anterior, a possibilidade de aplicações em \acs{DBT} é ampla. Nessa seção foram investigados as propriedades do sinal e do ruído em imagens uniformes reconstruídas de \acs{DBT}. Essa investigação é necessária tendo em vista a utilização desses modelos por métodos de redução de ruído tanto nas imagens de projeção de raios X quanto em outras já reconstruídas \cite{wu2012dose, borges2017pipeline}. Além disso, como já foi mencionado, esse modelamento pode ser incorporado como um modelo de restrição para métodos de reconstrução iterativa \cite{zheng2018detector}. 
+
+Em trabalhos anteriores do nosso grupo, o modelamento do ruído foi feito para os equipamentos de mamografia convencional e também para os de \acs{DBT}. Como proposto no \autoref{Capitulo4}, um modelo  Gaussiano heteroscedástico dependente do sinal foi aplicado no equacionamento das propriedades do ruído quântico e térmico, de acordo com a Equação \ref{eq:eqCapRuidoHeteroscedastico}.  Através desses trabalhos prévios, os autores concluíram que existe uma dependência do sinal e principalmente do espaço em relação ao ruído da mamografia, além da correlação devido as propriedades do detector \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}. 
+
+Dado isso, o foco dessa seção é realizar um estudo preliminar do ruído em imagens pós-reconstrução de \acs{DBT}, para avaliar se a adequação do modelo aplicado para as projeções é também aplicável nessas imagens já reconstruídas. Da mesma forma, analisamos se o processo de reconstrução, que envolve a combinação de imagens de projeção, correlaciona o ruído tanto para equipamentos que possuíam o espectro de frequência do ruído constante quanto para os que já eram correlacionados.   
+
+\subsection{Sistemas Utilizados}
+
+Os procedimentos envolveram a utilização de dois sistemas comerciais de \acs{DBT}. O primeiro possui um sistema de detecção indireta com detector plano formado por um fotodiodo de silício amorfo (\textit{Amorphous Silicon} - \acs{a-Si}) e tecnologia de cintilador formado por uma camada de fósforo com iodeto de césio dopado com tálio (\textit{Thallium-Doped Cesium Iodide} - \acs{CsI:Tl}). Já o segundo sistema é caracterizado pela detecção direta de raios X através da tecnologia de um detector de selênio amorfo (\textit{Amorphous Selenium} - \acs{a-Se}) \cite[p. 531]{mcEntee2017handbook}. Como já foi dito, denotamos de sistema \#1 e \#2 os equipamentos com detecção indireta e direta respectivamente.
+
+\subsection{\textit{Phantom} Uniforme}
+
+Para a execução dos procedimentos, foi utilizado um \textit{phantom} de \ac{PMMA}. Esse simulador é empregado na rotina clínica com o propósito de controle de qualidade, pois o mesmo simula a absorção da radiação semelhante a uma mama considerada padrão. Testes como a calibração do controle automático de exposição (\textit{Automatic Exposure Control} - \acs{AEC}), análises de ruído, \textit{kerma} incidente, correções de \textit{flat-field} etc, são exemplos nos quais são aplicados o simulador \cite{caron2017,vanegen2018protocol}. Nesse trabalho, sua utilização foi para a estimativa e a medida dos parâmetros do sinal e do ruído. Isso se deve ao fato do bloco de acrílico, ou \acs{PMMA}, ser uniforme, proporcionando teoricamente um sinal também uniforme no detector. A espessura de cada bloco de \acs{PMMA} mede 3 e 4cm, respectivamente, para cada sistema.
+
+ \begin{figure}[H]
+	\caption{Ilustração do \textit{phantom} uniforme de \acs{PMMA}.}
+	\begin{center}
+		\includegraphics[scale=0.8, clip, trim=2cm 9cm 2cm 12.6cm]{imgs/cap4/PMMA.pdf}
+	\end{center}
+	\legend{Fonte: Adaptado de \citeonline{vanegen2018protocol}.}
+	\label{fig:imgCap4PMMA}
+\end{figure} 
+
+
+\subsection{Métricas Objetivas} 
+
+Para a análise do sinal e do ruído nas imagens reconstruídas, foram feitas medidas objetivas como as descritas abaixo.
+
+%Valor médio  e a variância do sinal foram calculados para análise da dependência espacial.
+
+A métrica de \acs{SNR}, já mencionada, avalia a relação sinal-ruído em uma determinada imagem através da média $\mu$ pelo desvio padrão $\sigma$, matematicamente definido por: 
+
+ \begin{equation}
+ SNR = \dfrac{\mu}{\sqrt[]{\sigma^{2}}}.    	\qquad 
+ \label{eq:eqSNR}
+ \end{equation}
+ 
+ Já a medida de \acs{NPS} avalia a variância do ruído no domínio da frequência. Esta medida demonstra em que banda o ruído predomina, ou se seu espectro é constante, denominado ``branco'' \cite{bertalmiodenoising2018}. Sua fórmula matemática é dada por:
+ 
+ \begin{equation}
+ NPS_{v} = \dfrac{Ns^{2}}{P} \sum_{p=1}^{P}  \vert \mathcal{F}\{I_{p}-S_{p}\}\vert^{2},    	\qquad 
+ NNPS_{v} = \dfrac{NPS_{v}}{L^{2}},	 
+ \label{eq:eqNNPS}
+ \end{equation}
+
+\noindent na qual, $N$ é o número de \textit{pixels} do \textit{patch}\footnote{ Termo usado em processamento de imagens para nomear regiões de \textit{pixels} (normalmente retangulares) de uma imagem para a execução de cálculos locais.Podem ter tamanhos variados.}, $s$ é o tamanho do detector em milímetros, $P$ é a quantidade de \textit{patches} utilizados na imagem, $\mathcal{F}$  denota a transformada de Fourier,$I_{p}$, $S_{p}$ denotam o sinal adquirido e o mesmo livre de ruído, respectivamente, e $L$ é o maior valor de \textit{pixel} da imagem \cite{dobbins2000handbook}.
+
+\subsection{Metodologia} \label{Metodologia}
+
+Projeções uniforme do \textit{phantom} de \acs{PMMA} foram adquiridas nos sistemas \#1 e \#2. As imagens provenientes do sistema de detecção indireta foram feitas por meio da parceria com o Hospital de Amor da cidade de Barretos. Para o sistema com detecção direta, as imagens foram adquiridas mediante colaboração com o Hospital da Universidade da Pensilvânia nos Estados Unidos. 
+
+Devido a possíveis irregularidades nas bordas do detector causadas, por exemplo, por linhas de \textit{pixels} mortos e também pela presença da placa de compressão, foram retiradas 50/300 linhas de \textit{pixels} na direção da parede torácica para o mamilo (\textit{chest wall-nipple}) e na direção ortogonal, respectivamente, para o sistema \#1; e 100 linhas de \textit{pixels} em ambas as direções no sistema \#2.
+
+Todas as imagens foram reconstruídas por meio do \textit{software} de reconstrução desenvolvido em nosso laboratório, como descrito nas seções anteriores. O algoritmo de \acs{BP} foi utilizado, visto que este é baseado em uma simples retroprojeção geométrica, não alterando as propriedades do sinal das imagens de projeção. A técnica de \textit{Distance Driven} foi aplicada \cite{de2004distance}. 
+
+Para a análise do ruído, as fatias também foram cortadas devido a inconsistência dos \textit{voxels} reconstruídos nas bordas. Tais inconsistências estão presentes porque os \textit{voxels} próximos as bordas do detector são projetados do lado de fora da extensão da placa detectora em certos ângulos de aquisição. Um total de 648/339 linhas de \textit{pixels} foram removidas na direção X/Y respectivamente para o sistema \#1 e 378/319 na direção X/Y para o sistema \#2 na orientação do \textit{chest wall-nipple} e na direção ortogonal respectivamente. A Figura \ref{fig:imgCap4ReconUniform} representa uma fatia reconstruída do \textit{phantom} uniforme antes e depois do corte de algumas linhas de \textit{pixels}.
+
+\begin{figure}[H]
+	\centering	
+	\caption{Representação de uma fatia reconstruída do \textit{phantom} uniforme (a) antes e (b) depois do corte de algumas linhas de \textit{pixels}.}
+	
+	\subfloat[]{\includegraphics[scale=0.4,clip, trim=0cm 0cm 0cm 0cm]{imgs/cap4/ReconUniform_Hologic_31_45_NoCut.png}}	
+	\hfill
+	\subfloat[]{\includegraphics[scale=0.4,clip, trim=0cm 0cm 0cm -1.7cm]{imgs/cap4/ReconUniform_Hologic_31_45_Cut.png}}
+	
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCap4ReconUniform}
+\end{figure}
+
+A linearização das imagens foi realizada antes do processo de reconstrução, subtraindo o \textit{offset} de cada \textit{pixel} das projeções. O valor de \textit{offset} foi obtido através de trabalhos anteriores \cite{young2008technical,borges2017pipeline, borges2017method}.
+
+A análise do sinal e do ruído foi realizada considerando a fatia reconstruída na profundidade central de cada \textit{phantom}. O tamanho dos \textit{voxels} nas direções de X e Y foi escolhido de tal modo que seja o mesmo dos elementos detectores, para que a imagem reconstruída possa cobrir toda a área do detector. 
+
+Neste estudo, os valores de intensidade dos \textit{pixels} não foram convertidos em coeficientes de atenuação, ou seja, não foi realizado a transformação logarítmica nas projeções, como ilustrado na Equação \ref{eq:eqCap3BeerLambert2}. Essa estratégia foi adotada para facilitar as comparações entre os resultados deste trabalho e os reportados anteriormente para o domínio da projeção \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}.
+
+Como foi mencionado na seção anterior, o valor médio do sinal , a variância do ruído, a \acs{SNR} e o \acs{NNPS} foram medidos após a reconstrução considerando ambas as unidades de \acs{DBT}. 
+
+Seguindo o mesmo conceito matemático adotado para as imagens no domínio da projeção, discutido na seção \ref{Capitulo4:RuidoemMamografia}, optou-se do mesmo modo o modelo Gaussiano heteroscedástico dependente do sinal, como demostrado na Equação \ref{eq:eqCapRuidoHeteroscedastico}, para o equacionamento  do ruído nas imagens reconstruídas. 
+
+Se elevarmos ao quadrado ambos os lados da Equação \ref{eq:eqCapRuidoHeteroscedasticoStd}, temos uma nova equação que modela a variância da imagem em função do sinal livre de ruído:
+
+\begin{equation}
+\sigma^{2}(y(x)) = ay(x)+b.
+\label{eq:eqCap5HeteroscedasticoVar}
+\end{equation} 
+
+Dado isso, um equacionamento polinomial de primeira ordem foi feito para estimar os coeficientes angulares e lineares da Equação \ref{eq:eqCap5HeteroscedasticoVar}, a partir dos cálculos de média e variância.
+
+Para o procedimento da estimativa da média e variância, foram adotados \textit{patches} de tamanho 64$\times$64. Para melhorar a precisão da estimativa dos coeficientes da Equação \ref{eq:eqCap5HeteroscedasticoVar}, é desejável que se tenha muitos pontos com diferentes valores em x e y. Para isso, foram adquiridas imagens de raios X do \textit{phantom} uniforme com diferentes doses para obter esse pontos distintos. Para o sistema \#1, foram utilizadas as configurações de $29kVp$ e 45, 54, 72, 90 e $126mAs$ e $31kVp$, 45, 48, 54, 63 e $69mAs$ para o sistema \#2.
+
+
+Por fim, avaliou-se a distribuição de probabilidade que o sinal segue após o processo de reconstrução. Foi mencionado nas seções anteriores que as projeções de \acs{DBT} seguem a distribuição Poisson-Gaussiana escalada. O processo de reconstrução combina essas projeções para criar as fatias do volume. Portanto, com base no \acs{CLT}, realizou-se testes estatísticos de normalidade para avaliar a distribuição das variáveis aleatórias nas fatias reconstruídas. Foram utilizados\textit{patches} de tamanho $32\times32$ com três métodos diferentes para avaliar a normalidade: Shapiro-Wilk, Kolmogorov-Smirnov e Anderson-Darling \cite{razali2011power}. A hipótese nula $H_{0}$ desses testes afirma que os dados vêm de uma função normalmente distribuída com 5\% de nível de significância.
 
 
 
 
 
+
+ 

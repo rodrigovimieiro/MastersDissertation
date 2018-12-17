@@ -1,405 +1,253 @@
-\chapter[Materiais e Métodos]{Materiais e Métodos}\label{Capitulo4}
+\chapter[Ruído em Imagens]{Ruído em Imagens}\label{Capitulo4}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%												  Introdução    															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Uma imagem é a representação da captura das intensidades da luz advindas de uma cena natural. Na forma digital, a conversão dessas intensidades é feita e as mesmas são representadas na forma numérica através de elementos de imagem, denominados \textit{pixels}. A captura das ondas eletromagnéticas normalmente é feita por sensores que idealmente convertem de maneira proporcional a quantidade de luz recebida em valores de intensidade de \textit{pixel}  \cite{bertalmiodenoising2018}. Segundo \citeonline{prince2006medical}, ruído em uma imagem se refere a um termo genérico utilizado para qualquer variação aleatória em um sinal que pode degradar drasticamente a qualidade do sinal. As fontes dessas variações e as suas respectivas intensidades variam de acordo com cada sistema de aquisição de imagem. O conhecimento dessas fontes de interferências e seu modelamento é importante na área médica para aplicações na remoção de ruído em imagens, redução da dose de radiação em mamografias e como função de restrição para algoritmos de reconstrução iterativa de tomossíntese \cite{wu2012dose, romualdo2013mammographic,borges2016method,borges2017pipeline,borges2017method,mackenzie2017characterisation,zheng2018detector}. De fato o impacto do ruído no diagnóstico do câncer de mama tem sido reportado em trabalhos anteriores \cite{haus2000screen,huda2003experimental,ruschin2007dose,saunders2007does, samei2007digital, mackenzie2016relationship}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%											Ruído em Imagens	    														%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fontes de Ruído em Imagens}
+
+De acordo com \citeonline{bertalmiodenoising2018}, em uma imagem de longa exposição de uma cena qualquer, por exemplo, onde aparentemente não existem variações na intensidade da luz, a quantidade de fótons incidentes no detector varia no decorrer do tempo e a conversão dos fótons em cargas elétricas não se da de forma ideal. Essas variações são uma das formas mais comuns de ruído em imagens e é conhecida como ruído de aquisição ou ruído quântico. O termo quântico, do latim \textit{quantum} (plural: \textit{quanta}), significa quantidade, e na física moderna, a menor quantidade discreta de uma propriedade física, e.g., um fóton é um \textit{quantum} da luz \cite{bushberg2011essential}. 
+
+Outra fonte de flutuação é causada por variações na temperatura do sensor que causam agitações térmicas nas cargas elétricas dos condutores. Tal ruído é denominado térmico ou eletrônico, devido a este ser proporcional a temperatura em que o equipamento opera, estando presente nos condutores mesmo na ausência de um potencial elétrico. A movimentação dessas cargas gera uma certa corrente elétrica, denominada corrente de fundo. Essa fonte de variação é importante, especialmente em imagens médicas geradas por raios X com baixa dose de radiação \cite{bertalmiodenoising2018}.
+
+Ruído estrutural é também uma causa de pertubações nos sinais adquiridos. Ele está relacionado com características eletrônicas na leitura dos sensores como por exemplo, a variação no ganho dos amplificadores ao longo das regiões do detector. Tais variações normalmente são fixas espacialmente , ou seja, dependem de cada região do detector.
+
+Especificamente em imagens médicas, estruturas anatômicas que não são importantes para o exame, mas estão presentes assim mesmo, causam ruídos denominados anatômicos. Segundo \citeonline{bushberg2011essential}, em radiografias torácicas, quando se deseja avaliar a estrutura anatômica do pulmão, as costelas são causadoras do ruído anatômico em potencial.
+
  
+\section{Representação do Ruído}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%														Phantom																%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\section{Materiais}
+As diversas formas de flutuações referentes aos eventos aleatórios do ruído podem ser representadas por variáveis aleatórias que são matematicamente descritas através de funções de distribuição de probabilidade \cite{prince2006medical}. Ou seja, essas funções descrevem a probabilidade da ocorrência de um certo valor, ou de um dado intervalo de valores. 
 
-No presente trabalho foram utilizados \textit{phantoms} a fim de simular todos os métodos de reconstrução. Um \textit{phantom} pode ser físico ou virtual e tem como objetivo simular condições reais de exame para que os métodos alvos de pesquisas possam ser estudados e testados de maneira sistemática. Isso se deve ao fato de que exames clínicos, ou seja, com pacientes, não podem ser realizados toda vez que um novo método necessitar ser testado.
+Dado que $P_{N}(\eta)$ é a \ac{FDP} da variável aleatória $N$ e $\eta$ são valores contínuos, temos que seu valor esperado ou também chamado de valor médio é calculado por:
 
-\subsection{\textit{Phantom} Virtual}
 
-Uma versão modificada de \citeonline[]{shepp1974fourier} foi usada. O \textit{phantom} originalmente é constituído por uma seção da cabeça que foi desenvolvido para testar o algoritmo proposto pelos autores naquela época. Esse \textit{phantom} simula diversas estruturas anatômicas com diferentes densidades $D$ como: a água ($D=1$) nos ventrículos, massa cinzenta ($D=1,2$), tumores ($D=1,03;1,04$) e para o crânio ($D=2$). A Figura \ref{fig:imgCap4SheppLogan} ilustra o \textit{phantom} de Shepp-Logan em sua versão modificada.
+\begin{equation}
+\mu_{N} = E\{N\}= {\int_{-\infty}^{\infty} \,\eta \, P_{N}(\eta) \, d\eta}.
+\label{eq:eqCapRuidoValorEsperado}
+\end{equation}
 
-\begin{figure}[H]
-	\caption{Ilustração do \textit{phantom} de Shepp-Logan em sua versão modificada.}
-	\begin{center}
-		\includegraphics[scale=1]{imgs/cap4/SheppLogan.png}
-	\end{center}
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap4SheppLogan}
-\end{figure}   
-
-Como esse trabalho visa a reconstrução de estruturas anatômicas em \acs{3D} pela técnica de tomossíntese, deve-se usar um objeto tri-dimensional para validar as técnicas aplicadas. Tendo isso em mente, foi utilizado um algoritmo\footnote{\url{www.mathworks.com/matlabcentral/fileexchange/9416-3d-shepp-logan-phantom}}, retirado da comunidade \textit{MathWorks}\footnote{\url{www.mathworks.com}}, que gera uma extensão do \textit{phantom} Shepp-Logan em \acs{3D}. A Figura \ref{fig:imgCap4SheppLogan3D} ilustra o \textit{phantom} criado pelo respectivo algoritmo e suas medidas físicas são descritas na seção seguinte.
+De fato, quando analisamos a Figura \ref{fig:imgCapRuidoPhantom}, a qual ilustra imagens que foram corrompidas por ruído com diferentes características e os seus respectivos perfis radiográficos, a média do sinal se mantém a mesma para todos os casos. Isso torna difícil a especificação do sinal somente através de sua média. Sendo assim, é necessário a caracterização dessas interferências de outra maneira \cite{dougherty2009digital}.
 
 \begin{figure}[H]
-	\caption{Ilustração do \textit{phantom} de Shepp-Logan \acs{3D}.}
-	\begin{center}
-		\includegraphics[scale=0.3]{imgs/cap4/SheppLogan3D.pdf}
-	\end{center}
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap4SheppLogan3D}
-\end{figure} 
+	\centering
+	
+	\caption{Figura ilustrando (a) o \textit{phantom} de \citeonline{shepp1974fourier} e seu respectivo perfil radiométrico, junto as imagens (b) e (c) corrompidas por um ruído Gaussiano independente do sinal com diferentes variâncias.}
+	
+	\subfloat[]{\includegraphics[scale=0.41, clip, trim=4.3cm 8.5cm 5cm 9cm]{imgs/capRuido/PhantomProf.pdf}	
+	\label{fig:imgCapRuidoPhantomOriProf}}
+	\hfil
+	\subfloat[]{\includegraphics[scale=0.41, clip, trim=4.3cm 8.5cm 5cm 9cm]{imgs/capRuido/PhantomStd1Prof.pdf} \label{fig:imgCapRuidoPhantomStd1Prof}}
+	\hfil
+	\subfloat[]{\includegraphics[scale=0.41, clip, trim=4.3cm 8.5cm 5cm 9cm]{imgs/capRuido/PhantomStd2Prof.pdf} \label{fig:imgCapRuidoPhantomStd2Prof}}
+	\hfil
+	
+	\subfloat{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/Phantom_RedLine.pdf}	\label{fig:imgCapRuidoPhantomOri}}
+	\hfil
+	\subfloat{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PhantomStd1.pdf} \label{fig:imgCapRuidoPhantomStd1}}
+	\hfil
+	\subfloat{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PhantomStd2.pdf} \label{fig:imgCapRuidoPhantomStd2}}
+	
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCapRuidoPhantom}
+\end{figure}
 
-\subsection{\textit{Phantom} Físico}
-
-Já para os testes envolvendo a redução de artefatos de alta atenuação foi usado o \textit{phantom} físico BR3D\footnote{\url{www.cirsinc.com/products/all/51/br3d-breast-imaging-phantom/}} \cite{PhantomBR3D}, como ilustra a Figura \ref{fig:imgCap4BR3D}. Esse \textit{phantom} é constituído de 6 fatias com um material que simula o tecido $100\%$ adiposo e $100\%$ glandular de uma mama. Junto ao tecido estão contidas microcalcificações, fibrilas e massas em formato de esfera. Todas essas estruturas possuem diferentes tamanhos e buscam mimetizar os aspectos reais encontrados em uma mama com possíveis lesões.   
-
-\begin{figure}[H]
-	\caption{Ilustração do \textit{phantom} BR3D.}
-	\begin{center}
-		\includegraphics[scale=0.34]{imgs/cap4/BR3D.jpeg}
-	\end{center}
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap4BR3D}
-\end{figure} 
+Uma forma diferente é a caracterização através da média quadrática, segundo:
    
+\begin{equation}
+\mu_{N^{2}} = E\{N^{2}\}= {\int_{-\infty}^{\infty} \,\eta^{2} \, P_{N}(\eta) \, d\eta},
+\label{eq:eqCapRuidoEsperacaQuadratica}
+\end{equation}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%													Geometria																%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\section{Geometria} 
+\noindent tal que, a variância do sinal é dada pela relação entre a média e a média quadrática:
 
-%\subsection{\textit{Phantom} Virtual}
- 
-Para a aplicação dos métodos no \textit{phantom} virtual foi proposto uma geometria física do sistema que se aproxima de um equipamento de \acs{DBT} comercial. A Tabela \ref{tab:tabCap4ParametrosPhantoms} expõe os parâmetros físicos do sistema que foram utilizados, seguindo as propriedades geométricas de um sistema hipotético de \acs{DBT}. %O leitor pode fazer uma comparação com os valores dos equipamentos comerciais demonstrados na Tabela \ref{tab:tabCap2SistemasDBT}.
+\begin{equation}
+\sigma^{2}_{N} = Var\{N\}= {\int_{-\infty}^{\infty} \,(\eta -\mu_{N} )^{2} \, P_{N}(\eta) \, d\eta}, 
+\label{eq:eqCapRuidoVariancia1}
+\end{equation}
 
-A Figura \ref{fig:imgCap4GeometriaProjecao} ilustra a geometria que foi usada para a projeção e retroprojeção, sendo que a Figura \ref{fig:imgCap4GeometriaProjecao1} representa a projeção de número 1, \ref{fig:imgCap4GeometriaProjecao2} de número 9 e \ref{fig:imgCap4GeometriaProjecao3} de número 5, onde os ângulos são: $-1,25\degree$, $1,25\degree$ e $0\degree$ respectivamente. O cubo azul representa espacialmente o \textit{phantom} virtual da Figura \ref{fig:imgCap4SheppLogan3D}, o plano em amarelo a posição da projeção do objeto no detector, o plano pontilhado as extremidades do detector e o ponto vermelho o tubo de raios X. 
+\begin{equation}
+\sigma^{2}_{N}  = \mu_{N^{2}} - (\mu_{N} )^{2} .
+\label{eq:eqCapRuidoVariancia2}
+\end{equation}
 
 
-\begin{table}[H]
-	\footnotesize
+Diferentes distribuições de probabilidades são utilizadas para caracterizar cada tipo de ruído mencionado anteriormente, quando se tem o conhecimento detalhado do sistema de aquisição do sinal. Em imagens digitais, em geral, o ruído pode ser caraterizado por uma combinação dessas distribuições.
+
+O teorema do limite central (\textit{Central Limit Theorem} - \acs{CLT}) é comumente usado para modelar sistemas físicos que são complexos do ponto de vista onde inúmeras variáveis aleatórias com diferentes distribuições são utilizadas para modelos físicos distintos. Ele afirma que a soma dessas variáveis aleatórias converge para uma distribuição normal com uma respectiva média e variância $\mathcal{N}(0,\,\sigma^{2})$. No entanto, na prática, a média e a variância dos sinais podem mudar de acordo com a posição espacial, alterando assim as características dessas distribuições nas diversas posições do detector, mesmo que ainda sejam normais. Sendo assim, são necessários modelos matemáticos que levem em consideração esses fatores, como demonstrado nas seções abaixo \cite{bertalmiodenoising2018}.
+
+
+\subsection{Ruído Independente do Sinal}
+
+Agitações térmicas podem ser representadas por uma distribuição Gaussiana, também chamada de normal. Isso se deve ao fato dessas variações serem independentes da quantidade de sinal, ou seja, a variação de temperatura em média é a mesma em todo o detector, como ilustra a Figura \ref{fig:imgCapRuidoPhantom}. Esse tipo de flutuação é descrita matematicamente através do modelo de ruído aditivo Gaussiano branco  (\textit{Additive White Gaussian Noise} - \acs{AWGN}), independente e identicamente distribuído (\textit{Independent and Identically Distributed} - \acs{IID}). Sendo assim, a equação que descreve a contaminação da imagem por esse ruído é dada por:
+
+
+\begin{equation}
+z(x) = y(x) + N(x),
+\label{eq:eqCapRuidoTermico}
+\end{equation}
+
+\noindent na qual, $y$ é a imagem livre de ruído, $N$ é uma variável aleatória com uma distribuição normal $\mathcal{N}(0,\,\sigma^{2})$ de média zero e variância $\sigma^{2}$, $z$ é a imagem observada e $x$ descreve as coordenadas ao longo da imagem. O termo branco de \acs{AWGN} está relacionado com  o fato da variância do espectro de Fourier do ruído ser constante. A palavra branco em si deriva da espectroscopia, onde a luz branca possui todos os componentes de frequência do espectro visível. Esse conceitos são detalhados nas próximas seções.
+
+
+\subsection{Ruído Dependente do Sinal}
+
+Já o ruído quântico está relacionado com o fluxo de fótons em cada sensor, de modo que a variância das cargas elétricas é proporcional a esse fluxo. Isso significa que em locais onde mais fótons são detectados, maior é a variação nas cargas elétricas e consequentemente os valores dos \textit{pixels} serão mais contaminados pelo ruído quântico. Sendo assim, a dependência do sinal é uma característica desse tipo de ruído, que é matematicamente modelado através de uma distribuição Poisson \cite{bertalmiodenoising2018}. De fato, a equação simplificada que descreve a captura de uma imagem por um fotossensor é dada por:
+
+\begin{equation}
+z(x) =  \mathcal{P}(y(x)),
+\label{eq:eqCapRuidoQuantico}
+\end{equation}
+
+\noindent em que $\mathcal{P}$ significa a família de distribuições de Poisson. Uma das características marcantes dessa distribuição é o fato da variância ter o mesmo valor da média:
+
+\begin{equation}
+ E\{z(x)\mid y(x)\} =  Var\{z(x)\mid y(x)\} = y(x).
+\label{eq:eqCapRuidoQuanticoMediaVar}
+\end{equation}
+
+Essa propriedade pode ser observada através do exemplo na Figura \ref{fig:imgCapRuidoPoisson}, onde uma imagem sintética representa a aquisição de fótons com intensidade variada e a outra simula a inserção do ruído com uma distribuição Poisson. O perfil dessa pertubação é evidenciando na Figura \ref{fig:imgCapRuidoNoise3D}, exemplificando essa dependência do sinal. 
+
+\begin{figure}[H]
 	\centering
-	\caption{Parâmetros físicos do sistema implementado com \textit{phantom} virtual e do sistema comercial utilizado pelo \textit{phantom} BR3D.}
-	\label{tab:tabCap4ParametrosPhantoms}
-	\begin{tabular}{l|c|c}
-		\textbf{Parâmetro}                            &  \textbf{Shepp-Logan} &  \textbf{BR3D}  \\
-		[5pt]
-		\hline
-		\hline
-		\rule[-0.5ex]{0pt}{3ex}
-		Tamanho do detector 						  &     28x35cm       &      24x30cm       \\ \hline
-		\rule[-0.5ex]{0pt}{3ex}
-		Tamanho do \textit{pixel}                     &       1mm        &     100$\mu$m      \\ \hline
-		\rule[-0.5ex]{0pt}{3ex}
-		Número de projeções                           &        9         &         9          \\ \hline
-		\rule[-0.5ex]{0pt}{3ex}
-		Angulação do tubo                             &   2,5$\degree$   &    25$\degree$     \\ \hline
-		\rule[-0.5ex]{0pt}{3ex}
-		Angulação do detector                         &   Estacionário   &    Estacionário    \\ \hline
-		\rule[-0.5ex]{0pt}{3ex}
-		Tamanho do objeto                             & 128x128x128 u.v. & 2004x1092x129 u.v. \\ \hline
-		\rule[-0.5ex]{0pt}{3ex}
-		Tamanho do \textit{Voxel}                     &     1x1x10mm     &   0.1x0.1x0.5mm    \\ \hline
-		\rule[-0.5ex]{0pt}{3ex}
-		Distância fonte para detector                 &      660cm       &       660mm        \\ \hline
-		\rule[-0.5ex]{0pt}{3ex}
-		Distância detector para centro de rotação     &       40cm       &        40mm        \\ \hline
-		\rule[-0.5ex]{0pt}{3ex}
-		Tamanho lacuna de ar                          &       22cm       &        22mm        \\ \hline
-	\end{tabular}
-	\vspace{2ex}
-	\legend{Fonte: \citeonline{michell2018role,vedantham2015digital,sechopoulos2013review,baker2011breast}}
-\end{table}
-
-
-\begin{figure}[t!]
-	\centering
 	
-	\caption{Geometria utilizada na aplicação dos métodos, onde (a) representa a projeção de número 1, (b) de número 9 e (c) de número 5, onde os ângulos são: $-1,25\degree$, $1,25\degree$ e $0\degree$ respectivamente.}
+	\caption{Ilustração de (a) uma imagem sintética, (b) da inserção de ruído Poisson na mesma, (c) da subtração de (a) por (b) para extração apenas do ruído e (d) do seu respectivo perfil em \acs{3D}.}
 	
-	\subfloat[]{\includegraphics[scale=.5]{imgs/cap4/Geometria/Proj1.png}\label{fig:imgCap4GeometriaProjecao1}}
-	\subfloat[]{\includegraphics[scale=.5]{imgs/cap4/Geometria/Proj9.png}\label{fig:imgCap4GeometriaProjecao2}}
+	\subfloat[]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PhantomPoisson.pdf}	
+	\label{fig:imgCapRuidoPhantomPoisson}}
+	\hfill
+	\subfloat[]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PhantomWithNoise.pdf} \label{fig:imgCapRuidoPhantomWithNoise}}
+	\hfill
+	\subfloat[]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PoissonNoise.pdf} \label{fig:imgCapRuidoPoissonNoise}}
+	\hfill
+	\subfloat[]{\includegraphics[scale=0.55, clip, trim=3.1cm 8.7cm 3.7cm 8.2cm]{imgs/capRuido/Noise3D.pdf} \label{fig:imgCapRuidoNoise3D}}
 	
-	\subfloat[]{\includegraphics[scale=.55]{imgs/cap4/Geometria/Proj5.png}\label{fig:imgCap4GeometriaProjecao3}}
-	
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap4GeometriaProjecao}
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCapRuidoPoisson}
 \end{figure}
 
- 
-%\subsection{\textit{Phantom} Físico}\label{PhantomReal}
+Consequentemente a essa propriedade, o \acs{SNR} é diretamente proporcional a média do sinal:
 
-Já para o \textit{phantom} BR3D, as projeções foram realizadas em um equipamento da empresa \acs{GE} modelo Senographe Essential\texttrademark, ilustrado pela Figura \ref{fig:imgCap4EquipamentoGE}. A geometria utilizada pelo equipamento é detalhada também pela Tabela \ref{tab:tabCap4ParametrosPhantoms}.
+\begin{equation}
+SNR =  \dfrac{\mu}{\sigma} =  \dfrac{y(x)}{\sqrt{y(x)}}  = \sqrt{y(x)},
+\label{eq:eqCapRuidoQuanticoSNR}
+\end{equation}
 
-%\begin{table}[H]
-%	\footnotesize
-%	\centering
-%	\caption{Parâmetros físicos do sistema comercial.}
-%	\label{tab:tabCap4ParametrosGESenographeEssential}
-%	\begin{tabular}{l|c}
-%		\textbf{Parâmetro}                            &   \textbf{Valor}   \\
-%		[5pt]
-%		\hline
-%		\hline
-%		\rule[-0.5ex]{0pt}{3ex}
-%		Tamanho do detector 						  &      24x30cm       \\ \hline
-%		\rule[-0.5ex]{0pt}{3ex}
-%		Tamanho do \textit{pixel}                     &     100$\mu$m      \\ \hline
-%		\rule[-0.5ex]{0pt}{3ex}
-%		Número de projeções                           &         9          \\ \hline
-%		\rule[-0.5ex]{0pt}{3ex}
-%		Angulação do tubo                             &    25$\degree$     \\ \hline
-%		\rule[-0.5ex]{0pt}{3ex}
-%		Angulação do detector                         &    Estacionário    \\ \hline
-%		\rule[-0.5ex]{0pt}{3ex}
-%		Tamanho do objeto                             & 2004x1092x129 u.v. \\ \hline
-%		\rule[-0.5ex]{0pt}{3ex}
-%		Tamanho do \textit{Voxel}                     &   0.1x0.1x0.5mm    \\ \hline
-%		\rule[-0.5ex]{0pt}{3ex}
-%		Distância fonte para detector                 &       660mm        \\ \hline
-%		\rule[-0.5ex]{0pt}{3ex}
-%		Distância detector para centro de rotação     &        40mm        \\ \hline
-%		\rule[-0.5ex]{0pt}{3ex}
-%		Tamanho lacuna de ar                          &        22mm        \\ \hline
-%	\end{tabular}
-%	\vspace{2ex}
-%	\legend{Fonte: \citeonline{michell2018role,vedantham2015digital,sechopoulos2013review,baker2011breast}}
-%\end{table}
+\noindent na qual, $\mu$ representa a média e $\sigma$ o desvio padrão.
+
+\section{Ruído em Mamografia}\label{Capitulo4:RuidoemMamografia}
+
+Para a realização dos exames de mamografia, são utilizadas ondas eletromagnéticas na faixa dos raios X. Apesar da maioria dos detectores serem integradores de energia e não de fato contadores de fótons, a flutuação da intensidade dos raios X, ou seja, o ruído quântico é modelado através da distribuição de Poisson \cite{boone2000handbook,haus2000screen}. De fato, o ruído quântico é a maior fonte de flutuações nos exames de mamografia quando há uma alta intensidade de radiação, porém outras fontes de ruído também são observadas \cite{huda2003experimental,marshall2017handbook}. Especialmente em casos onde a dose de radiação é baixa, o ruído eletrônico se torna muito importante. Tais interferências são causadas por variações térmicas e pelo circuito eletrônico dos detectores em geral. Um exemplo de exame que utiliza uma baixa dose de radiação é a \acs{DBT}. Nessa técnica, o número de \textit{quanta} por projeção é menor, quando comparado com a mamografia digital convencional, sendo assim o ruído dependente do sinal é menor, tornando a parcela do ruído independente significativa \cite{sechopoulos2013review,vedantham2015digital}. 
+
+A calibração é um fator importante na rotina dos equipamentos de mamografia. A uniformidade das intensidades dos \textit{pixels} ao longo do detector e a não negatividade são fatores levados em conta. A uniformidade do campo é feita através de um procedimento conhecido como correção de \textit{flat-field} \cite{marshall2017handbook}. Nesse procedimento, é dado um ganho nos detectores em cada posição a fim de corrigir as imperfeições de iluminação dos raios X causadas pelo efeito Heel e pela geometria do cone. Já a não negatividade é garantida por meio de um \textit{offset} no valor lido pelos detectores. Todos esses fatores alteram significativamente as características do ruído, tornando-o  dependente do espaço \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}. Esse procedimento de certa forma corrige também os ruídos estruturais presentes devido as variações nos ganhos do detector, fixas espacialmente \cite{VanEngen2013,marshall2017handbook}.
+
+De fato, levando em consideração o ruído quântico, térmico e os fatores de calibração, um modelo matemático que se aproxima desses efeitos físicos é o Poisson escalado-Gaussiano:
+
+\begin{equation}
+z(x) = ap(x) + N(x),
+\label{eq:eqCapRuidoPossionGaussiano}
+\end{equation}
+
+\noindent no qual:
+
+\begin{equation}
+p(x) \sim \mathcal{P}(a^{-1}\,y(x)),  \qquad  N(x) \sim \mathcal{N}(0,\,b)
+\label{eq:eqCapRuidoPossionGaussiano1}
+\end{equation}
+
+\noindent e sua média e variância são dadas por:
+
+\begin{equation}
+E\{z(x)\mid y(x)\} =  y(x),
+\label{eq:eqCapRuidoPossionGaussianoMedia}
+\end{equation}
+
+\begin{equation}
+Var\{z(x)\mid y(x)\} = ay(x) + b.
+\label{eq:eqCapRuidoPossionGaussianoVar}
+\end{equation}
+
+De acordo com \citeonline{bertalmiodenoising2018}, para contagens que possuem uma média alta, a distribuição de Poisson se aproxima de uma normal, segundo:
+
+\begin{equation}
+\mathcal{P}(y(x)) \approx \mathcal{N}(y(x),\,y(x)),
+\label{eq:eqCapRuidoPossionGaussianoAproximacao}
+\end{equation}
+
+\noindent do mesmo modo, é possível aproximar  a Equação \ref{eq:eqCapRuidoPossionGaussiano} para o dito modelo Gaussiano heteroscedástico dependente do sinal:
+
+\begin{equation}
+z(x) = y(x) + \sigma(y(x)) \, \xi(x),
+\label{eq:eqCapRuidoHeteroscedastico}
+\end{equation}
+
+\noindent onde a função  $\xi(x)$ é \acs{IID} e tem uma distribuição normal com média zero e variância um, segundo:
+
+\begin{equation}
+\xi(x) \sim  \mathcal{N}(0,\,1),
+\label{eq:eqCapRuidoHeteroscedastico1}
+\end{equation}
+
+\noindent e a função $\sigma(y(x)) $, nomeada como função desvio padrão, modela o desvio padrão da parte dependente do sinal de acordo com a imagem livre de ruído, conforme:
+
+\begin{equation}
+\sigma(y(x)) = \sqrt{ay(x)+b}.
+\label{eq:eqCapRuidoHeteroscedasticoStd}
+\end{equation} 
+
+A Equação \ref{eq:eqCapRuidoHeteroscedastico} pode ser escrita ainda de maneira mais simplificada:
+
+\begin{equation}
+z(x) \sim  \mathcal{N}(\,y(x),\,\sigma(\,y(x)) \,).
+\label{eq:eqCapRuidoHeteroscedasticoSimplificado}
+\end{equation}
+
+\subsection{Correlação}\label{Correlação}
+
+Até então, todo o modelamento do ruído foi feito considerando cada unidade do detector como uma variável aleatória independente. Na prática, isso não é a realidade observada nos equipamentos. A correlação, ou a associação existente entre duas variáveis, ocorre devido a fenômenos físicos, tais como: o processo de aquisição do sistema, o procedimento de leitura dos sensores, o \textit{cross-talk} existente entre \textit{pixels} vizinhos, dentre outros \cite{morettin2010,bertalmiodenoising2018}. 
+
+Esses fenômenos podem ser quantificados matematicamente no domínio do espaço através de uma função de autocovariância, porém são mais comumente descritos no domínio da frequência através do espectro de potência do ruído (\textit{Noise Power Spectrum} - \acs{NPS}), também conhecido como espectro de Wiener \cite[p. 485]{marshall2017handbook}. Segundo \citeonline{marshall2017handbook}, o \acs{NPS} é o modulo da transformada de Fourier da função de autocovariância, ou segundo \citeonline{bertalmiodenoising2018} corresponde a variância da transformada de Fourier do ruído. Essa medida é dada pela potência do ruído por unidade de frequência \cite{marshall2017handbook}.
+
+A correlação do ruído é comumente associada com as cores do espectro de luz visível. Isso se deve ao fato de sua medida objetiva ser feita mais frequentemente no domínio da frequência. Por isso é feita essa associação. 
+
+O ruído é dito colorido quando seu espectro de potência não é constante, ou seja, quando existe uma preponderância da variância em certa faixa de frequência. O ruído que afeta as baixas frequências é denominado de ``ruído vermelho'', enquanto o que afeta as altas é chamado de ``ruído azul'', dentre outras denominações. Ao caracterizar o ruído como ``branco'', significa que o seu espectro de frequência é constante \cite{marshall2017handbook,bertalmiodenoising2018}. A Figura \ref{fig:imgCapRuidoColoredNoise} exemplifica os tipos de ruídos correlacionados mencionados.
+
 
 \begin{figure}[H]
 	\centering
 	
-	\caption{(a) Equipamento de tomossíntese modelo Senographe Essential\texttrademark \ utilizado para realizar as projeções e (b) o mesmo com o \textit{phantom} BR3D.}
+	\caption{Ilustração de alguns tipos de ruídos correlacionados denominados coloridos, especificamente (a) branco, (b) vermelho, (c) azul e (d) horizontal.}
 	
-	\subfloat[]{\includegraphics[scale=0.08]{imgs/cap4/EquipamentoGE.jpg}\label{fig:imgCap4EquipamentoGEA}}
+	\subfloat[]{\includegraphics[scale=0.7, clip, trim=3.2cm 6.7cm 14.3cm 16cm]{imgs/capRuido/ColoredNoise.pdf}}
 	\hfil
-	\subfloat[]{\includegraphics[scale=.49]{imgs/cap4/BR3Deq.jpeg}\label{fig:imgCap4EquipamentoGEB}}
+	\subfloat[]{\includegraphics[scale=0.7, clip, trim=6.75cm 6.7cm 10.4cm 16cm]{imgs/capRuido/ColoredNoise.pdf}}
+	\hfil
+	\subfloat[]{\includegraphics[scale=0.7, clip, trim=10.35cm 6.7cm 6.75cm 16cm]{imgs/capRuido/ColoredNoise.pdf}}
+	\hfil
+	\subfloat[]{\includegraphics[scale=0.7, clip, trim=14.2cm 6.7cm 3.4cm 16cm]{imgs/capRuido/ColoredNoise.pdf}}
 	
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap4EquipamentoGE}
-\end{figure} 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%														Métodos																%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\section{Métodos} 
-
-Para os métodos de reconstrução, uma \textit{toolbox}\footnote{www.mathworks.com/matlabcentral/fileexchange/35548-3d-cone-beam-ct--cbct--projection-backprojection-fdk--iterative-reconstruction-matlab-examples.} foi utilizada para auxílio da implementação dos métodos propostos. Foram aplicadas as técnicas de simples retroprojeção, retroprojeção filtrada e o método estatístico de máxima verossimilhança. Entretanto antes de implementar essas técnicas é necessário a obtenção das projeções dado o volume do objeto. Em função disso, são discutidos os métodos utilizados para a obtenção delas.  
-
-\subsection{Projeção e Retroprojeção} 
-
-Para a implementação da projeção direta foi utilizado o método de \textit{Pixel Driven} (Figura \ref{fig:imgCap3Projetores1}) descrito nos capítulos anteriores. Para isso então são utilizadas as Equações \ref{eq:eqCap3ProjectionY} e \ref{eq:eqCap3ProjectionX}, considerando a distância entre o detector e o eixo de rotação igual a zero, ou seja, $D=0$. 
-
- \colorbox{pink}{Reescrever esse parágrafo} De modo que nenhum \textit{pixel} no detector fique sem valor, um processo inverso é feito, ou seja, para cada \textit{pixel} no detector é calculado o respectivo \textit{voxel} do qual se atribui o seu valor. O mesmo é feito para a retroprojeção, onde são calculados para todos os \textit{voxels} qual o respectivo \textit{pixel} que contribui para o seu valor. 
-
-
- Os cálculos das projeções e retroprojeções são feitos com o objetivo de converter as coordenadas do mundo, e.g. $(X,Y,Z)$, para as coordenadas da imagem, e.g. $(x_{i},y_{i})$, porém após isso ainda são necessárias as conversões das coordenadas da imagem para as coordenadas em \textit{pixel}, e.g. $(i,j)$. Isso pode ser feito segundo as Equações \ref{eq:eqCap4ConversaoCoordImgparaPixelY} e \ref{eq:eqCap4ConversaoCoordImgparaPixelX}, seguido por uma interpolação linear entre as coordenadas em \textit{pixel} e a imagem a ser projetada ou reprojetada, onde $dx\,\text{e}\,dy$ são os tamanhos dos \textit{pixels} em (mm) para as coordenadas $x\,\text{e}\,y$ respectivamente. A Figura \ref{fig:imgCap4ConversaoCoord} ilustra a relação entre as coordenadas e os pseudocódigos abaixo resumem todo o processo. 
- 
-\begin{equation}
-i = \dfrac{y_{i}}{dy} + y_{0}  
-\label{eq:eqCap4ConversaoCoordImgparaPixelY}
-\end{equation} 
- 
-\begin{equation}
- j = -\dfrac{x_{i}}{dx} + x_{0}.  
-\label{eq:eqCap4ConversaoCoordImgparaPixelX}
-\end{equation} 
- 
- 
- \begin{figure}[H]
- 	\caption{Ilustração da relação entre as coordenadas.}
- 	\begin{center}
- 		\includegraphics[scale=1]{imgs/cap4/ConversaoCoord.pdf}
- 	\end{center}
- 	\legend{Fonte: do autor, 2018.}
- 	\label{fig:imgCap4ConversaoCoord}
-\end{figure} 
-
-\begin{algorithm}[H]
-	\label{alg:algProjecao}
-	\caption{Projeção}
-	\Entrada{$Volume3D$, $Parâmetros$} 
-	\Saida{$Projeções$}
-	\Inicio{
-		
-		\Para{cada $Projeção \in Projeções$}{
-			$\theta \leftarrow Ângulo(Projeção)$
-			
-			\Para{cada $Fatia \in Volume3D$}{
-				
-				Calcular $Y \;\text{e}\; X \; \forall \; (y_{i}, x_{i}) \; \in Projeção$
-				
-				Calcular $i \;\text{e}\; j \; \forall \; (Y, X)$
-				
-				$Projeção \leftarrow Projeção + \text{Interpolação}(Fatia\,,\,(i,j)\,)$			
-			}
-		}
-	}
-	\Retorna{$Projeções$}
-\end{algorithm}
-
-
-\begin{algorithm}[H]
-	\label{alg:algRetroprojecao}
-	\caption{Retroprojeção}
-	\Entrada{$Projeções$, $Parâmetros$} 
-	\Saida{$Volume3D$}
-	\Inicio{
-		
-		\Para{cada $Projeção \in Projeções$}{
-			$\theta \leftarrow Ângulo(Projeção)$
-			
-			\Para{cada $Fatia \in Volume3D$}{
-				
-				Calcular $y_{i} \;\text{e}\; x_{i} \; \forall \; (X,Y,Z) \; \in Fatia$
-				
-				Calcular $i \;\text{e}\; j \; \forall \; (y_{i}, x_{i})$
-				
-				$Fatia \leftarrow Fatia + \text{Interpolação}(Projeção\,,\,(i,j)\,)$			
-			}
-		}
-	}
-	\Retorna{$Volume3D$}
-\end{algorithm}
-
-
-Após a aplicação dos passos mencionados acima em todo o volume \acs{3D}, são geradas as projeções da Figura \ref{fig:imgCap4Projecoes}, onde as imagens de (a) até (i) representam as projeções de 1 a 9 respectivamente. A partir dessas projeções é possível fazer a reconstrução do volume aplicando os métodos propostos.
- 
-\begin{figure}[H]
-	\centering
-	
-	\caption{Projeções geradas a partir da Figura \ref{fig:imgCap4GeometriaProjecao}, onde de (a) até (i) representam as projeções de 1 a 9.}
-	
-	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/1.png}\label{fig:imgCap4Projecao1}}
-	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/2.png}\label{fig:imgCap4Projecao2}}
-	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/3.png}\label{fig:imgCap4Projecao3}}
-	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/4.png}\label{fig:imgCap4Projecao4}}
-	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/5.png}\label{fig:imgCap4Projecao5}}
-	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/6.png}\label{fig:imgCap4Projecao6}}
-	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/7.png}\label{fig:imgCap4Projecao7}}
-	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/8.png}\label{fig:imgCap4Projecao8}}
-	\subfloat[]{\includegraphics[scale=.45]{imgs/cap4/Proj/9.png}\label{fig:imgCap4Projecao9}}
-	
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap4Projecoes}
+	\legend{Fonte: \citeonline{bertalmiodenoising2018}.}
+	\label{fig:imgCapRuidoColoredNoise}
 \end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%												Reconstrução																%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Reconstrução de Imagens} 
 
-Após a execução do passo a passo exemplificado anteriormente é possível a aplicação dos métodos de reconstrução. São utilizadas três técnicas para a comparação do melhor resultado: retroprojeção, retroprojeção filtrada e máxima verossimilhança. Para o algoritmo estatístico, diferentes quantidades de iterações são aplicadas no teste, variando de cinco até vinte iterações. O método de simples retroprojeção foi descrito no subitem anterior e os pseudocódigos abaixo descrevem o funcionamento dos métodos de \acs{FBP} e \acs{MLEM}. A confecção do filtro para o algoritmo de retroprojeção filtrada se dá a partir dos passos ditos no item \ref{RetroprojeçãoFiltrada}.
-
-\begin{algorithm}[H]
-	\label{alg:algRetroprojecaoFiltrada}
-	\caption{Retroprojeção Filtrada}
-	\Entrada{$Projeções$, $Parâmetros$} 
-	\Saida{$Volume3D$}
-	\Inicio{
-		
-		\Para{cada $Projeção \in Projeções$}{
-			$Projeção \leftarrow Filtrar(Projeção)$	
-		}
-		$Volume3D \leftarrow Retroprojeção(Projeções)$
-	}
-	\Retorna{$Volume3D$}
-\end{algorithm}
-
-\begin{algorithm}[H]
-	\label{alg:algMlEM}
-	\caption{MLEM}
-	\Entrada{$Projeções$, $Parâmetros$} 
-	\Saida{$Volume3D$}
-	\Inicio{
-	$Volume3D \leftarrow EstimativaInicial$	
-		
-	$FatorNorm \leftarrow Retroprojeção(1)$	
-	
-		\Para{cada Iteração}{
-		$EstimativaProjeções \leftarrow Projeção(Volume3D)$	
-		
-		$RazãoProjeções \leftarrow Projeções \;/\; EstimativaProjeções$
-		
-		$VolumeEstimado \leftarrow Retroprojeção(RazãoProjeções)$
-		
-		$FatorModificação \leftarrow VolumeEstimado \;/\; FatorNorm$
-		
-		$Volume3D \leftarrow Volume3D \;X\; FatorModificação$
-		}
-	}
-	\Retorna{$Volume3D$}
-\end{algorithm}
-
-
-\subsection{Redução de Artefatos de Alta Atenuação}\label{MetodosReduçãodeArtefatosdeAltaAtenuação} 
-
-Para a implementação dos métodos de redução de artefatos, utilizou-se os materiais ditos na seção anterior. Em seguida aplicou-se os métodos de \citeonline[]{borges2017metal} de redução de artefatos metálicos com o intuito de avaliar os resultados apresentados. 
-
-A constante $M$ da Equação \ref{eq:eqCap3wBPLogistic} foi ajustada de maneira a balancear o nível de ruído e a redução dos artefatos de alta atenuação na imagem.
-
-
-Foram recortadas regiões de interesse (\textit{Region of Interest} - \acs{ROI}) de tamanho $90x90$, para aplicar a técnica abordada. As coordenadas da \acs{ROI} foram de 1440 até 1529 em Y e 860 até 949 em X. A Figura \ref{fig:imgCap4ROIGE} ilustra essa região referente a fatia 74 reconstruída pelo equipamento comercial assim como a Figura \ref{fig:imgCap4ROIBP} ilustra a mesma região com uma técnica de reconstrução por retroprojeção simples. 
-
-Foram selecionadas somente as fatias de 67 a 75 para a realização dos procedimentos. Isso se deve ao fato de que o método é computacionalmente caro.
-
-\begin{figure}[H]
-	\centering
-	
-	\caption{\acs{ROI} reconstruídas pelo modelo (a) comercial e através da (b) retroprojeção simples a fim de testar os métodos de redução de artefatos.}
-	
-	\subfloat[\acs{ROI} da fatia 74 - Comercial.]{\includegraphics[scale=.5]{imgs/cap4/GEroi.png}\label{fig:imgCap4ROIGE}}
-	\hfil
-	\subfloat[\acs{ROI} da fatia 74 - \acs{BP}]{\includegraphics[scale=.5]{imgs/cap4/BProi.png}\label{fig:imgCap4ROIBP}}
-	
-	\legend{Fonte: do autor, 2018.}
-	\label{fig:imgCap4ROI}
-\end{figure} 
-
-\subsection{Validação} 
-
-Para analisar de maneira objetiva os resultados das imagens, utilizou-se métricas de avaliação da qualidade da imagem, conhecidas na literatura, como as descritas abaixo:
-
-O Erro quadrático médio (\textit{Mean Square Error} - \acs{MSE}) é uma forma de medida pontual que analisa as diferenças de intensidade entre uma imagem referência e outra estimada. Esse método é utilizado devido a sua simplicidade de cálculo, obtenção de resultados com fácil interpretação e baixa complexidade computacional, porém críticas são feitas ao mesmo devido a sua ineficiência quando se comparado com as métricas subjetivas da percepção humana \cite{gonzalez2008digital,wang2004image}. Sua equação matemática é dada por:
+O modelo mais simples para a formulação do ruído correlacionado é dado pelo modelo dito estacionário, matematicamente formulado por:
 
 \begin{equation}
-MSE = \dfrac{1}{MN} \sum_{x=1}^{M} \sum_{y=1}^{N} [f(x,y) - \hat{f}(x,y)]^{2},
-\label{eq:eqCap4MSE}
-\end{equation} 
-
-\noindent ou em sua versão aplicando a raiz quadrada:
-
-\begin{equation}
-RMSE = \sqrt{MSE(f,\hat{f})},
-\label{eq:eqCap4RMSE}
-\end{equation}
- 
-\noindent ou ainda em sua versão normalizada:
-
-\begin{equation}
-NRMSE = \dfrac{RMSE(f,\hat{f})}{max(\hat{f}) - min(\hat{f})},
-\label{eq:eqCap4NRMSE}
+z(x) =  y(x) + N(x), \qquad N(x) = (\nu\circledast g)(x),
+\label{eq:eqCapRuidoCorrelatedNoiseStationary}
 \end{equation}
 
-%\noindent onde:
-%
-%\begin{equation}
-%S_{f} = \dfrac{1}{MN} \sum_{x=1}^{M} \sum_{y=1}^{N} f(x,y)  \;\; S_{\hat{f}} = \dfrac{1}{MN} \sum_{x=1}^{M} \sum_{y=1}^{N} \hat{f}(x,y).
-%\label{eq:eqCap4NRMSESxSy}
-%\end{equation}
+\noindent no qual, N é a função que modela o ruído aditivo correlacionado estacionário de média zero, $\nu$ representa o ruído independente de média zero e variância unitária e g é a máscara de convolução que modela a correlação do ruído e sua variância. Os modelos mais complexos são encontrados em \citeonline[p. 27-30]{bertalmiodenoising2018}.
 
 
-A métrica de Índice de Similaridade Estrutural (\textit{Structural Similarity Index} - \acs{SSIM}) tem como função fazer uma avaliação que seja mais fiel a percepção humana e a formação das imagens, segundo \citeonline[]{wang2004image}. Esse método avalia componentes como a  luminância $l(\cdot)$, o contraste $c(\cdot)$ e a estrutura dos objetos $s(\cdot)$. Sua formulação matemática é dada por:
 
-\begin{equation}
-SSIM(x,y) = [l(x,y)]^{\alpha} \cdot [c(x,y)]^{\beta} \cdot [s(x,y)]^{\gamma},
-\label{eq:eqCap4SSIM}
-\end{equation}
 
-\noindent onde $\alpha,\beta,\gamma$ são constantes de ajuste da métrica. É importante ressaltar que o \acs{SSIM} retorna os índices de similaridade para diversas regiões da imagem, porém quando se fala em similaridade é interessante que haja somente um índice para toda a imagem. Portanto é feito então uma média dos M índices retornados, dado pela equação:
 
-\begin{equation}
-MSSIM(x,y) = \dfrac{1}{M} \sum_{j=1}^{M} SSIM(x_{j},y_{j})
-\label{eq:eqCap4MSSIM}
-\end{equation} 
+      
 
-A métrica de \textit{Sharpness} tem como função avaliar o nível de borramento em uma imagem. Isso é importante pois os métodos de restauração ou reconstrução tendem a borrar as imagens, fazendo com que haja perda de detalhes, como por exemplo em uma microcalcificação nos exames mamografias. É importante notar que esse método não necessita de uma imagem referência. A estimativa é feita através das seguintes equações:
 
-\begin{equation}
-Sharpness = \sum_{r}^{} \sum_{c}^{}  w_{x}G^{2}_{x} + w_{y} G^{2}_{y}, 
-\label{eq:eqCap4SHARPDB}
-\end{equation}
-
-\noindent onde $G_{x}$ e $G_{y}$ são gradientes direcionais, $w_{x}$ e $w_{y}$ são pesos baseados em uma vizinhança local, dados por:
-
-\begin{equation}
-w_{x} = [M(x+1,y)-M(x-1,y)]^{2},
-\label{eq:eqCap4SHARPDB1}
-\end{equation}
-
-\begin{equation}
-w_{y} = [M(x,y+1)-M(x,y-1)]^{2}.
-\label{eq:eqCap4SHARPDB2}
-\end{equation}
-
-\colorbox{pink}{Alexandre: Arrumar essas equações de Sharpness}
-	
