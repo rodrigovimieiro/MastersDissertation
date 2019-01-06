@@ -53,6 +53,7 @@
 \usepackage[algo2e, portuguese, boxruled]{algorithm2e}	% Para colocar pseudocódigo (Rodrigo)
 \newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu} 	% Rodrigo: Overbar 
 \usepackage{amssymb}  % Rodrigo
+\usepackage{multirow}  % Rodrigo
 
 % ---
 
@@ -145,40 +146,61 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%													  Dedicatória															%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\imprimirdedicatoria{Este trabalho é dedicado a Deus\\
-%   e aos meus pais, Erika e José Ronaldo.}
+\imprimirdedicatoria{Este trabalho é dedicado a Deus\\
+   e aos meus pais, Erika e José Ronaldo.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%													 Agradecimentos															%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\imprimiragradecimentos{
-%
-%Julgo que esse capítulo seja o mais importante do trabalho.  Como nesse mundo ninguém faz nada sozinho, vamos lá. Primeiramente eu gostaria de agradecer a Deus e a Jesus pela oportunidade de meus estudos e a saúde que disponho para enfrentar as lutas do dia a dia. Aos meus pais Erika e José Ronaldo e ao meu irmão Junior pelo apoio e presença sempre constante na minha vida de vocês. A todos da minha família, sem exceção, que essa singela citação possa demonstrar a minha enorme gratidão a cada um. A minha namorada Débora, por todo amor, força e companheirismo nessa jornada que estive em São Carlos. A todos da república Javanesa, pelo companheirismo na convivência no dia a dia. Ao Professor Marcelo por ter me acolhido no laboratório e ter tido toda a paciência ao me passar os conhecimentos. Grande parte desse trabalho só foi possível devido a excepcional orientação que eu pude ter. A todos os membros e ex-membros do laboratório, que ao compartilhar as informações enriquecem o trabalho de todos. Que cada um se sinta agradecido pela enorme contribuição tanto pessoal quanto profissional. Ao pessoal do Hospital de Amor de Barretos, por todo o apoio na pesquisa, em especial ao Renato por toda a sua paciência comigo. Aos órgãos públicos, especificamente  o Conselho Nacional de Desenvolvimento Científico e Tecnológico (Cnpq), a Fundação de Amparo à Pesquisa do Estado de São Paulo (Fapesp) e a Universidade de São Paulo pelo apoio financeiro.
-%
-%}
+\imprimiragradecimentos{
+
+Julgo que esse capítulo seja o mais importante do trabalho.  Não há como descrever em palavras a gratidão que eu tenho por todas as pessoas que me auxiliaram, não só para a elaboração da pesquisa, mas também o apoio pessoal no geral. Nesse mundo ninguém faz nada sozinho e tudo gira em torno de cooperações; sendo assim, eu só tenho a agradecer. 
+
+Primeiramente a Deus e ao mestre Jesus pela oportunidade concedida aos meus estudos e a saúde que disponho para enfrentar as lutas do dia a dia. 
+
+Aos meus pais Erika e José Ronaldo e ao meu irmão Júnior pelo apoio e presença sempre constante em minha vida. 
+
+A todos os meus familiares, sem exceção, que essa singela citação possa demonstrar minha enorme gratidão a cada um. 
+
+A Débora, por todo amor, força e companheirismo nessa jornada durante a qual estive em São Carlos. 
+
+A todos da república, onde vivi o período da pesquisa, pelo companheirismo na convivência do dia a dia. 
+
+Aos amigos da Casa do Caminho pela força e engrandecimento espiritual. 
+
+Em especial, ao professor Marcelo por ter me acolhido de maneira paternal no laboratório e ter tido toda a paciência ao transmitir-me os conhecimentos. Grande parte desse trabalho só foi possível devido a excepcional orientação que tive o privilégio de ter. 
+
+A todos os membros e ex-membros do laboratório, que ao compartilhar as informações, enriquecem o trabalho de todos. O meu agradecimento a cada um pela enorme contribuição tanto pessoal quanto profissional. 
+
+Ao pessoal do Hospital de Amor, de Barretos, por todo o apoio na pesquisa, em especial ao Renato por toda paciência comigo. 
+
+Aos órgãos públicos, especificamente o Conselho Nacional de Desenvolvimento Científico e Tecnológico (Cnpq), a Fundação de Amparo à Pesquisa do Estado de São Paulo (Fapesp) e a Universidade de São Paulo (USP) pelo apoio financeiro. 
+
+Por fim, que Deus possa nos fortalecer e amparar, para que cada vez mais possamos contribuir para a obra divina como um todo.
+
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%													   Epígrafe																%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\imprimirepigrafe{
-%``Além do trabalho-obrigação que nos remunera de pronto, é necessário nos
-%atenhamos ao prazer de servir. (...)\\
-%O trabalho-ação transforma o ambiente.\\
-%O trabalho-serviço, transforma o homem. (...)\\
-%Quando começamos a ajudar o próximo, sem aguilhões, matriculamo-nos no acrisolamento da própria alma, entrando em sintonia com a Vida Abundante''.\\
-%(Francisco Cândido Xavier ditado pelo espírito Emmanuel, Cap. 7, Trabalho, Pensamento e Vida.)
-%}
+\imprimirepigrafe{
+``Além do trabalho-obrigação que nos remunera de pronto, é necessário nos
+atenhamos ao prazer de servir. (...)\\
+O trabalho-ação transforma o ambiente.\\
+O trabalho-serviço, transforma o homem. (...)\\
+Quando começamos a ajudar o próximo, sem aguilhões, matriculamo-nos no acrisolamento da própria alma, entrando em sintonia com a Vida Abundante''.\\
+(Francisco Cândido Xavier ditado pelo espírito Emmanuel, Cap. 7, Trabalho, Pensamento e Vida.)
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%												  RESUMO e ABSTRACT															%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Resumo em português
-\begin{resumo}{tomossíntese digital mamária, reconstrução de imagens, análise de ruído}
-
-A tomossíntese digital da mama (\textit{Digital Breast Tomosynthesis} - \acs{DBT}) é um exame radiográfico utilizado para o rastreamento do câncer de mama, que busca superar a limitação da sobreposição de tecidos existente na mamografia digital \acs{2D}. Nessa técnica são adquiridas projeções radiográficas em diferentes ângulos, que são processadas para a reconstrução do volume da mama. Um grande desafio é a elaboração dos algoritmos para a reconstrução tomográfica, visto que há um número limitado de projeções com uma baixa dose de radiação, abrangendo uma estreita faixa de ângulo. Outro fator importante é o ruído presente nessa modalidade que pode impactar o diagnóstico do câncer pelos radiologistas. Esse trabalho tem como objetivo apresentar uma ferramenta de reconstrução de imagens para tomossíntese da mama e fazer um estudo do comportamento do sinal e do ruído nas imagens reconstruídas. Os métodos analíticos de retroprojeção simples e  filtrada, bem como os interativos de máxima verossimilhança e algébricos foram avaliados. A validação do software foi feita por meio de métricas objetivas e as reconstruções comparadas com outro \textit{software} disponibilizado \textit{online}. Obteve-se então imagens reconstruídas de \textit{phantoms}, bem como as de pacientes, comparando-as com as disponibilizadas pelo equipamento comercial. Através das análises objetivas e visuais, demonstrou-se o potencial da ferramenta desenvolvida. O ruído foi analisado por meio da reconstrução de imagens de \textit{phantoms} homogêneos, levando em consideração dois sistemas, de detecção direta e indireta de raios X. As curvas de valor médio de \textit{pixel}, a variância e o \acs{SNR} seguiram o mesmo padrão já demonstrado para as projeções. A análise do \acs{NPS} demonstrou que o processo de reconstrução correlaciona o ruído para ambos os sistemas.
+\begin{resumo}{tomossíntese digital mamária, reconstrução, análise de ruído}
+A tomossíntese digital mamária (\textit{Digital Breast Tomosynthesis} - \acs{DBT}) é um exame radiográfico utilizado para o rastreamento do câncer de mama, que busca superar a limitação da sobreposição de tecidos existente na mamografia digital \acs{2D}. Nessa técnica são adquiridas projeções radiográficas em diferentes ângulos, que são processadas para a reconstrução do volume da mama. Um grande desafio é a elaboração dos algoritmos para a reconstrução tomográfica, visto que há um número limitado de projeções adquiridas com baixas doses de radiação, abrangendo uma estreita faixa de ângulo. Outro fator importante é o ruído presente nas imagens, que pode impactar o diagnóstico do câncer pelos radiologistas. Esse trabalho tem como objetivo apresentar uma ferramenta de reconstrução de imagens para \acs{DBT} e fazer um estudo do comportamento do sinal e do ruído nas imagens reconstruídas. Os métodos analíticos de retroprojeção simples e  filtrada, bem como os interativos de máxima verossimilhança e algébricos foram avaliados. A validação dos algoritmos de reconstrução foi feita por meio de métricas objetivas e as imagens reconstruídas foram comparadas com imagens obtidas a partir de um software de reconstrução para \acs{DBT} desenvolvido pelo \ac{FDA}. A partir das análises objetivas e visuais, demonstrou-se o potencial da ferramenta desenvolvida nesse trabalho. O ruído pós-reconstrução foi investigado através da aquisição de imagens de \textit{phantoms} homogêneos, utilizando dois sistemas comerciais de \acs{DBT}. As curvas de valor médio de \textit{pixel}, a variância do ruído e a relação sinal-ruído seguiram o mesmo padrão já demonstrado para as projeções. A análise do espectro de potência do ruído demonstrou que o processo de reconstrução correlaciona o ruído para ambos os sistemas.
 
 \end{resumo}
 
-\begin{abstract}{digital breast tomosynthesis, image reconstruction, noise analysis}
+\begin{abstract}{digital breast tomosynthesis, reconstruction, noise analysis}
 	
-Digital breast tomosynthesis is a radiographic examination used for breast cancer screening, which seeks to overcome the tissue superposition in \acs{2D} digital mammography. In this technique, radiographic projections are acquired at different angles, which are processed for the reconstruction of the breast volume. A major challenge is one of the procedures for tomographic reconstruction since a limited number of projections with a low dose of radiation covering a range of angles. Another important factor is the noise present in this modality that can impact the diagnosis of tumors by radiologists. This work aims to present a toolbox for image reconstruction for digital breast tomosynthesis and study the noise behavior of the signal and noise in the reconstructed slices. The simple and filtered back-projection analytical methods, as well as the maximum likelihood and algebraic iterative methods, were evaluated. The validation of the software was done by objective metrics and the reconstructions were compared with another online available toolbox. Reconstructed images from phantoms as well as from patients were obtained and compared with those available by commercial systems. Through the objective and visual analysis, the potential of the toolbox developed was demonstrated. The noise was analyzed by the reconstruction of the homogeneous phantom images, taking into account two direct and indirect X-ray detection systems. The mean pixel value, the variance and the \acs{SNR} follow the same curve shape already shown for the projection domain. The analysis of \acs{NPS} demonstrated that the process of reconstruction correlates the noise for both systems used.
+\acf{DBT} is a radiographic examination used for breast cancer screening, which seeks to overcome the tissue superposition in 2D digital mammography. In this technique, radiographic projections are acquired at different angles, which are processed for the reconstruction of the breast volume. A major challenge is the elaboration of algorithms for tomographic reconstruction since there are a limited number of projections acquired with low doses of radiation, covering a narrow-angle range. Another important factor is the noise present in this modality that can impact the diagnosis of tumors by radiologists. This work aims to present an image reconstruction toolbox for \acs{DBT} and study the signal and noise behavior in the reconstructed slices. The analytical methods of simple and filtered back-projection, as well as the maximum likelihood and algebraic iterative methods were evaluated. The validation of the reconstruction algorithms was done by objective metrics and the reconstructed images were compared with the images obtained from a reconstruction software for \acs{DBT} developed by the \acf{FDA}. Through the objective and visual analysis, the potential of the toolbox developed in this work was demonstrated. The noise after reconstruction was investigated by means of the acquisition of homogeneous phantom images, using two commercial \acs{DBT} systems. The mean pixel value, the noise variance and the signal-to-noise ratio follow the same curve shape already shown for the projection domain. The analysis of noise power spectrum demonstrated that the process of reconstruction correlates the noise for both systems used.
+	
 
-	
 \end{abstract}
 
 

@@ -2,8 +2,6 @@
 
 A partir dos métodos propostos no capítulo anterior, são apresentados nessa seção os resultados obtidos e suas respectivas discussões. Esse capítulo foi dividido em duas seções, respectivas aos resultados do desenvolvimento e validação do \textit{software} de reconstrução e aos resultados referentes a análise do sinal e do ruído nas imagens reconstruídas. 
 
-Ambos os trabalhos discutidos nas seções foram apresentados em um congresso nacional e outro internacional, como demonstra o \autoref{Capitulo9}. 
-
 \section{\textit{Toolbox} de Reconstrução}
 
 \subsection{Disponibilização \textit{Online}}
@@ -22,7 +20,7 @@ Ambos os trabalhos discutidos nas seções foram apresentados em um congresso na
     
  \begin{figure}[!h]
  	\centering	
- 	\caption{Reconstrução da fatia \#64 para o método de (b) \acs{BP}, (c) \acs{FBP}, (d) \acs{MLEM} e \acs{SART}, comparando-os com o (a) padrão-ouro.}
+ 	\caption{Reconstrução da fatia \#64 para o método de (b) \acs{BP}, (c) \acs{FBP}, (d) \acs{MLEM} e (e) \acs{SART}, comparando-os com o (a) padrão-ouro.}
  	\subfloat[]{\includegraphics[scale=.9]{imgs/cap5/Shep_Original64.png}}
  	\hfill
  	\subfloat[]{\includegraphics[scale=.9]{imgs/cap5/Shep_BP64.png}}
@@ -50,7 +48,7 @@ Ambos os trabalhos discutidos nas seções foram apresentados em um congresso na
 	\label{fig:imgCap6SheppLogan3D_Recons}
 \end{figure}
 
-No âmbito das métricas objetivas, foi avaliado o \acs{SSIM} nas fatias de número 16 até a 113 referente a cada método, comparando-as com o padrão-outro, como ilustrado pela Figura \ref{fig:imgCap6MSSIM}. É interessante destacar que o maior índice de similaridade possível de se obter é o valor 1. Através do gráfico, fica claro que o método estatístico iterativo obteve a maior similaridade no geral. É valido ressaltar que as maiores similaridades estão dispostas próximas as fatias centrais.
+No âmbito das métricas objetivas, foi avaliado o \acs{SSIM} nas fatias de número 16 até a 113 referente a cada método, comparando-as com o padrão-ouro, como ilustrado pela Figura \ref{fig:imgCap6MSSIM}. É interessante destacar que o maior índice de similaridade possível de se obter é o valor 1. Através do gráfico, fica claro que o método estatístico iterativo obteve a maior similaridade no geral. É valido ressaltar que as maiores similaridades estão dispostas próximas as fatias centrais.
 
 \begin{figure}[!h]
 	\caption{Avaliação da métrica do índice de similaridade estrutural nas fatias reconstruídas de número 16 até a 113 para o \textit{phantom} virtual de Shepp-Logan, levando em consideração todos os métodos utilizados.}
@@ -65,10 +63,10 @@ Os tempos de processamento gastos para a execução de cada método foram medido
 
 \begin{table}[!ht]
 	\centering
-	\caption{Tempo de execução em segundos para todos os quatro métodos de reconstrução para o \textit{phantom} de Shepp-Logan.}
+	\caption{Tempo de execução em segundos para todos os quatro métodos de reconstrução referente ao \textit{phantom} de Shepp-Logan. Os números apresentados após cada método iterativo significam a quantidade de iterações executadas.}
 	\label{tab:tabCap6TimeSheppLogan}
 	\begin{tabular}{l|c}
-		\textbf{Método}	     & \ \textbf{Shepp-Logan} \\ 
+		\textbf{Método}	     & \ \textbf{Tempo (s)} \\ 
 		\hline
 		\hline
 		\rule[-0.5ex]{-3pt}{3ex}
@@ -78,9 +76,10 @@ Os tempos de processamento gastos para a execução de cada método foram medido
 		FBP			& 0,88 									\\
 		\hline
 		\rule[-0.5ex]{-3pt}{3ex}
-		MLEM		& 13,41 								\\
+		MLEM-8		& 13,41 								\\
 		\hline
-		SART		& 15,98 								\\
+		\rule[-0.5ex]{-3pt}{3ex}
+		SART-2		& 3,79								\\
 		\hline
 	\end{tabular}
 	\vspace{2ex}
@@ -91,11 +90,11 @@ Os tempos de processamento gastos para a execução de cada método foram medido
 
 Para o \textit{phantom} antropomórfico físico BR3D, foram feitas análises visuais subjetivas comparando os resultados obtidos pela \textit{toolbox} com as imagens fornecidas pelo equipamento. A Figura \ref{fig:imgCap6BR3D} exemplifica os resultados atingidos, bem como a imagem fornecida pelo equipamento. Estas são referentes a fatia \#56 e estão localizadas a $50mm$ do detector. O ajuste da escala de cinza foi feito manualmente buscando o melhor contraste para cada imagem, visto que cada uma refere-se a um método de reconstrução diferente.
 
-Observa-se novamente que o método de \acs{BP} não apresenta uma nitidez com relação as estruturas internas devido a sobreposição das baixas frequências, discutidas anteriormente. Para o método de \acs{FBP}, as estruturas internas estão claras, porém com um elevado nível de ruído. Para ambos os métodos iterativos, as imagens possuem um contraste bom e é possível visualizar as estruturas internas tal como na imagem fornecida pelo equipamento. Nota-se que todas as estruturas estão em foco na mesma fatia para todos os métodos de reconstrução, assim como na imagem do equipamento.
+Observa-se novamente que o método de \acs{BP} não apresenta uma nitidez com relação as estruturas internas devido a sobreposição das baixas frequências, discutidas anteriormente. Para o método de \acs{FBP}, as estruturas internas estão claras, porém com um elevado nível de ruído. Para ambos os métodos iterativos, as imagens possuem um contraste bom e é possível visualizar as estruturas internas tal como na imagem fornecida pelo equipamento. Nota-se que todas as estruturas estão em foco na mesma fatia para todos os métodos de reconstrução, assim como na imagem fornecida pelo equipamento.
 
 \begin{figure}[!h]
 	\centering	
-	\caption{Ilustração da reconstrução da fatia \#56 do \textit{phantom} BR3D referente ao (a) equipamento de \acs{DBT} da \acs{GE}, método de (b) \acs{BP}, (c) \acs{FBP} e (d) \acs{MLEM} gerada pela \textit{toolbox} apresentada.}
+	\caption{Ilustração da reconstrução da fatia \#56 do \textit{phantom} BR3D referente ao (a) equipamento de \acs{DBT} da \acs{GE}, método de (b) \acs{BP}, (c) \acs{FBP}, (d) \acs{MLEM} e (e) \acs{SART} gerada pela \textit{toolbox} apresentada.}
 	\subfloat[Comercial]{\includegraphics[scale=.13]{imgs/cap5/BR3D_GE56.png}}
 	\hfill
 	\subfloat[\acs{BP}]{\includegraphics[scale=.13]{imgs/cap5/BR3D_BP56.png}}
@@ -104,7 +103,7 @@ Observa-se novamente que o método de \acs{BP} não apresenta uma nitidez com re
 	
 	\subfloat[\acs{MLEM}]{\includegraphics[scale=.13]{imgs/cap5/BR3D_MLEM8_56.png}}	
 	\hfil
-	\subfloat[\acs{SART}]{\includegraphics[scale=.13]{imgs/cap5/BR3D_SART8_56.png}}
+	\subfloat[\acs{SART}]{\includegraphics[scale=.13]{imgs/cap5/BR3D_SART2_56_3.png}}
 	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap6BR3D}
 \end{figure}
@@ -113,7 +112,7 @@ Regiões de interesse (\textit{Region of Interest} - \acs{ROI}) foram extraídas
 
 \begin{figure}[!h]
 	\centering
-	\caption{Regiões de interesse extraídas de locais onde se encontram as microcalcificações simuladas, referentes aos métodos de (b) \acs{BP}, (c) \acs{FBP}, (d) \acs{MLEM}, (d) \acs{SART} e (a) do equipamento comercial.}	
+	\caption{Regiões de interesse extraídas de locais onde se encontram as microcalcificações simuladas, referentes aos métodos de (b) \acs{BP}, (c) \acs{FBP}, (d) \acs{MLEM}, (e) \acs{SART} e (a) do equipamento comercial.}	
 	\subfloat[Comercial]{\hspace*{3ex}\includegraphics[scale=.2]{imgs/cap5/BR3D_GE56_ROI.png}\hspace*{3ex}}
 	\hfill
 	\subfloat[\acs{BP}]{\hspace*{3ex}\includegraphics[scale=.2]{imgs/cap5/BR3D_BP56_ROI.png}\hspace*{3ex}}
@@ -122,20 +121,21 @@ Regiões de interesse (\textit{Region of Interest} - \acs{ROI}) foram extraídas
 	\hfill
 	\subfloat[\acs{MLEM}]{\hspace*{3ex}\includegraphics[scale=.2]{imgs/cap5/BR3D_MLEM8_56_ROI.png}\hspace*{3ex}}	
 	\hfill
-	\subfloat[\acs{SART}]{\hspace*{3ex}\includegraphics[scale=.2]{imgs/cap5/BR3D_SART8_56_ROI.png}\hspace*{3ex}}
+	\subfloat[\acs{SART}]{\hspace*{3ex}\includegraphics[scale=.2]{imgs/cap5/BR3D_SART2_56_3_ROI.png}\hspace*{3ex}}
 	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap6BR3D_ROI}
 \end{figure}
 
 
-Do mesmo modo que no \textit{phantom} virtual, os tempos de processamento também foram medidos, demonstrados pela Tabela \ref{tab:tabCap6TimeBR3D}. Novamente, fica claro o alto custo computacional relacionado com os métodos iterativos, chegando  a ser cerca de 21 vezes mais lento que uma simples retroprojeção.  É incontestável a diferença existente entre os tempos gastos pelos métodos analítico e estatístico iterativo. Para cada iteração é necessária uma projeção e uma retroprojeção, fazendo com que o custo computacional do método aumente muito. Já para o método analítico de \acs{FBP} é necessário somente uma retroprojeção e uma pré-filtragem, tornando-o mais eficiente quando se leva em consideração o tempo de execução.
+Do mesmo modo que no \textit{phantom} virtual, os tempos de processamento também foram medidos, demonstrados pela Tabela \ref{tab:tabCap6TimeBR3D}. Novamente, fica claro o alto custo computacional relacionado com os métodos iterativos, chegando  a ser cerca de 19 vezes mais lento que uma simples retroprojeção.  É incontestável a diferença existente entre os tempos gastos pelo método analítico e estatístico iterativo. Para cada iteração é necessária uma projeção e uma retroprojeção, fazendo com que o custo computacional do método aumente muito. Já para o método analítico de \acs{FBP} é necessário somente uma retroprojeção e uma pré-filtragem, tornando-o mais eficiente quando se leva em consideração o tempo de execução.
 
 \begin{table}[!ht]
 	\centering
-	\caption{Tempo de execução em segundos para todos os quatro métodos de reconstrução para o \textit{phantom} de BR3D.}
+	\caption{Tempo de execução em segundos para todos os quatro métodos de reconstrução referente ao \textit{phantom} BR3D. Os números apresentados após cada método iterativo significam a quantidade de iterações executadas.}
 	\label{tab:tabCap6TimeBR3D}
 	\begin{tabular}{l|c}
-		\textbf{Método}	     &   \textbf{BR3D}   	\\ 
+		\textbf{Método}	     &   \textbf{Tempo (s)}   	\\ 
+		[5pt]
 		\hline
 		\hline
 		\rule[-0.5ex]{-3pt}{3ex}
@@ -145,9 +145,10 @@ Do mesmo modo que no \textit{phantom} virtual, os tempos de processamento també
 		FBP			 						& 58,88					\\
 		\hline
 		\rule[-0.5ex]{-3pt}{3ex}
-		MLEM		 					& 1087 					\\
+		MLEM-8		 					& 1087 					\\
 		\hline
-		SART		 					& 1239 					\\
+		\rule[-0.5ex]{-3pt}{3ex}
+		SART-2		 					& 334 					\\
 		\hline
 	\end{tabular}
 	\vspace{2ex}
@@ -159,12 +160,12 @@ Do mesmo modo que no \textit{phantom} virtual, os tempos de processamento també
  
  Já para o \textit{phantom} antropomórfico virtual gerado pelo \textit{software} OpenVCT, os resultados são apresentados pela Figura \ref{fig:imgCap6VCT}. São comparadas as reconstruções advindas tanto da \textit{toolbox} proposta nesse trabalho quanto da fornecida pelo órgão americano \acs{FDA}. Da mesma maneira avaliou-se as \acs{ROI}s provenientes de três métodos de reconstrução, comparando-as entre os dois \textit{softwares}. A \textit{toolbox} proposta por esse trabalho é denominada de ``LAVI-USP''.
  
- O agrupamento de microcalcificações no \textit{phantom} padrão-ouro está localizado na altura de  $53.7mm$ do detector. As \acs{ROI}s demonstradas na Figura \ref{fig:imgCap6VCT} foram reconstruídas na altura de $54mm$, visto que a resolução em Z escolhida foi de $0.5mm$. 
+ O agrupamento de microcalcificações no \textit{phantom} padrão-ouro está localizado na altura de  $53,7mm$ do detector. As \acs{ROI}s demonstradas na Figura \ref{fig:imgCap6VCT} foram reconstruídas na altura de $54mm$, visto que a resolução em Z escolhida foi de $0,5mm$. 
  
  Uma inspeção visual comparando as reconstruções da \textit{toolbox} LAVI-USP e do \acs{FDA} evidencia a semelhança entre ambos os resultados. Alguns artefatos de reconstrução são observados nos métodos de \acs{FBP} e \acs{SART}, denominados de \textit{undershooting}, que são causados devido a supressão de baixas frequências no sinal.
  
  \begin{figure}[!ht]
- 	\caption{Ilustração do \textit{phantom} virtual antropomórfico gerado pelo software OpenVCT com a \acs{ROI} ilustrando o agrupamento de microcalcificações simuladas. As \acs{ROI}s restantes apresentam os resultados para cada método considerando ambos \textit{softwares} de reconstrução.}
+ 	\caption{Ilustração do \textit{phantom} virtual antropomórfico gerado pelo software OpenVCT com a \acs{ROI} ilustrando o agrupamento de microcalcificações simuladas. As \acs{ROI}s restantes apresentam os resultados para cada método, considerando ambos \textit{softwares} de reconstrução.}
  	\begin{center}
  		\includegraphics[scale=.38, clip, trim=0.1cm 3.7cm 2cm 2.4cm]{imgs/cap5/Recons.pdf}
  	\end{center}
@@ -185,7 +186,7 @@ A avaliação objetiva feita através da similaridade entre as fatias de \acs{DB
 \end{figure}
 
 
-Para a análise da dispersão do sinal no eixo Z, a métrica de \acs{ASF} foi avaliada para ambas \textit{toolboxes} e o padrão-ouro foi tomado como referência, de acordo com a Figura \ref{fig:imgCap6VCTASF}. É importante notar que a resolução em Z para o \textit{phantom} virtual é de $0.1mm$ e para as fatias reconstruídas $0.5 mm$ . Analisando o padrão-ouro, é perceptível que o agrupamento de microcalcificações está principalmente situado em fatias nas altura de 53.6, 53.7 e $53.8mm$. Os maiores valores da métrica de \acs{ASF}, para ambas \textit{toolboxes}, estão localizados na altura de $54mm$, demonstrando que o agrupamento de microcalcificações está em foco na mesma altura que o \textit{phantom} padrão-ouro, considerando as duas resoluções de amostragem distintas no eixo Z.
+Para a análise da dispersão do sinal no eixo Z, a métrica de \acs{ASF} foi avaliada para ambas \textit{toolboxes} e o padrão-ouro foi tomado como referência, de acordo com a Figura \ref{fig:imgCap6VCTASF}. É importante notar que a resolução em Z para o \textit{phantom} virtual é de $0,1mm$ e para as fatias reconstruídas $0,5 mm$. Analisando o padrão-ouro, é perceptível que o agrupamento de microcalcificações está principalmente situado em fatias nas altura de 53,6, 53,7 e $53,8mm$. Os maiores valores da métrica de \acs{ASF}, para ambas \textit{toolboxes}, estão localizados na altura de $54mm$, demonstrando que o agrupamento de microcalcificações está em foco na mesma altura que o \textit{phantom} padrão-ouro, considerando as duas resoluções de amostragem distintas no eixo Z.
 
 \begin{figure}[!ht]
 	
@@ -202,24 +203,26 @@ Para a análise da dispersão do sinal no eixo Z, a métrica de \acs{ASF} foi av
 \end{figure}
 
 
-\subsubsection{Imagens de Pacientes}
+\subsubsection{Imagens Clínicas}
 
 Imagens clínicas de pacientes também foram reconstruídas para a validação do \textit{software}. A Figura \ref{fig:imgCap6ClinicalRecon} exemplifica os resultados de modo a compará-los com as imagens fornecidas pelos equipamentos. Novamente é importante ressaltar que as projeções advindas do sistema \#1 foram do tipo ``não processadas'', enquanto que as do sistema \#2 do tipo ``processadas''. 
 
 A comparação visual das estruturas demonstra que os objetos estão em foco na mesma altura para ambas as imagens de cada sistema. Nenhum tipo de pré- ou pós-processamento foi utilizado. Consequentemente, uma irregularidade na visualização da imagem reconstruída pela \textit{toolbox} pode ser observada no sistema \#1. A janela de níveis de cinza foi ajustada manualmente de modo a obter o melhor contraste para cada imagem.
 
-As Figuras \ref{fig:imgCap6ClinicalGECC} e \ref{fig:imgCap6ClinicalGEMLO} representam um caso de uma paciente que realizou a mamografia no sistema \#1 em orientação \acs{CC} e \acs{MLO}, respectivamente. As Figuras \ref{fig:imgCap6ClinicalGECC_A} e \ref{fig:imgCap6ClinicalGEMLO_A} foram adquiridas através do equipamento e servem como  padrão para comparação. Já as Figuras \ref{fig:imgCap6ClinicalGECC_B} e \ref{fig:imgCap6ClinicalGEMLO_B} são o resultado da reconstrução feita através da \textit{toolbox} LAVI-USP sem nenhum tipo de pré ou pós-processamento e sem ajuste da janela de nível de cinza. Por fim, as Figuras \ref{fig:imgCap6ClinicalGECC_C} e \ref{fig:imgCap6ClinicalGEMLO_C} representam as mesmas reconstruções de (b), porém com um ajuste da janela de nível de cinza para uma melhor visualização do interior da mama.  
+As Figuras \ref{fig:imgCap6ClinicalGECC} e \ref{fig:imgCap6ClinicalGEMLO} representam um caso de uma paciente que realizou a mamografia no sistema \#1 em orientação \acs{CC} e \acs{MLO}, respectivamente. As Figuras \ref{fig:imgCap6ClinicalGECC_A} e \ref{fig:imgCap6ClinicalGEMLO_A} foram adquiridas através do equipamento e servem como  padrão para comparação. Já as Figuras \ref{fig:imgCap6ClinicalGECC_B} e \ref{fig:imgCap6ClinicalGEMLO_B} são o resultado da reconstrução feita através da \textit{toolbox} LAVI-USP sem nenhum tipo de pré- ou pós-processamento e sem ajuste da janela de nível de cinza. Por fim, as Figuras \ref{fig:imgCap6ClinicalGECC_C} e \ref{fig:imgCap6ClinicalGEMLO_C} representam as mesmas reconstruções de (b), porém com um ajuste da janela de nível de cinza para uma melhor visualização do interior da mama.  
 
-É interessante notar, através das setas vermelhas, os objetos em foco tanto nas imagens formadas pela \textit{toolbox} quanto nas fornecidas pelos equipamentos. Especificamente no exame \acs{MLO}, é possível observar artefatos na parte superior e inferior das imagens, demonstrados pelas setas azuis. Estes artefatos são decorrentes da falta de informação de regiões da mama e determinadas projeções, em outras palavras, a projeção da mama foi cortada em certos ângulos, pois foram projetas para fora do detector. O equipamento comercial faz algum tipo de pós-processamento para minimizar esse efeito, mas ainda é possível ver as regiões com artefatos nas imagens. Alguns trabalhos anteriores descrevem métodos para minimizar estas irregularidades, como os demonstrados em \citeonline{zhang2009artifact} e \citeonline{lu2013diffusion}.
+É interessante notar, através das setas vermelhas, os objetos em foco tanto nas imagens formadas pela \textit{toolbox} quanto nas fornecidas pelos equipamentos. 
+
+Especificamente no exame \acs{MLO}, é possível observar artefatos na parte superior e inferior das imagens, demonstrados pelas setas azuis. Estes artefatos são decorrentes da falta de informação de regiões da mama em determinadas projeções, em outras palavras, a projeção da mama foi cortada em certos ângulos, pois foram projetas para fora do detector. O equipamento comercial faz algum tipo de pós-processamento para minimizar esse efeito, mas ainda é possível ver as regiões com artefatos nas imagens. Alguns trabalhos anteriores descrevem métodos para minimizar estas irregularidades, como os demonstrados em \citeonline{zhang2009artifact} e \citeonline{lu2013diffusion}.
 
 
-\begin{figure}[!ht]
+\begin{figure}[htb]
 	\centering	
 	\caption{Comparação visual entre as reconstruções de imagens de pacientes advindas do sistema (a) \#1, (b) LAVI-USP, (c) sistema \#2 e (d) LAVI-USP. As fatias estão localizadas nas alturas de $51$mm e $61$mm do detector para ambos os sistemas, respectivamente, e foram adquiridas em uma orientação \acs{CC}.}
 	
 	\subfloat[]{\includegraphics[scale=0.45, clip, trim=0cm 0cm 0cm 0.38cm]{imgs/cap5/Clinical/GE_Original_Slice_58.png}}
 	\hfill
-	\subfloat[]{\includegraphics[scale=0.45, clip, trim=0cm 0cm 0cm 0.38cm]{imgs/cap5/Clinical/GE_Lavi_Slice_58.png}}
+	\subfloat[]{\includegraphics[scale=0.45, clip, trim=0cm 0cm 0cm 0.38cm]{imgs/cap5/Clinical/GE_Lavi_Slice_58_nSART_3.png}}
 	\hfill
 	\subfloat[]{\includegraphics[scale=0.45]{imgs/cap5/Clinical/Hologic_Original_Slice_35.png}}
 	\hfill
@@ -228,33 +231,36 @@ As Figuras \ref{fig:imgCap6ClinicalGECC} e \ref{fig:imgCap6ClinicalGEMLO} repres
 	\label{fig:imgCap6ClinicalRecon}
 \end{figure}
 
-
 \begin{figure}[!ht]
 	\centering	
-	\caption{Reconstrução de uma fatia a $62mm$ do detector proveniente de um exame mamográfico realizado no equipamento do sistema \#1, adquirido em uma orientação \acs{CC}, na qual (a) foi fornecida pelo equipamento, (b) é a reconstrução através da \textit{toolbox} LAVI-USP sem ajuste de histograma e (c) com ajuste de histograma. As setas em vermelho apontam para estruturas em foco nas mesmas imagens. }
+	\caption{Reconstrução de uma fatia a $62mm$ do detector proveniente de um exame mamográfico realizado no equipamento do sistema \#1, adquirido em uma orientação \acs{CC}, na qual (a) foi fornecida pelo equipamento, (b) é a reconstrução através da \textit{toolbox} LAVI-USP sem ajuste da janela de nível de cinza e (c) com ajuste da janela de nível de cinza. As setas em vermelho apontam para estruturas em foco nas mesmas imagens. }
 	
 	
-	\subfloat[]{\includegraphics[scale=0.53, clip, trim=10cm 0cm 10cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Original_Slice_40_CC.pdf}\label{fig:imgCap6ClinicalGECC_A}}
+	\subfloat[]{\includegraphics[scale=0.5, clip, trim=10cm 0cm 10cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Original_Slice_40_CC.pdf}\label{fig:imgCap6ClinicalGECC_A}}
 	
-	\subfloat[]{\includegraphics[scale=0.53, clip, trim=10cm 0cm 10cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Lavi_Slice_40_CC_SemAjuste.pdf}\label{fig:imgCap6ClinicalGECC_B}}
+	\subfloat[]{\includegraphics[scale=0.5, clip, trim=10cm 0cm 10cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Lavi_Slice_40_CC_SemAjuste_nSART.pdf}\label{fig:imgCap6ClinicalGECC_B}}
 	\hfil
-	\subfloat[]{\includegraphics[scale=0.53, clip, trim=10cm 0cm 10cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Lavi_Slice_40_CC_Ajuste.pdf}\label{fig:imgCap6ClinicalGECC_C}}
+	\subfloat[]{\includegraphics[scale=0.5, clip, trim=10cm 0cm 10cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Lavi_Slice_40_CC_Ajuste_nSART.pdf}\label{fig:imgCap6ClinicalGECC_C}}
 	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap6ClinicalGECC}
 \end{figure}
 
+\clearpage
+
 \begin{figure}[!ht]
 	\centering	
-	\caption{Reconstrução de uma fatia a $81mm$ do detector proveniente de um exame mamográfico realizado no equipamento do sistema \#1, adquirido em uma orientação \acs{MLO}, na qual (a) foi fornecido pelo equipamento, (b) é a reconstrução através da \textit{toolbox} LAVI-USP sem ajuste de histograma e (c) com ajuste de histograma. As setas em vermelho apontam para estruturas em foco nas mesmas imagens e as azuis para artefatos de reconstrução. }
+	\caption{Reconstrução de uma fatia a $81mm$ do detector proveniente de um exame mamográfico realizado no equipamento do sistema \#1, adquirido em uma orientação \acs{MLO}, na qual (a) foi fornecido pelo equipamento, (b) é a reconstrução através da \textit{toolbox} LAVI-USP sem ajuste da janela de nível de cinza e (c) com ajuste da janela de nível de cinza. As setas em vermelho apontam para estruturas em foco nas mesmas imagens e as azuis para artefatos de reconstrução. }
 		
-	\subfloat[]{\includegraphics[scale=0.53, clip, trim=11cm 0cm 11cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Original_Slice_59_MLO.pdf}\label{fig:imgCap6ClinicalGEMLO_A}}
+	\subfloat[]{\includegraphics[scale=0.5, clip, trim=11cm 0cm 11cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Original_Slice_59_MLO.pdf}\label{fig:imgCap6ClinicalGEMLO_A}}
 	
-	\subfloat[]{\includegraphics[scale=0.53, clip, trim=11cm 0cm 11cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Lavi_Slice_59_MLO_SemAjuste.pdf}\label{fig:imgCap6ClinicalGEMLO_B}}
+	\subfloat[]{\includegraphics[scale=0.5, clip, trim=11cm 0cm 11cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Lavi_Slice_59_MLO_SemAjuste_nSART.pdf}\label{fig:imgCap6ClinicalGEMLO_B}}
 	\hfil
-	\subfloat[]{\includegraphics[scale=0.53, clip, trim=11cm 0cm 11cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Lavi_Slice_59_MLO_Ajuste.pdf}\label{fig:imgCap6ClinicalGEMLO_C}}
+	\subfloat[]{\includegraphics[scale=0.5, clip, trim=11cm 0cm 11cm 0cm]{imgs/cap5/Clinical/Caso1/GE_Lavi_Slice_59_MLO_Ajuste_nSART.pdf}\label{fig:imgCap6ClinicalGEMLO_C}}
 	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap6ClinicalGEMLO}
 \end{figure}
+
+\clearpage
 
 
 \section{Caracterização do Sinal  \& Ruído} 
@@ -263,9 +269,9 @@ A análise do sinal e do ruído referente aos dois sistemas de \acs{DBT} é apre
 
 \subsection{Convenção de Coordenadas}
 
-A fim de estabelecer um padrão para a ilustração dos resultados, bem como para a discussão, foi adotado uma convenção para a nomenclatura dos eixos e para a disposição dos resultados. A Figura \ref{fig:imgCap63DVolume} exemplifica o padrão adotado, na qual a coordenada X representa a direção da parede torácica para o mamilo (\textit{chest wall-nipple}), denominada por perfil \ac{PA} e a coordenada Y representa a direção onde o tubo de raios X se movimenta, denominada de perfil \ac{LA}. Já a coordenada Z simboliza a profundidade onde são reconstruídas as fatias da mama.
+A fim de estabelecer um padrão para a ilustração dos resultados, bem como para a discussão, foi adotado uma convenção para a nomenclatura dos eixos e para a disposição dos resultados. A Figura \ref{fig:imgCap63DVolume} exemplifica o padrão adotado, na qual a coordenada X representa a direção da parede torácica para o mamilo, denominada por perfil \ac{PA} e a coordenada Y representa a direção onde o tubo de raios X se movimenta, denominada de perfil \ac{LA}. Já a coordenada Z simboliza a profundidade onde são reconstruídas as fatias da mama.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
 	\caption{Ilustração da convenção dos eixos adotados nesse trabalho, na qual a coordenada X representa a direção da parede torácica para o mamilo e a coordenada Y onde o tubo de raios X rotaciona. A coordenada (0,0) simboliza a posição do tubo de raios X quando no ângulo de $0^{\circ}$.}
 	\begin{center}
 		\includegraphics[scale=.7, clip, trim=3.6cm 8.5cm 4.2cm 8.5cm]{imgs/cap5/3D_Breast.pdf}
@@ -277,12 +283,12 @@ A fim de estabelecer um padrão para a ilustração dos resultados, bem como par
 \subsection{Avaliação do Sinal  \& Ruído}
 
 
-A figura \ref{fig:imgCap6Means} mostra o valor médio dos \textit{pixels} na fatia reconstruída referente a cada dose para ambos os sistemas. Observa-se que há uma queda visível no valor médio dos \textit{pixels} na região posterior do detector, especialmente no sistema \#2. Isto é causado principalmente por imperfeições na calibração da uniformidade (\textit{flat-field}) dos \textit{pixels}, que compensa fenômenos como o efeito Heel.
+A figura \ref{fig:imgCap6Means} mostra o valor médio dos \textit{pixels} na fatia reconstruída referente a cada dose para ambos os sistemas. Observa-se que há uma queda visível no valor médio dos \textit{pixels} na região posterior do detector, especialmente no sistema \#2. Isto é causado principalmente por imperfeições na calibração da uniformidade dos \textit{pixels} (\textit{flat-fielding}), que compensa fenômenos como o efeito heel, o qual leva a não uniformidade dos feixes de raios X \cite[p. 485]{marshall2017handbook}.
 
 
-\begin{figure}[!ht]
+\begin{figure}[htb]
 	\centering
-	\caption{Valor médio dos \textit{pixels} na fatia reconstruída para cada respectiva dose de raios X, considerando (a) o sistema \#1 e (b) e \#2.}
+	\caption{Valor médio dos \textit{pixels} na fatia reconstruída para cada respectiva dose de raios X, considerando (a) o sistema \#1 e (b) \#2.}
 	\subfloat[]{\includegraphics[scale=.7, clip, trim=3.4cm 8.3cm 5cm 9cm ]{imgs/cap5/ge_Mean.pdf}}
 	
 	\subfloat[]{\includegraphics[scale=.7, clip, trim=3.4cm 8.3cm 5cm 9cm ]{imgs/cap5/hologic_Mean.pdf}}
@@ -292,9 +298,9 @@ A figura \ref{fig:imgCap6Means} mostra o valor médio dos \textit{pixels} na fat
 
 A característica da dependência do sinal em relação ao ruído é observada ao analisar as Figuras \ref{fig:imgCap6Means}, \ref{fig:imgCap6GE_Var} e \ref{fig:imgCap6HO_Var}. À medida que a dose aumenta, o valor esperado referente ao sinal livre do ruído também aumenta, ilustrada pela Figura \ref{fig:imgCap6Means}. Consequência deste fato e em relação direta com a Equação \ref{eq:eqCap5HeteroscedasticoVar}, a variância do ruído também aumenta, representada pelas Figuras \ref{fig:imgCap6GE_Var} e \ref{fig:imgCap6HO_Var}.
 
-Além disso, a dependência espacial da variância do ruído é observada nas fatias reconstruídas, seguindo o mesmo comportamento demonstrado em trabalhos anteriores para o domínio das projeções. Novamente, esse fenômeno decorre devido a correção de \textit{flat-field} que evita não-uniformidades no detector causadas pelo efeito Heel e pela geometria do feixe cônico no domínio das projeções \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}.
+Além disso, a dependência espacial da variância do ruído é observada nas fatias reconstruídas, seguindo o mesmo comportamento demonstrado em trabalhos anteriores para o domínio das projeções. Novamente, esse fenômeno decorre devido ao \textit{flat-fielding} que evita não-uniformidades no detector causadas pelo efeito heel e pela geometria do feixe cônico no domínio das projeções \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}.
 
-\begin{figure}[!ht]
+\begin{figure}[htb]
 	\centering
 	\caption{Variância do ruído na fatia reconstruída (a) para cada dose respectiva, (b) a representação \acs{2D} para a maior dose e (c) o perfil na coordenada X para o sistema \#1.}
 	\subfloat[]{\includegraphics[scale=0.6, clip, trim=3.6cm 8cm 4.2cm 9cm ]{imgs/cap5/ge_Variance3D.pdf}}
@@ -306,7 +312,7 @@ Além disso, a dependência espacial da variância do ruído é observada nas fa
 	\label{fig:imgCap6GE_Var}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[htb]
 	\centering
 	\caption{Variância do ruído na fatia reconstruída (a) para cada dose respectiva, (b) a representação \acs{2D} para a maior dose e (c) o perfil na coordenada X para o sistema \#2.}
 	\subfloat[]{\includegraphics[scale=0.6, clip, trim=3.6cm 8cm 4.2cm 9cm ]{imgs/cap5/hologic_Variance3D.pdf}}
@@ -318,12 +324,12 @@ Além disso, a dependência espacial da variância do ruído é observada nas fa
 	\label{fig:imgCap6HO_Var}
 \end{figure}
 
-Em seguida, a métrica de \acs{SNR} foi calculada para cada dose, como mostra a Figura \ref{fig:imgCap6SNR}. É possível observar que as medidas da variância e também do \acs{SNR} seguem o mesmo formato de curva após a reconstrução, como relatado anteriormente para projeções de \acs{DBT} no trabalho de \citeonline{borges2017method}, evidenciando a mesma dependência do sinal do espaço.
+Em seguida, a métrica de \acs{SNR} foi calculada para cada dose, como mostra a Figura \ref{fig:imgCap6SNR}. É possível observar que as medidas da variância e também do \acs{SNR} seguem o mesmo formato de curva após a reconstrução, como relatado anteriormente para projeções de \acs{DBT} no trabalho de \citeonline{borges2017method}, evidenciando a mesma dependência do espaço.
 
 
-\begin{figure}[!ht]
+\begin{figure}[htb]
 	\centering
-	\caption{Valor da métrica de \acs{SNR} na fatia reconstruída para cada dose respectiva, considerando (a) os sistemas \#1 e (b) \#2.}
+	\caption{Valor da métrica de \acs{SNR} na fatia reconstruída para cada dose respectiva, considerando os sistemas (a) \#1 e (b) \#2.}
 	
 	\subfloat[]{\includegraphics[scale=.7, clip, trim=3.5cm 8cm 3.7cm 9cm ]{imgs/cap5/ge_SNR3D.pdf}}
 	
@@ -338,7 +344,7 @@ Para estimar os coeficientes angulares e lineares da função afim apresentada p
 Os coeficientes da função afim que modelam a variância das imagens reconstruídas do sistema \#1 são mostrados nas Figuras \ref{fig:imgCap6GECoefA} e \ref{fig:imgCap6GECoefB}, enquanto que as Figuras \ref{fig:imgCap6HOCoefA} e \ref{fig:imgCap6HOCoefB} ilustram os parâmetros estimados do sistema \#2.
 
 
-\begin{figure}[!ht]
+\begin{figure}[htb]
 	\centering
 	\caption{Coeficientes (a) angular e (b) linear da função afim aproximada para a modelagem da variância das fatias reconstruídas no sistema \#1.}
 	\subfloat[]{\includegraphics[scale=.54, clip, trim=3.6cm 8cm 3.6cm 8cm ]{imgs/cap5/ge_lambda_D.pdf}\label{fig:imgCap6GECoefA}}
@@ -348,7 +354,7 @@ Os coeficientes da função afim que modelam a variância das imagens reconstru�
 	\label{fig:imgCap6GECoef}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[htb]
 	\centering
 	\caption{Coeficientes (a) angular e (b) linear da função afim aproximada para a modelagem da variância das fatias reconstruídas no sistema \#2.} 
 	\subfloat[]{\includegraphics[scale=.54, clip, trim=3.6cm 8cm 3.6cm 8cm ]{imgs/cap5/hologic_lambda_D.pdf}\label{fig:imgCap6HOCoefA}}
@@ -360,9 +366,9 @@ Os coeficientes da função afim que modelam a variância das imagens reconstru�
 
 A correlação gerada pelo procedimento de reconstrução foi medida por meio do \acs{NNPS}. A Figura \ref{fig:imgCap6NNPS} representa os resultados para ambos os sistemas. A frequência máxima observada pelo sistema depende do tamanho dos \textit{pixels}, dada a partir do teorema de Nyquist, mencionado na seção \ref{RetroprojeçãoFiltrada}. Portanto, ambos os sistemas têm frequência máxima distinta devido a sua diferença no tamanho do detector. As medições indicam que o processo de reconstrução correlaciona o ruído para o detector direto de \acs{a-Se}, que era virtualmente não correlacionado no domínio das projeções (ruído branco), apresentado no trabalho de \citeonline{borges2017method},  e correlaciona ainda mais o ruído no sistema \#1 de detecção indireta de  \acs{a-Si}.
 
-\begin{figure}[!ht]
+\begin{figure}[htb]
 	\centering
-	\caption{Medidas de \acs{NNPS} para o  (a) sistema \#1 e (b) \#2.} 
+	\caption{Medidas de \acs{NNPS} para os sistemas (a) \#1 e (b) \#2.} 
 	\subfloat{\includegraphics[scale=.54, clip, trim=3.6cm 8cm 4.3cm 8cm ]{imgs/cap5/ge_NNPS.pdf}\label{fig:imgGENNPS}}
 	\hfill
 	\subfloat{\includegraphics[scale=.54, clip, trim=3.6cm 8cm 4.3cm 8cm ]{imgs/cap5/hologic_NNPS.pdf}\label{fig:imgHONNPS}}
@@ -370,52 +376,53 @@ A correlação gerada pelo procedimento de reconstrução foi medida por meio do
 	\label{fig:imgCap6NNPS}
 \end{figure}
 
-Em relação a análise da normalidade, as Tabelas \ref{tab:tabCap6NormTestGE} e \ref{tab:tabCap6NormTestHologic} mostram a porcentagem de \acs{ROI}s, nas quais os testes estatísticos não rejeitaram a hipótese nula, com nível de significância de 5\%. É perceptível que a distribuição dos valores de cinza locais, referentes as imagens pós-reconstrução, seguem uma distribuição normal, o que suporta o \acs{CLT} discutido anteriormente.
+Em relação a análise da normalidade, as Tabelas \ref{tab:tabCap6NormTestGE} e \ref{tab:tabCap6NormTestHologic} mostram a porcentagem de \acs{ROI}s, nas quais os testes estatísticos não rejeitaram a hipótese nula, com nível de significância de 5\%. Em outras palavras, a quantidade de \acs{ROI}s em que o teste comprova que os dados são normalmente distribuídos. É perceptível que a distribuição dos valores de cinza locais, referentes as imagens pós-reconstrução, seguem uma distribuição normal, o que suporta o \acs{CLT} discutido anteriormente.
 
-{\begin{table}[!ht]
+{\begin{table}[htb]
 		\caption{Porcentagem de \acs{ROI}s que não rejeitaram a hipótese nula $H_0$ referente as imagens reconstruídas do sistema \#1. Os valores representados são para três testes estatísticos diferentes que medem a normalidade dos dados.}
 		\label{tab:tabCap6NormTestGE}
 		\centering
 		% 	\footnotesize
 		\begin{tabular}{c|c|c|c|c|c}
-			\rowcolor[HTML]{D4D4D4}
-			\textbf{mAs}                   &        \textbf{45}        &                        \textbf{54}&                 \textbf{72}&                 \textbf{90} &                 \textbf{126}      \\
-			[1pt]
+			%			\rowcolor[HTML]{D4D4D4}
+			\multirow{2}{*}{\textbf{Teste de hipótese} } &                  \multicolumn{5}{c}{\textbf{mAs} }                   \\ \cline{2-6}
+			                                                 & \textbf{45} & \textbf{54} & \textbf{72} & \textbf{90} & \textbf{126} \\
+			   [3pt]
 			\hline
 			\hline
-			\rule[-0.5ex]{-3pt}{1ex}
-			Shapiro-Wilk       & 81.8                                  & 82.7                                                   & 81.4                                                   & 80.4                                                   & 78.7                                                   \\ \hline
-			\rule[-0.5ex]{-3pt}{1ex}
-			Kolmogorov-Smirnov & 99.8                                                   & 99.6                                                   & 99.2                                                   & 98.8                                                  & 97.6                                                   \\ \hline
-			\rule[-0.5ex]{-3pt}{1ex}
-			Anderson-Darling   & 85.6                                                   & 85.1                                                   & 84.0                                                   & 83.3                                                   & 82.1                                                   \\ \hline
+			\rule[-0.5ex]{-3pt}{3ex}
+			Shapiro-Wilk    						&    81,8     &    82,7     &    81,4     &    80,4     &     78,7     \\ \hline
+			              \rule[-0.5ex]{-3pt}{3ex}
+			Kolmogorov-Smirnov               &    99,8     &    99,6     &    99,2     &    98,8     &     97,6     \\ \hline
+			               \rule[-0.5ex]{-3pt}{3ex}
+			Anderson-Darling                 	&    85,6     &    85,1     &    84,0     &    83,3     &     82,1     \\ \hline
 		\end{tabular}
 		\vspace{2ex}
 		\legend{Fonte: do autor, 2019.}
 	\end{table}
 	
-	{\begin{table}[!h]
+	{\begin{table}[htb]
 			\caption{Porcentagem de \acs{ROI}s que não rejeitaram a hipótese nula $H_0$ referente as imagens reconstruídas do sistema \#2. Os valores representados são para três testes estatísticos diferentes que medem a normalidade dos dados.}
 			\label{tab:tabCap6NormTestHologic}
 			\centering
 			% 	\footnotesize
 			\begin{tabular}{c|c|c|c|c|c}
-				\rowcolor[HTML]{D4D4D4}
-				\textbf{mAs}                   &        \textbf{45}        &                        \textbf{48}&                 \textbf{54}&                 \textbf{63} &                 \textbf{69}      \\
-				[1pt]
+				%				\rowcolor[HTML]{D4D4D4}
+				\multirow{2}{*}{\textbf{Teste de hipótese} } &                  \multicolumn{5}{c}{\textbf{mAs} }                  \\ \cline{2-6}
+				                                                    & \textbf{45} & \textbf{48} & \textbf{54} & \textbf{63} & \textbf{69} \\
+				  [3pt]
 				\hline
 				\hline
-				\rule[-0.5ex]{-3pt}{1ex}
-				Shapiro-Wilk       & 93.2                                                   & 93.5                                                   & 93.3                                                   & 93.4                                                   & 93.0                                                  \\ \hline
-				\rule[-0.5ex]{-3pt}{1ex}
-				Kolmogorov-Smirnov & 99.9                                                   & 100                                                      & 99.9                                                   & 99.9                                                   & 100                                                     \\ \hline
-				\rule[-0.5ex]{-3pt}{1ex}
-				Anderson-Darling   & 94.1                                                   & 93.9                                                   & 93.4                                                   & 93.8                                                   & 92.4                                                  \\ \hline
+				\rule[-0.5ex]{-3pt}{3ex}
+				Shapiro-Wilk   								&    93,2     &    93,5     &    93,3     &    93,4     &    93,0     \\ \hline
+				               \rule[-0.5ex]{-3pt}{3ex}
+				Kolmogorov-Smirnov                	 &    99,9     &     100     &    99,9     &    99,9     &     100     \\ \hline
+				                \rule[-0.5ex]{-3pt}{3ex}
+				Anderson-Darling                 		&    94,1     &    93,9     &    93,4     &    93,8     &    92,4     \\ \hline
 			\end{tabular}
 		\vspace{2ex}
 		\legend{Fonte: do autor, 2019.}
 		\end{table}
-
 
 
 

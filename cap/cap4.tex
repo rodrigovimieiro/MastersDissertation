@@ -3,18 +3,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%												  Introdução    															%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Uma imagem é a representação da captura das intensidades da luz advindas de uma cena natural. Na forma digital, a conversão dessas intensidades é feita e as mesmas são representadas na forma numérica através de elementos de imagem, denominados \textit{pixels}. A captura das ondas eletromagnéticas normalmente é feita por sensores que idealmente convertem de maneira proporcional a quantidade de luz recebida em valores de intensidade de \textit{pixel}  \cite{bertalmiodenoising2018}. Segundo \citeonline{prince2006medical}, ruído em uma imagem se refere a um termo genérico utilizado para qualquer variação aleatória em um sinal que pode degradar drasticamente a qualidade do sinal. As fontes dessas variações e as suas respectivas intensidades variam de acordo com cada sistema de aquisição de imagem. O conhecimento dessas fontes de interferências e seu modelamento é importante na área médica para aplicações na remoção de ruído em imagens, redução da dose de radiação em mamografias e como função de restrição para algoritmos de reconstrução iterativa de tomossíntese \cite{wu2012dose, romualdo2013mammographic,borges2016method,borges2017pipeline,borges2017method,mackenzie2017characterisation,zheng2018detector}. De fato o impacto do ruído no diagnóstico do câncer de mama tem sido reportado em trabalhos anteriores \cite{haus2000screen,huda2003experimental,ruschin2007dose,saunders2007does, samei2007digital, mackenzie2016relationship}.
+Uma imagem é a representação da captura das intensidades da luz advindas de uma cena natural. Na forma digital, a conversão dessas intensidades é feita e as mesmas são representadas na forma numérica através de elementos de imagem, denominados \textit{pixels}. A captura das ondas eletromagnéticas normalmente é feita por sensores que idealmente convertem de maneira proporcional a quantidade de luz recebida em valores de intensidade de \textit{pixel}  \cite{bertalmiodenoising2018}. Segundo \citeonline{prince2006medical}, ruído em uma imagem se refere a um termo genérico utilizado para qualquer variação aleatória em um sinal que pode degradar drasticamente a qualidade do mesmo. As fontes dessas variações e as suas respectivas intensidades variam de acordo com cada sistema de aquisição de imagem. O conhecimento dessas fontes de interferências e seu modelamento é importante na área médica para aplicações na remoção de ruído em imagens, redução da dose de radiação em mamografias e como função de restrição para algoritmos de reconstrução iterativa de tomossíntese \cite{wu2012dose, romualdo2013mammographic,borges2016method,borges2017pipeline,borges2017method,mackenzie2017characterisation,zheng2018detector}. De fato o impacto do ruído no diagnóstico do câncer de mama tem sido reportado em trabalhos anteriores \cite{haus2000screen,huda2003experimental,ruschin2007dose,saunders2007does, samei2007digital, mackenzie2016relationship}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%											Ruído em Imagens	    														%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Fontes de Ruído em Imagens}
 
-De acordo com \citeonline{bertalmiodenoising2018}, em uma imagem de longa exposição de uma cena qualquer, por exemplo, onde aparentemente não existem variações na intensidade da luz, a quantidade de fótons incidentes no detector varia no decorrer do tempo e a conversão dos fótons em cargas elétricas não se da de forma ideal. Essas variações são uma das formas mais comuns de ruído em imagens e é conhecida como ruído de aquisição ou ruído quântico. O termo quântico, do latim \textit{quantum} (plural: \textit{quanta}), significa quantidade, e na física moderna, a menor quantidade discreta de uma propriedade física, e.g., um fóton é um \textit{quantum} da luz \cite{bushberg2011essential}. 
+De acordo com \citeonline{bertalmiodenoising2018}, em uma imagem de longa exposição de uma cena qualquer, por exemplo, onde aparentemente não existem variações na intensidade da luz, a quantidade de fótons incidentes no detector varia no decorrer do tempo e a conversão dos fótons em cargas elétricas não se dá de forma ideal. Essas variações são uma das formas mais comuns de ruído em imagens e é conhecida como ruído de aquisição ou ruído quântico. O termo quântico, do latim \textit{quantum} (plural: \textit{quanta}), significa quantidade, e na física moderna, a menor quantidade discreta de uma propriedade física, e.g., um fóton é um \textit{quantum} da luz \cite{bushberg2011essential}. 
 
 Outra fonte de flutuação é causada por variações na temperatura do sensor que causam agitações térmicas nas cargas elétricas dos condutores. Tal ruído é denominado térmico ou eletrônico, devido a este ser proporcional a temperatura em que o equipamento opera, estando presente nos condutores mesmo na ausência de um potencial elétrico. A movimentação dessas cargas gera uma certa corrente elétrica, denominada corrente de fundo. Essa fonte de variação é importante, especialmente em imagens médicas geradas por raios X com baixa dose de radiação \cite{bertalmiodenoising2018}.
 
-Ruído estrutural é também uma causa de pertubações nos sinais adquiridos. Ele está relacionado com características eletrônicas na leitura dos sensores como por exemplo, a variação no ganho dos amplificadores ao longo das regiões do detector. Tais variações normalmente são fixas espacialmente , ou seja, dependem de cada região do detector.
+Ruído estrutural é também uma causa de perturbações nos sinais adquiridos. Ele está relacionado com características eletrônicas na leitura dos sensores como por exemplo, a variação no ganho dos amplificadores ao longo das regiões do detector. Tais variações normalmente são fixas espacialmente, ou seja, dependem de cada região do detector \cite{bushberg2011essential,marshall2017handbook}.
 
 Especificamente em imagens médicas, estruturas anatômicas que não são importantes para o exame, mas estão presentes assim mesmo, causam ruídos denominados anatômicos. Segundo \citeonline{bushberg2011essential}, em radiografias torácicas, quando se deseja avaliar a estrutura anatômica do pulmão, as costelas são causadoras do ruído anatômico em potencial.
 
@@ -78,7 +78,7 @@ Uma forma diferente é a caracterização através da média quadrática, segund
 
 Diferentes distribuições de probabilidades são utilizadas para caracterizar cada tipo de ruído mencionado anteriormente, quando se tem o conhecimento detalhado do sistema de aquisição do sinal. Em imagens digitais, em geral, o ruído pode ser caraterizado por uma combinação dessas distribuições.
 
-O teorema do limite central (\textit{Central Limit Theorem} - \acs{CLT}) é comumente usado para modelar sistemas físicos que são complexos do ponto de vista onde inúmeras variáveis aleatórias com diferentes distribuições são utilizadas para modelos físicos distintos. Ele afirma que a soma dessas variáveis aleatórias converge para uma distribuição normal com uma respectiva média e variância $\mathcal{N}(0,\,\sigma^{2})$. No entanto, na prática, a média e a variância dos sinais podem mudar de acordo com a posição espacial, alterando assim as características dessas distribuições nas diversas posições do detector, mesmo que ainda sejam normais. Sendo assim, são necessários modelos matemáticos que levem em consideração esses fatores, como demonstrado nas seções abaixo \cite{bertalmiodenoising2018}.
+O teorema do limite central (\textit{Central Limit Theorem} - \acs{CLT}) é comumente usado para modelar sistemas físicos que são complexos do ponto de vista onde inúmeras variáveis aleatórias com diferentes distribuições são utilizadas para modelos físicos distintos. Ele afirma que a soma dessas variáveis aleatórias converge para uma distribuição normal $\mathcal{N}(\mu,\,\sigma^{2})$ com uma respectiva média $\mu$ e variância $\sigma^{2}$. No entanto, na prática, a média e a variância dos sinais podem mudar de acordo com a posição espacial, alterando assim as características dessas distribuições nas diversas posições do detector, mesmo que ainda sejam normais. Sendo assim, são necessários modelos matemáticos que levem em consideração esses fatores, como demonstrado nas seções abaixo \cite{bertalmiodenoising2018}.
 
 
 \subsection{Ruído Independente do Sinal}
@@ -91,12 +91,12 @@ z(x) = y(x) + N(x),
 \label{eq:eqCapRuidoTermico}
 \end{equation}
 
-\noindent na qual, $y$ é a imagem livre de ruído, $N$ é uma variável aleatória com uma distribuição normal $\mathcal{N}(0,\,\sigma^{2})$ de média zero e variância $\sigma^{2}$, $z$ é a imagem observada e $x$ descreve as coordenadas ao longo da imagem. O termo branco de \acs{AWGN} está relacionado com  o fato da variância do espectro de Fourier do ruído ser constante. A palavra branco em si deriva da espectroscopia, onde a luz branca possui todos os componentes de frequência do espectro visível. Esse conceitos são detalhados nas próximas seções.
+\noindent na qual, $y$ é a imagem livre de ruído, $N$ é uma variável aleatória com uma distribuição normal $\mathcal{N}(0,\,\sigma^{2})$ de média zero e variância $\sigma^{2}$, $z$ é a imagem observada e $x$ descreve as coordenadas espaciais ao longo da imagem. O termo branco de \acs{AWGN} está relacionado com  o fato da variância do espectro de Fourier do ruído ser constante. A palavra branco em si deriva da espectroscopia, onde a luz branca possui todos os componentes de frequência do espectro visível. Esses conceitos são detalhados nas próximas seções.
 
 
 \subsection{Ruído Dependente do Sinal}
 
-Já o ruído quântico está relacionado com o fluxo de fótons em cada sensor, de modo que a variância das cargas elétricas é proporcional a esse fluxo. Isso significa que em locais onde mais fótons são detectados, maior é a variação nas cargas elétricas e consequentemente os valores dos \textit{pixels} serão mais contaminados pelo ruído quântico. Sendo assim, a dependência do sinal é uma característica desse tipo de ruído, que é matematicamente modelado através de uma distribuição Poisson \cite{bertalmiodenoising2018}. De fato, a equação simplificada que descreve a captura de uma imagem por um fotossensor é dada por:
+Já o ruído quântico está relacionado com o fluxo de fótons em cada sensor, de modo que a variância das cargas elétricas é proporcional a esse fluxo. Isso significa que em locais onde mais fótons são detectados, maior é a variação nas cargas elétricas e consequentemente os valores dos \textit{pixels} serão mais contaminados pelo ruído quântico. Sendo assim, a dependência do sinal é uma característica desse tipo de ruído, que é matematicamente modelado através de uma distribuição Poisson \cite{bertalmiodenoising2018}. De fato, a equação simplificada que descreve a captura de uma imagem por um foto-sensor é dada por:
 
 \begin{equation}
 z(x) =  \mathcal{P}(y(x)),
@@ -110,7 +110,7 @@ z(x) =  \mathcal{P}(y(x)),
 \label{eq:eqCapRuidoQuanticoMediaVar}
 \end{equation}
 
-Essa propriedade pode ser observada através do exemplo na Figura \ref{fig:imgCapRuidoPoisson}, onde uma imagem sintética representa a aquisição de fótons com intensidade variada e a outra simula a inserção do ruído com uma distribuição Poisson. O perfil dessa pertubação é evidenciando na Figura \ref{fig:imgCapRuidoNoise3D}, exemplificando essa dependência do sinal. 
+Essa propriedade pode ser observada através do exemplo na Figura \ref{fig:imgCapRuidoPoisson}, onde uma imagem sintética representa a aquisição de fótons com intensidade variada e a outra simula a inserção do ruído com uma distribuição Poisson. O perfil dessa perturbação é evidenciando na Figura \ref{fig:imgCapRuidoNoise3D}, exemplificando essa dependência do sinal. 
 
 \begin{figure}[H]
 	\centering
@@ -143,23 +143,23 @@ SNR =  \dfrac{\mu}{\sigma} =  \dfrac{y(x)}{\sqrt{y(x)}}  = \sqrt{y(x)},
 
 Para a realização dos exames de mamografia, são utilizadas ondas eletromagnéticas na faixa dos raios X. Apesar da maioria dos detectores serem integradores de energia e não de fato contadores de fótons, a flutuação da intensidade dos raios X, ou seja, o ruído quântico é modelado através da distribuição de Poisson \cite{boone2000handbook,haus2000screen}. De fato, o ruído quântico é a maior fonte de flutuações nos exames de mamografia quando há uma alta intensidade de radiação, porém outras fontes de ruído também são observadas \cite{huda2003experimental,marshall2017handbook}. Especialmente em casos onde a dose de radiação é baixa, o ruído eletrônico se torna muito importante. Tais interferências são causadas por variações térmicas e pelo circuito eletrônico dos detectores em geral. Um exemplo de exame que utiliza uma baixa dose de radiação é a \acs{DBT}. Nessa técnica, o número de \textit{quanta} por projeção é menor, quando comparado com a mamografia digital convencional, sendo assim o ruído dependente do sinal é menor, tornando a parcela do ruído independente significativa \cite{sechopoulos2013review,vedantham2015digital}. 
 
-A calibração é um fator importante na rotina dos equipamentos de mamografia. A uniformidade das intensidades dos \textit{pixels} ao longo do detector e a não negatividade são fatores levados em conta. A uniformidade do campo é feita através de um procedimento conhecido como correção de \textit{flat-field} \cite{marshall2017handbook}. Nesse procedimento, é dado um ganho nos detectores em cada posição a fim de corrigir as imperfeições de iluminação dos raios X causadas pelo efeito Heel e pela geometria do cone. Já a não negatividade é garantida por meio de um \textit{offset} no valor lido pelos detectores. Todos esses fatores alteram significativamente as características do ruído, tornando-o  dependente do espaço \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}. Esse procedimento de certa forma corrige também os ruídos estruturais presentes devido as variações nos ganhos do detector, fixas espacialmente \cite{VanEngen2013,marshall2017handbook}.
+A calibração é um fator importante na rotina dos equipamentos de mamografia. A uniformidade das intensidades dos \textit{pixels} ao longo do detector e a não negatividade são fatores levados em conta. A uniformidade do campo é feita através de um procedimento conhecido como correção de \textit{flat-field} \cite{marshall2017handbook}. Nesse procedimento, é dado um ganho nos detectores em cada posição a fim de corrigir as imperfeições de iluminação dos raios X causadas pelo efeito heel e pela geometria do cone. Já a não negatividade é garantida por meio de um \textit{offset} no valor lido pelos detectores. Todos esses fatores alteram significativamente as características do ruído, tornando-o  dependente do espaço \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}. Esse procedimento de certa forma corrige também os ruídos estruturais presentes devido as variações nos ganhos do detector, fixas espacialmente \cite{VanEngen2013,marshall2017handbook}.
 
-De fato, levando em consideração o ruído quântico, térmico e os fatores de calibração, um modelo matemático que se aproxima desses efeitos físicos é o Poisson escalado-Gaussiano:
+De fato, levando em consideração o ruído quântico, térmico e os fatores de calibração, um modelo matemático que se aproxima desses efeitos físicos é o Poisson-Gaussiano:
 
 \begin{equation}
 z(x) = ap(x) + N(x),
 \label{eq:eqCapRuidoPossionGaussiano}
 \end{equation}
 
-\noindent no qual:
+\noindent no qual N é uma função que tem a distribuição aproximada por uma Gaussiana de média 0 e variância b e p uma função com distribuição Poisson com um fator de escala a, segundo:
 
 \begin{equation}
-p(x) \sim \mathcal{P}(a^{-1}\,y(x)),  \qquad  N(x) \sim \mathcal{N}(0,\,b)
+p(x) \sim \mathcal{P}(a^{-1}\,y(x)) \qquad \text{e}  \qquad  N(x) \sim \mathcal{N}(0,\,b),
 \label{eq:eqCapRuidoPossionGaussiano1}
 \end{equation}
 
-\noindent e sua média e variância são dadas por:
+\noindent onde sua média e variância são dadas por:
 
 \begin{equation}
 E\{z(x)\mid y(x)\} =  y(x),
@@ -206,7 +206,7 @@ z(x) \sim  \mathcal{N}(\,y(x),\,\sigma(\,y(x)) \,).
 \label{eq:eqCapRuidoHeteroscedasticoSimplificado}
 \end{equation}
 
-\subsection{Correlação}\label{Correlação}
+\subsection{Correlação Espacial}\label{Correlação}
 
 Até então, todo o modelamento do ruído foi feito considerando cada unidade do detector como uma variável aleatória independente. Na prática, isso não é a realidade observada nos equipamentos. A correlação, ou a associação existente entre duas variáveis, ocorre devido a fenômenos físicos, tais como: o processo de aquisição do sistema, o procedimento de leitura dos sensores, o \textit{cross-talk} existente entre \textit{pixels} vizinhos, dentre outros \cite{morettin2010,bertalmiodenoising2018}. 
 

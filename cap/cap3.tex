@@ -28,7 +28,7 @@ Em geral, reconstruções de imagens tomográficas são consideradas, do ponto d
 	\label{fig:imgCap3ProbInver}
 \end{figure}
 
-Os equipamentos de raios X por transmissão têm como modelo físico básico a formulação de \textit{Beer-Lambert} \cite{zeng2010medical}. Essa fórmula relaciona a função de atenuação $\mu(\sigma)$ do feixe de radiação quando este interage com um certo material por um determinado caminho. Considerando um feixe de raio X ideal, infinitamente pequeno, monoenergético e sem espalhamento, sua intensidade de energia inicial $I_{0}$ interage com a matéria por um caminho de comprimento $l$ e sua intensidade de energia final $I$ é dada por \eqref{eq:eqCap3BeerLambert1}, segundo \citeonline[p. 13]{levakhina2014three}:
+Os equipamentos de raios X por transmissão têm como modelo físico básico a formulação de \textit{Beer-Lambert} \cite{zeng2010medical}. Essa fórmula relaciona a função de atenuação $\mu(\sigma)$ do feixe de radiação quando este interage com um certo material por um determinado caminho. Considerando um feixe de raio X ideal, infinitamente pequeno, monoenergético e sem espalhamento, sua intensidade de energia inicial $I_{0}$ interage com a matéria por um caminho $L$ e sua intensidade de energia final $I$ é dada por \eqref{eq:eqCap3BeerLambert1}, segundo \citeonline[p. 13]{levakhina2014three}:
 
 \begin{equation}
  I = I_{0} \, e \, ^{-\int_{L}^{} \,\mu(\sigma) \, d\sigma}.
@@ -42,7 +42,7 @@ p_{L} = {\int_{L}^{} \,\mu(\sigma) \, d\sigma},
 \label{eq:eqCap3BeerLambert2}
 \end{equation}
 
-\noindent onde $\sigma$ é o incremento ao longo de $l$ e o problema inverso, ou de reconstrução, passa a ser a recuperação da função  $\mu(\sigma)$, tendo disponível um conjunto de integrais de linha $p_{L}$, calculadas através da transformada de Radon detalhada na seção seguinte \cite[p. 33]{levakhina2014three}.  
+\noindent onde $\sigma$ é o incremento ao longo de $L$ e o problema inverso, ou de reconstrução, passa a ser a recuperação da função  $\mu(\sigma)$, tendo disponível um conjunto de integrais de linha $p_{L}$, calculadas através da transformada de Radon detalhada na seção seguinte \cite[p. 33]{levakhina2014three}.  
  
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%											Transformada de Radon    														%
@@ -132,12 +132,12 @@ Portanto é possível fazer o uso de \textit{pixels} ou \textit{voxels} para rep
 Se tomarmos qualquer linha dessa matriz, temos a Figura \ref{fig:imgCap3DiscretizacaoImagem2}, ilustrando os coeficientes discretos e os níveis de energia inicial e final da respectiva linha, considerando um feixe ideal. Dado isto, pode-se adaptar a Equação \ref{eq:eqCap3BeerLambert1} para a sua forma discreta, demonstrada a seguir:
 
 \begin{equation}
-I_{l} = I_{0} \, e \, ^{-\sum_{i=1}^{n} \mu_{i}}.
+I = I_{0} \, e \, ^{-\sum_{i=1}^{n} \mu_{i}}.
 \label{eq:eqCap3BeerLambertDiscreto1}
 \end{equation} 
 
 \begin{figure}[H]
-	\caption{Coeficientes de atenuação discretos da primeira linha da matriz mostrada na Figura \ref{fig:imgCap3DiscretizacaoImagem1}.}
+	\caption{Coeficientes de atenuação discretos de qualquer linha da matriz mostrada na Figura \ref{fig:imgCap3DiscretizacaoImagem1}.}
 	\begin{center}
 		\includegraphics[scale=1.3]{imgs/cap3/DiscretizacaoImg2.pdf}
 	\end{center}
@@ -196,9 +196,9 @@ Ao somar as contribuições de cada ângulo da Figura \ref{fig:imgCap3BPMosaico}
 	\label{fig:imgCap3BPSoma}
 \end{figure}
 
-O método descrito acima é o mais simples encontrado na literatura e é conhecido como \textit{Pixel Driven} (Figura \ref{fig:imgCap3Projetores1}) \cite[p. 47]{levakhina2014three}. Em sua projeção direta, o método consiste em projetar o centro de cada \textit{pixel} no detector e o seu valor de atenuação é repartido entre os detectores vizinhos por meio da interpolação linear ou por outros métodos mais complexos. O mesmo princípio é aplicado para o operador de retroprojeção, no qual os \textit{pixels} da imagem recebem os valores obtidos por sensores vizinhos também através de métodos de interpolação.
+O método descrito acima é o mais simples encontrado na literatura e é conhecido como \textit{Pixel Driven} (Figura \ref{fig:imgCap3Projetores1}) \cite[p. 47]{levakhina2014three}. Em sua projeção direta, o método consiste em projetar o centro de cada \textit{pixel} no detector e o seu valor de atenuação é repartido entre os detectores vizinhos por meio da interpolação linear ou por outros métodos mais complexos. O mesmo princípio é aplicado para o operador de retroprojeção, no qual os \textit{pixels} da imagem recebem os valores obtidos por sensores vizinhos, também através de métodos de interpolação.
 
-Outras técnicas mais sofisticadas também são aplicadas como: \textit{Ray Casting} ou \textit{Ray Driven}, \textit{Distance-Driven} \cite{de2002distance,de2004distance} e \textit{Trapezoid footprint} como demonstra a Figura \ref{fig:imgCap3Projetores}. Um maior detalhamento das técnicas mencionadas pode ser encontrado em \citeonline[p. 47-49]{levakhina2014three} ou ainda, métodos do estado da arte como demostrado em \citeonline[]{liu2017gpu} e \citeonline[]{zheng2017segmented}.
+Outras técnicas mais sofisticadas também são aplicadas como: \textit{Ray Casting} ou \textit{Ray Driven}, \textit{Distance-Driven} \cite{de2002distance,de2004distance} e \textit{Trapezoid footprint}, como demonstra a Figura \ref{fig:imgCap3Projetores}. Um maior detalhamento das técnicas mencionadas pode ser encontrado em \citeonline[p. 47-49]{levakhina2014three} ou ainda, métodos do estado da arte como demostrado em \citeonline[]{liu2017gpu} e \citeonline[]{zheng2017segmented}.
 
 \begin{figure}[H]
 	\centering
@@ -222,7 +222,7 @@ Outras técnicas mais sofisticadas também são aplicadas como: \textit{Ray Cast
 
 Os problemas para a reconstrução de imagens em tomossíntese estão relacionados à estruturas tridimensionais, sendo assim é importante discorrer sobre os operadores de projeção e retroprojeção aplicados a essa técnica. A Figura \ref{fig:imgCap33DGeometry} ilustra como um feixe de raio X é atenuando e quais \textit{voxels} são responsáveis por esta interação. Em geral, os operadores utilizados para \acs{2D} são também atribuídos as geometrias \acs{3D}, porém sendo necessários ajustes para cada técnica e geometria. O processamento é feito então plano por plano, passando por todos os \textit{voxels} daquele nível. 
 
-\begin{figure}[H]
+\begin{figure}[htb]
 	\caption{Ilustração da geometria de meio cone referente a tomossíntese e a atenuação do feixe de raio X pelos respectivos \textit{voxels}.}
 	\begin{center}
 		\includegraphics[scale=0.9]{imgs/cap3/3DGeometry.pdf}
@@ -235,7 +235,7 @@ Para a implementação do operador \textit{Pixel Driven} é necessário encontra
 
 Uma das geometrias de movimento isocêntrico foi primeiramente apresentada por \citeonline[]{niklason1997digital}, como ilustra a Figura \ref{fig:imgCap3ProjectionGeometry}, na qual o detector se mantém estacionário e o tubo se move em um arco com um determinado centro de rotação. 
 
-\begin{figure}[H]
+\begin{figure}[htb]
 	\caption{Geometria de movimento isocêntrico apresentado por \citeonline[]{niklason1997digital}, em que o tubo se move em um determinado arco e o detector se mantêm estacionário.}
 	\begin{center}
 		\includegraphics[scale=0.4]{imgs/cap3/ProjectionGeometry.png}
@@ -272,14 +272,16 @@ Já a retroprojeção dos dados é dada a partir da inversão dessas equações 
 
 \subsection{Reconstrução Analítica}
 
-As técnicas utilizadas para a reconstrução em equipamentos de tomossíntese são provenientes de \acs{CT}, pelo fato de já estarem consolidadas e serem vastamente conhecidas na literatura. Isso não é diferente quando o assunto é reconstrução de forma analítica. Todo processo vem da teoria da transformada inversa de Radon, que foi discutida com mais detalhes no item \ref{TransformadaRadon2D}. É importante notar que devido ao problema de reconstrução ser mal condicionado, tal como uma aquisição incompleta de dados, a resolução de forma analítica é uma solução aproximada e não leva em conta diversos fatores, como o ruído quântico presente nas projeções. A melhor forma de explicar esse método é partindo de duas dimensões e posteriormente a extensão para a terceira dimensão, como é demonstrado nos itens a seguir \cite{mertelmeier2014filtered,xu2014tomographic}.  
+As técnicas utilizadas para a reconstrução em equipamentos de tomossíntese são provenientes de \acs{CT}, pelo fato de já estarem consolidadas e serem vastamente conhecidas na literatura. Isso não é diferente quando o assunto é reconstrução de forma analítica. Todo processo vem da teoria da transformada inversa de Radon, que foi discutida com mais detalhes no item \ref{TransformadaRadon2D}. É importante notar que devido ao problema de reconstrução ser mal condicionado, tal como uma aquisição incompleta de dados, a resolução de forma analítica é uma solução aproximada e não leva em conta diversos fatores, como o ruído quântico presente nas projeções. A melhor forma de explicar esse método é partindo de duas dimensões e posteriormente estendê-lo para a terceira dimensão, como é demonstrado nos itens a seguir \cite{mertelmeier2014filtered,xu2014tomographic}.  
 
 
 \subsubsection{Retroprojeção Filtrada}\label{RetroprojeçãoFiltrada}
 
-Um grande problema relacionado com a simples retroprojeção dos dados do detector é a soma das baixas frequências que ocorre a partir dos diferentes ângulos, como foi demosntrado pela Figura \ref{fig:imgCap3BPMosaico} e \ref{fig:imgCap3BPParcial}. Isso é facilmente observado quando faz-se o uso do \textit{Fourier slice theorem}, também conhecido como \textit{central slice theorem}, ou traduzindo para o português como teorema do corte de Fourier. O problema dito acima pode ser observado na Figura \ref{fig:imgCap3FourierSliceTheorem}, caso sejam tomados diferentes ângulos de projeção. A formulação matemática desse teorema é encontrada em \citeonline[p. 61-65]{hsieh2009computed}. Aplicando a transformada de Fourier inversa no domínio da frequência, ao serem adquiridas diversas projeções em toda a faixa de ângulo, é possível recuperar a estrutura espacial do objeto, porém de forma ``borrada'' devido a sobreposição de baixas frequências.     
+Um grande problema relacionado com a simples retroprojeção dos dados do detector é a soma das baixas frequências que ocorre a partir dos diferentes ângulos, como foi demosntrado pela Figura \ref{fig:imgCap3BPMosaico} e \ref{fig:imgCap3BPParcial}. Isso é facilmente observado quando faz-se o uso do \textit{Fourier slice theorem}, também conhecido como \textit{central slice theorem}, ou traduzindo para o português como teorema do corte de Fourier. 
 
-\begin{figure}[H]
+O problema dito acima pode ser observado na Figura \ref{fig:imgCap3FourierSliceTheorem}, caso sejam tomados diferentes ângulos de projeção. A formulação matemática desse teorema é encontrada em \citeonline[p. 61-65]{hsieh2009computed}. Aplicando a transformada de Fourier inversa no domínio da frequência, ao serem adquiridas diversas projeções em toda a faixa de ângulo, é possível recuperar a estrutura espacial do objeto, porém de forma ``borrada'' devido a sobreposição de baixas frequências.     
+
+\begin{figure}[htb]
 	\caption{Ilustração do teorema do corte de Fourier.}
 	\begin{center}
 		\includegraphics[scale=0.75, clip, trim=8.5cm 4cm 10.4cm 5.6cm]{imgs/cap3/FourierSliceTheorem.pdf}
@@ -290,7 +292,7 @@ Um grande problema relacionado com a simples retroprojeção dos dados do detect
 
 Com o propósito de contornar esse problema, é aplicado em cada projeção um filtro de rampa \acs{1D}, conhecido como \textit{ramp filter} (\ref{fig:imgCap3FBPFiltersA}), até a frequência de Nyquist $\frac{1}{2 \varDelta x}$, no qual $\varDelta x$ é o tamanho espacial do \textit{pixel}. Esse filtro faz com que as baixas frequências sejam atenuadas mantendo somente as altas, porém devido ao seu formato, o ruído que predomina na alta frequência é amplificado. 
 
-\begin{figure}[H]
+\begin{figure}[htb]
 	\centering
 	
 	\caption{Ilustração (a) do filtro de rampa no domínio da frequência (passa alta) e (b) o mesmo ``janelado'' por uma função Hanning para redução de ruídos (passa faixa).}
@@ -306,7 +308,7 @@ Com o propósito de contornar esse problema, é aplicado em cada projeção um f
 
 Devido a esse impasse é aplicado um ``janelamento'' no filtro, como por exemplo: Hamming, Hanning, Shepp-Logan ou cosseno. A Figura \ref{fig:imgCap3FBPFiltersA} ilustra o filtro rampa no domínio da frequência e a Figura \ref{fig:imgCap3FBPFiltersB} demonstra o mesmo após um ``janelamento'' pela função Hanning. Seguido do procedimento de filtragem, os dados são retomados para o domínio do espaço e então são retroprojetados para a formação da estrutura espacial do objeto \cite{xu2014tomographic}. 
 
-Já para a aplicação em tomossíntese, diversas aproximações devem ser feitas, pois esta técnica abrange somente uma pequena extensão de ângulo com poucas projeções, quando comparada aos equipamentos de \acs{CT}. Outro problema é com a geometria de emissão dos feixes, que são dispostos em formato de meio cone (\textit{half cone beam}) \cite{mertelmeier2014filtered}. 
+Já para a aplicação em tomossíntese, diversas aproximações devem ser feitas, pois esta técnica abrange somente uma pequena extensão de ângulo com poucas projeções, quando comparada aos equipamentos de \acs{CT}. Outro problema é com a geometria de emissão dos feixes, que são dispostos em formato de meio cone (\textit{half-cone-beam}) \cite{mertelmeier2014filtered}. 
 
 Tendo em vista esses fatores, com uma aproximação da geometria dos feixes, dispondo-os paralelamente, pode-se utilizar o teorema do corte de Fourier para analisar o comportamento das projeções no domínio da frequência. Isso pode ser feito para grandes distâncias entre o tubo e o detector. A Figura \ref{fig:imgCap3FourierSliceTheorem3D} ilustra a utilização do teorema na técnica de tomossíntese para a análise das projeções no domínio da frequência \cite[p. 101-106]{mertelmeier2014filtered}.
 
@@ -419,7 +421,7 @@ a_{21}f_{1} \, + a_{22}f_{2} \, = p_{2} \\
 Cada equação, nesse caso, simboliza uma reta no espaço bidimensional, como demonstra a Figura \ref{fig:imgCap3ART}. Uma estimativa inicial $f^{(0)}$ deve ser feita e então esse ponto deve ser projetado perpendicularmente na reta, ou hiperplano, que representa $p_{1}$ para obter a nova imagem $f^{(1)}$. O processo volta a se repetir, projetando $f^{(1)}$ no hiperplano definido pela equação de $p_{2}$ e assim até convergir para a solução desejada $f = (f_{1},f_{2})^{T}$.
 
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\caption{Ilustração geométrica do processo de reconstrução através do método \acs{ART}.}
 	\begin{center}
 		\includegraphics[scale=1]{imgs/cap3/ART1.pdf}
@@ -443,7 +445,7 @@ f^{n} = f^{n-1} - \dfrac{(a_{i} \, f^{n-1}- p_{i})}{a_{i}\,(a_{i})^{T}}   (a_{i}
 
 Os métodos ditados acima assumem um caso ideal. As projeções dos feixes em sistemas reais sofrem de inconsistências de ruídos e artefatos, bem como na prática o problema é constituído de inúmeras equações. Dado isso, a solução para as equações lineares não é encontrada em somente um ponto, mas sim em uma região que possui múltiplas soluções. Nesse caso uma solução aproximada $\hat{f}$ deve ser estimada no sistema caracterizado como possível e indeterminado \cite[p. 218]{buzug2008computed}. A Figura \ref{fig:imgCap3ARTIndeterminado} exemplifica o caso acima. 
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\caption{Ilustração geométrica de como ocorre a reconstrução de um sistema possível indeterminado por meio do método \acs{ART}.}
 	\begin{center}
 		\includegraphics[scale=1]{imgs/cap3/ART2.pdf}
@@ -461,10 +463,10 @@ Variações do método algébrico, dito acima, são encontradas na literatura. O
 
 Os problemas de reconstrução também podem ser resolvidos por meio de métodos estatísticos que são equivalentes aos problemas de otimização \cite[p. 79]{levakhina2014three}. O algoritmo da máxima verossimilhança (\textit{Maximum Likelihood} - \acs{ML}) é um exemplo de modelamento estatístico. Nesse caso, a função de custo torna-se a função de verossimilhança \cite[p. 77]{levakhina2014three}.
 
-Segundo \citeonline[p. 10]{Fessler2000handbook}, esse método busca estimar um parâmetro, por exemplo os coeficientes de atenuação $(ImgEstimada)$, que maximizam a verossimilhança dado um conjunto de observações $(Medidas)$. Essa estimativa pode ser modelada através da função de verossimilhança representada por meio da equação abaixo e explicada com detalhes a seguir:
+Segundo \citeonline[p. 10]{Fessler2000handbook}, esse método busca estimar um parâmetro, por exemplo os coeficientes de atenuação $(ImgEstimada)$, que maximizam a verossimilhança dado um conjunto de observações $(Medidas)$. Essa estimativa pode ser modelada através da função de verossimilhança representada por meio da Equação \ref{eq:eqCap3ModeloVerossimilhança} e explicada com detalhes a seguir:
 
 \begin{equation}
-ImgReconstruida = \underset{ImgEstimada}{\arg\max} \; l(ImgEstimada \mid Medidas),
+ImgReconstruida = \underset{}{\arg\max} \;\; l(ImgEstimada \mid Medidas),
 \label{eq:eqCap3ModeloVerossimilhança}
 \end{equation} 
 
@@ -588,7 +590,7 @@ Prob(f \mid P) = \dfrac{Prob(P \mid f) Prob(f)}{Prob(P)},
 \label{eq:eqCap3TeoremaBayesLogSimplificadaFinal}
 \end{equation}
 
-É conhecido da literatura que os mapas de atenuações não variam bruscamente em uma pequena faixa de extensão, ou seja, os níveis de cinza entre os \textit{pixels} vizinhos não alteram significantemente em relação a média local \cite{Fessler2000handbook,buzug2008computed}. Essa informação pode ser considerada como um conhecimento \textit{a priori} sobre a imagem desejada e a partir desse fato, pode ser incorporado uma equação que desestimule a ``rispidez'' sobre a imagem processada, impondo restrições de suavidade. Sendo assim, essa equação pode ser modelada através de funções matemáticas e incorporada como uma restrição para o conjunto de soluções do modelo estatístico.
+É conhecido da literatura que os mapas de atenuações não variam bruscamente em uma pequena faixa de extensão, ou seja, os níveis de cinza entre os \textit{pixels} vizinhos não alteram significantemente em relação à média local \cite{Fessler2000handbook,buzug2008computed}. Essa informação pode ser considerada como um conhecimento \textit{a priori} sobre a imagem desejada e a partir desse fato, pode ser incorporado uma equação que desestimule a ``rispidez'' sobre a imagem processada, impondo restrições de suavidade. Sendo assim, essa equação pode ser modelada através de funções matemáticas e incorporada como uma restrição para o conjunto de soluções do modelo estatístico.
 
 Um das maneiras mais simples de modelar uma função de restrição de suavidade na imagem é através da discrepância existente entre os valores dos \textit{pixels} vizinhos \cite[p. 12]{Fessler2000handbook}. Esse modelamento pode ser feito de acordo com \citeonline[p. 4]{das2011penalized}:
 
