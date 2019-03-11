@@ -116,11 +116,11 @@
      	%backref=true,
      	%pagebackref=true,
 		%bookmarks=true,         		% show bookmarks bar?
-		pdftitle={\imprimirtitulo}, 
-		pdfauthor={\imprimirautor},
-		pdfkeywords={mamografia, distorção arquitetural, digital breast tomosynthesis, cad},
+		pdftitle={Ferramenta para reconstrução de imagens de tomossíntese mamária e sua aplicação na análise do ruído em imagens reconstruídas}, 
+		pdfauthor={Rodrigo de Barros Vimieiro},
+		pdfkeywords={tomossíntese digital mamária, reconstrução, análise de ruído},
 	    pdfproducer={LaTeX with abnTeX2}, 	% producer of the document
-	    pdfcreator={\imprimirautor},
+	    pdfcreator={Rodrigo de Barros Vimieiro},
     	colorlinks=true,       		% false: boxed links; true: colored links
     	linkcolor=black,          	% color of internal links
     	citecolor=black,        		% color of links to bibliography
