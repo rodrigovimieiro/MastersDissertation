@@ -78,12 +78,12 @@ Uma forma diferente é a caracterização através da média quadrática, segund
 
 Diferentes distribuições de probabilidades são utilizadas para caracterizar cada tipo de ruído mencionado anteriormente, quando se tem o conhecimento detalhado do sistema de aquisição do sinal. Em imagens digitais, em geral, o ruído pode ser caraterizado por uma combinação dessas distribuições.
 
-O teorema do limite central (\textit{Central Limit Theorem} - \acs{CLT}) é comumente usado para modelar sistemas físicos que são complexos do ponto de vista onde inúmeras variáveis aleatórias com diferentes distribuições são utilizadas para modelos físicos distintos. Ele afirma que a soma dessas variáveis aleatórias converge para uma distribuição normal $\mathcal{N}(\mu,\,\sigma^{2})$ com uma respectiva média $\mu$ e variância $\sigma^{2}$. No entanto, na prática, a média e a variância dos sinais podem mudar de acordo com a posição espacial, alterando assim as características dessas distribuições nas diversas posições do detector, mesmo que ainda sejam normais. Sendo assim, são necessários modelos matemáticos que levem em consideração esses fatores, como demonstrado nas seções abaixo \cite{bertalmiodenoising2018}.
+O teorema central do limite (\textit{Central Limit Theorem} - \acs{CLT}) é comumente usado para modelar sistemas físicos que são complexos do ponto de vista onde inúmeras variáveis aleatórias com diferentes distribuições são utilizadas para modelos físicos distintos. Ele afirma que a soma dessas variáveis aleatórias converge para uma distribuição normal $\mathcal{N}(\mu,\,\sigma^{2})$ com uma respectiva média $\mu$ e variância $\sigma^{2}$. No entanto, na prática, a média e a variância dos sinais podem mudar de acordo com a posição espacial, alterando assim as características dessas distribuições nas diversas posições do detector, mesmo que ainda sejam normais. Sendo assim, são necessários modelos matemáticos que levem em consideração esses fatores, como demonstrado nas seções abaixo \cite{bertalmiodenoising2018}.
 
 
 \subsection{Ruído Independente do Sinal}
 
-Agitações térmicas podem ser representadas por uma distribuição Gaussiana, também chamada de normal. Isso se deve ao fato dessas variações serem independentes da quantidade de sinal, ou seja, a variação de temperatura em média é a mesma em todo o detector, como ilustra a Figura \ref{fig:imgCapRuidoPhantom}. Esse tipo de flutuação é descrita matematicamente através do modelo de ruído aditivo Gaussiano branco  (\textit{Additive White Gaussian Noise} - \acs{AWGN}), independente e identicamente distribuído (\textit{Independent and Identically Distributed} - \acs{IID}). Sendo assim, a equação que descreve a contaminação da imagem por esse ruído é dada por:
+Agitações térmicas podem ser representadas por uma distribuição Gaussiana, também chamada de normal. Isso se deve ao fato dessas variações serem independentes da quantidade de sinal, ou seja, a variação de temperatura em média é a mesma em todo o detector, como ilustra a Figura \ref{fig:imgCapRuidoGaussiano}}. Esse tipo de flutuação é descrita matematicamente através do modelo de ruído aditivo Gaussiano branco  (\textit{Additive White Gaussian Noise} - \acs{AWGN}), independente e identicamente distribuído (\textit{Independent and Identically Distributed} - \acs{IID}). Sendo assim, a equação que descreve a contaminação da imagem por esse ruído é dada por:
 
 
 \begin{equation}
@@ -92,6 +92,24 @@ z(x) = y(x) + N(x),
 \end{equation}
 
 \noindent na qual, $y$ é a imagem livre de ruído, $N$ é uma variável aleatória com uma distribuição normal $\mathcal{N}(0,\,\sigma^{2})$ de média zero e variância $\sigma^{2}$, $z$ é a imagem observada e $x$ descreve as coordenadas espaciais ao longo da imagem. O termo branco de \acs{AWGN} está relacionado com  o fato da variância do espectro de Fourier do ruído ser constante. A palavra branco em si deriva da espectroscopia, onde a luz branca possui todos os componentes de frequência do espectro visível. Esses conceitos são detalhados nas próximas seções.
+
+\begin{figure}[!htb]
+	\centering
+	
+	\caption{Representação do ruído independente do sinal, através da ilustração de (a) uma imagem sintética, (b) da inserção de ruído \acs{AWGN} na mesma, (c) da subtração de (b) por (a) para extração apenas do ruído e (d) do seu respectivo perfil em \acs{3D}.}
+	
+	\subfloat[]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PhantomPoisson.pdf}	
+		\label{fig:imgCapRuidoPhantomGaussian}}
+	\hfill
+	\subfloat[]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PhantomWithNoise_IS.pdf} \label{fig:imgCapRuidoPhantomWithNoiseGaussian}}
+	\hfill
+	\subfloat[]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/GaussianNoise.pdf} \label{fig:imgCapRuidoGaussianNoise}}
+	\hfill
+	\subfloat[]{\includegraphics[scale=0.55, clip, trim=3.1cm 8.7cm 3.7cm 8.2cm]{imgs/capRuido/Noise3D_IS.pdf} \label{fig:imgCapRuidoNoise3D_IS}}
+	
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCapRuidoGaussiano}
+\end{figure}
 
 
 \subsection{Ruído Dependente do Sinal}
@@ -110,27 +128,27 @@ z(x) =  \mathcal{P}(y(x)),
 \label{eq:eqCapRuidoQuanticoMediaVar}
 \end{equation}
 
-Essa propriedade pode ser observada através do exemplo na Figura \ref{fig:imgCapRuidoPoisson}, onde uma imagem sintética representa a aquisição de fótons com intensidade variada e a outra simula a inserção do ruído com uma distribuição Poisson. O perfil dessa perturbação é evidenciando na Figura \ref{fig:imgCapRuidoNoise3D}, exemplificando essa dependência do sinal. 
+Essa propriedade pode ser observada através do exemplo na Figura \ref{fig:imgCapRuidoPoisson}, onde uma imagem sintética representa a aquisição de fótons com intensidade variada e a outra simula a inserção do ruído com uma distribuição Poisson. O perfil dessa perturbação é evidenciando na Figura \ref{fig:imgCapRuidoNoise3D_DS}, exemplificando essa dependência do sinal. 
 
-\begin{figure}[H]
+\begin{figure}[!htb]
 	\centering
 	
-	\caption{Ilustração de (a) uma imagem sintética, (b) da inserção de ruído Poisson na mesma, (c) da subtração de (a) por (b) para extração apenas do ruído e (d) do seu respectivo perfil em \acs{3D}.}
+	\caption{Representação do ruído dependente do sinal, através da ilustração de (a) uma imagem sintética, (b) da inserção de ruído Poisson na mesma, (c) da subtração de (b) por (a) para extração apenas do ruído e (d) do seu respectivo perfil em \acs{3D}.}
 	
 	\subfloat[]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PhantomPoisson.pdf}	
 	\label{fig:imgCapRuidoPhantomPoisson}}
 	\hfill
-	\subfloat[]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PhantomWithNoise.pdf} \label{fig:imgCapRuidoPhantomWithNoise}}
+	\subfloat[]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PhantomWithNoise_DS.pdf} \label{fig:imgCapRuidoPhantomWithNoisePoisson}}
 	\hfill
 	\subfloat[]{\includegraphics[scale=0.4, clip, trim=5cm 8cm 5cm 7cm]{imgs/capRuido/PoissonNoise.pdf} \label{fig:imgCapRuidoPoissonNoise}}
 	\hfill
-	\subfloat[]{\includegraphics[scale=0.55, clip, trim=3.1cm 8.7cm 3.7cm 8.2cm]{imgs/capRuido/Noise3D.pdf} \label{fig:imgCapRuidoNoise3D}}
+	\subfloat[]{\includegraphics[scale=0.55, clip, trim=3.1cm 8.7cm 3.7cm 8.2cm]{imgs/capRuido/Noise3D_DS.pdf} \label{fig:imgCapRuidoNoise3D_DS}}
 	
 	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCapRuidoPoisson}
 \end{figure}
 
-Consequentemente a essa propriedade, o \acs{SNR} é diretamente proporcional a média do sinal:
+Consequentemente a essa propriedade, o \acs{SNR} é diretamente proporcional a raiz quadrada da média do sinal:
 
 \begin{equation}
 SNR =  \dfrac{\mu}{\sigma} =  \dfrac{y(x)}{\sqrt{y(x)}}  = \sqrt{y(x)},
@@ -141,9 +159,9 @@ SNR =  \dfrac{\mu}{\sigma} =  \dfrac{y(x)}{\sqrt{y(x)}}  = \sqrt{y(x)},
 
 \section{Ruído em Mamografia}\label{Capitulo4:RuidoemMamografia}
 
-Para a realização dos exames de mamografia, são utilizadas ondas eletromagnéticas na faixa dos raios X. Apesar da maioria dos detectores serem integradores de energia e não de fato contadores de fótons, a flutuação da intensidade dos raios X, ou seja, o ruído quântico é modelado através da distribuição de Poisson \cite{boone2000handbook,haus2000screen}. De fato, o ruído quântico é a maior fonte de flutuações nos exames de mamografia quando há uma alta intensidade de radiação, porém outras fontes de ruído também são observadas \cite{huda2003experimental,marshall2017handbook}. Especialmente em casos onde a dose de radiação é baixa, o ruído eletrônico se torna muito importante. Tais interferências são causadas por variações térmicas e pelo circuito eletrônico dos detectores em geral. Um exemplo de exame que utiliza uma baixa dose de radiação é a \acs{DBT}. Nessa técnica, o número de \textit{quanta} por projeção é menor, quando comparado com a mamografia digital convencional, sendo assim o ruído dependente do sinal é menor, tornando a parcela do ruído independente significativa \cite{sechopoulos2013review,vedantham2015digital}. 
+Para a realização dos exames de mamografia, são utilizadas ondas eletromagnéticas na faixa dos raios X. Apesar da maioria dos detectores serem integradores de energia e não de fato contadores de fótons, a flutuação da intensidade dos raios X, ou seja, o ruído quântico é modelado através da distribuição de Poisson \cite{yaffe2000handbook,haus2000screen}. De fato, o ruído quântico é a maior fonte de flutuações nos exames de mamografia quando há uma alta intensidade de radiação, porém outras fontes de ruído também são observadas \cite{huda2003experimental,marshall2017handbook}. Especialmente em casos onde a dose de radiação é baixa, o ruído eletrônico se torna muito importante. Tais interferências são causadas por variações térmicas e pelo circuito eletrônico dos detectores em geral. Um exemplo de exame que utiliza uma baixa dose de radiação é a \acs{DBT}. Nessa técnica, o número de \textit{quanta} por projeção é menor, quando comparado com a mamografia digital convencional, sendo assim o ruído dependente do sinal é menor, tornando a parcela do ruído independente significativa \cite{sechopoulos2013review,vedantham2015digital}. 
 
-A calibração é um fator importante na rotina dos equipamentos de mamografia. A uniformidade das intensidades dos \textit{pixels} ao longo do detector e a não negatividade são fatores levados em conta. A uniformidade do campo é feita através de um procedimento conhecido como correção de \textit{flat-field} \cite{marshall2017handbook}. Nesse procedimento, é dado um ganho nos detectores em cada posição a fim de corrigir as imperfeições de iluminação dos raios X causadas pelo efeito heel e pela geometria do cone. Já a não negatividade é garantida por meio de um \textit{offset} no valor lido pelos detectores. Todos esses fatores alteram significativamente as características do ruído, tornando-o  dependente do espaço \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}. Esse procedimento de certa forma corrige também os ruídos estruturais presentes devido as variações nos ganhos do detector, fixas espacialmente \cite{VanEngen2013,marshall2017handbook}.
+A calibração é um fator importante na rotina dos equipamentos de mamografia. A uniformidade das intensidades dos \textit{pixels} ao longo do detector e a não negatividade são fatores levados em conta. A uniformidade do campo é feita através de um procedimento conhecido como correção de \textit{flat-field} \cite{marshall2017handbook}. Nesse procedimento, é dado um ganho nos detectores em cada posição a fim de corrigir as imperfeições de iluminação dos raios X causadas pelo efeito \textit{heel}\footnote{Efeito que causa a redução da intensidade dos raios X mais próximos ao anodo. Esse fenômeno ocorre devido a superfície inclinada do anodo, fazendo com que alguns fótons percorram distâncias maiores que outros, sendo esses mais atenuados pelo próprio metal do alvo \cite{boone2000handbook,bushberg2011essential}. } e pela geometria do cone. Já a não negatividade é garantida por meio de um \textit{offset} no valor lido pelos detectores. Todos esses fatores alteram significativamente as características do ruído, tornando-o  dependente do espaço \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}. Esse procedimento de certa forma corrige também os ruídos estruturais presentes devido as variações nos ganhos do detector, fixas espacialmente \cite{VanEngen2013,marshall2017handbook}.
 
 De fato, levando em consideração o ruído quântico, térmico e os fatores de calibração, um modelo matemático que se aproxima desses efeitos físicos é o Poisson-Gaussiano:
 
@@ -152,7 +170,7 @@ z(x) = ap(x) + N(x),
 \label{eq:eqCapRuidoPossionGaussiano}
 \end{equation}
 
-\noindent no qual N é uma função que tem a distribuição aproximada por uma Gaussiana de média 0 e variância b e p uma função com distribuição Poisson com um fator de escala a, segundo:
+\noindent no qual $N$ é uma variável aleatória que tem a distribuição aproximada por uma Gaussiana de média zero e variância b e $p(x)$ uma variável aleatória com distribuição Poisson com um fator de escala a, segundo:
 
 \begin{equation}
 p(x) \sim \mathcal{P}(a^{-1}\,y(x)) \qquad \text{e}  \qquad  N(x) \sim \mathcal{N}(0,\,b),
@@ -171,7 +189,7 @@ Var\{z(x)\mid y(x)\} = ay(x) + b.
 \label{eq:eqCapRuidoPossionGaussianoVar}
 \end{equation}
 
-De acordo com \citeonline{bertalmiodenoising2018}, para contagens que possuem uma média alta, a distribuição de Poisson se aproxima de uma normal, segundo:
+De acordo com \citeonline{bertalmiodenoising2018}, para contagens que possuem uma média alta, utilizando o \acs{CLT}, a distribuição de Poisson se aproxima de uma normal, segundo:
 
 \begin{equation}
 \mathcal{P}(y(x)) \approx \mathcal{N}(y(x),\,y(x)),
@@ -185,7 +203,7 @@ z(x) = y(x) + \sigma(y(x)) \, \xi(x),
 \label{eq:eqCapRuidoHeteroscedastico}
 \end{equation}
 
-\noindent onde a função  $\xi(x)$ é \acs{IID} e tem uma distribuição normal com média zero e variância um, segundo:
+\noindent onde a variável aleatória  $\xi(x)$ é \acs{IID} e tem uma distribuição normal com média zero e variância um, segundo:
 
 \begin{equation}
 \xi(x) \sim  \mathcal{N}(0,\,1),

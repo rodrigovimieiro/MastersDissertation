@@ -30,7 +30,7 @@ A mama feminina, em sua anatomia é constituída por: lobos, que são glândulas
 \end{figure}
 
 
-Com o auxílio do exame de mamografia, o câncer de mama pode ser detectado através de quatro indicadores, segundo \citeonline{boone2000handbook}:
+Com o auxílio do exame de mamografia, o câncer de mama pode ser detectado através de quatro indicadores, segundo \citeonline{yaffe2000handbook}:
 
 \begin{enumerate}
 	\item Morfologia característica de uma massa tumoral;
@@ -138,7 +138,7 @@ Resumidamente, a técnica de \acs{DBT} é muito semelhante a mamografia digital 
 \begin{figure}[htb]
 	\caption{Geometria básica de aquisição de um equipamento de \acs{DBT}.}
 	\begin{center}
-		\includegraphics[scale=0.7, clip, trim=11cm 1.5cm 9.5cm 2.5cm]{imgs/cap2/DBT}
+		\includegraphics[scale=0.7, clip, trim=11cm 1.48cm 9.5cm 2.5cm]{imgs/cap2/DBT}
 	\end{center}
 	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap2DBTEstrutura}
@@ -194,12 +194,8 @@ O número de projeções está intimamente ligado com a dose total e com os arte
 Dado uma dose total de $X\,mGy$ com um número $N$ de projeções, a dose individual $X_{i}$ de cada projeção é dada por: $X_{i} = \frac{X}{N}$, ou seja, a dose total é dividida igualmente para cada projeção. Quanto menor a dose por imagem $X_{i}$, menor será sua relação sinal-ruído (\textit{Signal-to-Noise Ratio} - \acs{SNR}), devido ao ruído ser modelado através de uma distribuição \textit{Poisson}, como detalhado no \autoref{Capitulo4}. Sendo assim, a \acs{SNR} de cada projeção é inversamente proporcional ao número total de projeções \cite{sechopoulos2009optimization}. Isso resulta ao final em uma degradação na qualidade da imagem reconstruída caso o número de exposições seja elevado.  No entanto, existe um compromisso entre a dose de radiação e a qualidade da imagem exposta ao radiologista, de modo que, do ponto de vista da dosagem de radiação deseja-se minimizar o número de projeções, mas para a qualidade da imagem reconstruída ser boa é preciso aumentar o número de projeções.
 
 Outra consideração a ser feita para os equipamentos de \acs{DBT} é a sua geometria de emissão dos feixes. Diferente de \acs{CT}, a emissão dos feixes de raios X é feita através de uma geometria de meio cone (\textit{half-cone-beam}). Esse fato deve ser levado em consideração em ambos procedimentos de projeção e retroprojeção nos algoritmos de reconstrução \cite{wu2004comparison}. 
-    
+        
 Tomando como base os sistemas atuais, eles se diferem em diversos aspectos como: a geometria física, a angulação do tubo, a movimentação do detector, o número de projeções, o tamanho do \textit{pixel}, o método de aquisição direto ou indireto, os algoritmos de reconstrução, o tempo do exame etc. 
-
-A Tabela \ref{tab:tabCap2SistemasDBT} mostra a relação entre as principais diferenças encontradas nos equipamentos comerciais de \acs{DBT} aprovados pelo \acs{FDA}. É possível observar uma grande variação entre as propriedades de cada modelo especificado. Isso se deve ao fato de que cada fabricante utiliza de suas ferramentas de pesquisa e desenvolvimento para solucionar um determinado problema e cada sistema possui os seus benefícios e suas limitações. 
-
-Os equipamentos em sua essência buscam a melhor forma para obtenção das imagens, sendo assim, visam um bom contraste, menor dose, maior resolução  e uma boa relação sinal-ruído. Para isso, são utilizadas diferentes abordagens na aquisição dessas imagens \cite{vedantham2015digital}. 
 
 \begin{table}[h]
 	\centering
@@ -235,6 +231,12 @@ Os equipamentos em sua essência buscam a melhor forma para obtenção das image
 	\vspace{2ex}
 	\legend{Fonte: \citeonline{michell2018role,vedantham2015digital,sechopoulos2013review,baker2011breast}.}
 \end{table}
+
+A Tabela \ref{tab:tabCap2SistemasDBT} mostra a relação entre as principais diferenças encontradas nos equipamentos comerciais de \acs{DBT} aprovados pelo \acs{FDA}. É possível observar uma grande variação entre as propriedades de cada modelo especificado. Isso se deve ao fato de que cada fabricante utiliza de suas ferramentas de pesquisa e desenvolvimento para solucionar um determinado problema e cada sistema possui os seus benefícios e suas limitações. 
+
+Os equipamentos em sua essência buscam a melhor forma para obtenção das imagens, sendo assim, visam um bom contraste, menor dose, maior resolução  e uma boa relação sinal-ruído. Para isso, são utilizadas diferentes abordagens na aquisição dessas imagens \cite{vedantham2015digital}. 
+
+
 
 
  

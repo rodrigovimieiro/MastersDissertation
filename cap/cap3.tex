@@ -252,9 +252,11 @@ Y_{i}(\theta,Y,Z) = Y \, + \dfrac{ Z(L \, sin(\theta) \, + Y)}{L \, cos(\theta) 
 \end{equation} 
 
 \begin{equation}
-X_{i}(\theta,X,Z) = \dfrac{X \, (L \, cos(\theta)\,+\, D)}{L \, cos(\theta) \, + D - Z}.
+X_{i}(\theta,X,Z) = \dfrac{X \, (L \, cos(\theta)\,+\, D)}{L \, cos(\theta) \, + D - Z},
 \label{eq:eqCap3ProjectionX}
 \end{equation} 
+
+\noindent na qual $D$ é a distancia entre o detector e o eixo de rotação (pivô) e $L$ a distância entre o tubo de raios X e o eixo de rotação.
 
 Já a retroprojeção dos dados é dada a partir da inversão dessas equações a fim de calcular os valores da coordenada $(X,Y)$ para cada fatia em $Z$. O procedimento é executado a partir de cada projeção obtida em um determinado ângulo $\theta$ e por fim são somadas a contribuições de cada projeção para cada fatia em $Z$. O fluxograma da Figura \ref{fig:imgCap3FluxogramaBP} ilustra o procedimento que deve ser feito para a reconstrução do volume. Em geral a combinação matemática utilizada para os planos retroprojetados é uma simples soma ou um média ponderada. Técnicas mais sofisticadas para a redução de artefatos de alta atenuação são apresentadas em \citeonline{levakhina2013weighted} e \citeonline{borges2017metal}.
 
@@ -366,16 +368,16 @@ f_{1} \, + f_{2} \, = p_{4}, \\
 \noindent sendo também possível reescrever o sistema acima na sua forma matricial, representado pela equação abaixo:
 
 \begin{equation}
-P \, = A \, f,
+p \, = A \, f,
 \label{eq:eqCap3MatrizEquacoesLineares1}
 \end{equation}
 
-\noindent na qual $P = [p_{1},p_{2},p_{3},...,p_{M}]^{T}$ é um vetor coluna que representa os valores do sinograma no espaço de Radon, ou seja as projeções, {$f = [f_{1},f_{2},f_{3},...,f_{N}]^{T}$ é um vetor coluna que representa os coeficientes de atenuação dos \textit{voxels} no espaço \acs{3D} e $A$ é uma matriz $MxN$, onde cada elemento $a_{ij}$ representa a contribuição que o ``j-ésimo'' \textit{voxel} $f_{j}$ apresenta para a atenuação do feixe de raio X que forma a ``i-ésima'' projeção $p_{i}$, por exemplo, o valor $\sqrt{2}$ em $f_{1}$ e $f_{4}$ para $p_{3}$. Tratando-se da matriz $A$, sua dimensão $M$ significa o número de elementos detectores vezes o número de projeções e $N$ representa o número total de \textit{voxels} do objeto \cite{zeng2010medical,levakhina2014three}.
+\noindent na qual $p = [p_{1},p_{2},p_{3},...,p_{M}]^{T}$ é um vetor coluna que representa os valores do sinograma no espaço de Radon, ou seja as projeções, {$f = [f_{1},f_{2},f_{3},...,f_{N}]^{T}$ é um vetor coluna que representa os coeficientes de atenuação dos \textit{voxels} no espaço \acs{3D} e $A$ é uma matriz $MxN$, onde cada elemento $a_{ij}$ representa a contribuição que o ``j-ésimo'' \textit{voxel} $f_{j}$ apresenta para a atenuação do feixe de raio X que forma a ``i-ésima'' projeção $p_{i}$, por exemplo, o valor $\sqrt{2}$ em $f_{1}$ e $f_{4}$ para $p_{3}$. Tratando-se da matriz $A$, sua dimensão $M$ significa o número de elementos detectores vezes o número de projeções e $N$ representa o número total de \textit{voxels} do objeto \cite{zeng2010medical,levakhina2014three}.
 
 Como o objetivo da reconstrução é encontrar os coeficientes de atenuação do objeto, deve-se então solucionar $f$. Para isso, se a matriz $A$ é inversível, a imagem reconstruída pode ser facilmente encontrada algebricamente através da equação abaixo:
 
  \begin{equation}
- f \, = A^{-1} \, P,
+ f \, = A^{-1} \, p,
  \label{eq:eqCap3MatrizEquacoesLineares2}
  \end{equation}      
 
@@ -391,11 +393,11 @@ Para isso, deve-se otimizar uma função $E(x)$, normalmente chamada de função
 Segundo \citeonline[p. 206]{buzug2008computed}, uma solução generalizada para a Equação \ref{eq:eqCap3MatrizEquacoesLineares1} é dada pela minimização de \eqref{eq:eqCap3MinimosQuadrados} dita como norma mínima dos mínimos quadrados, caracterizando-se por um problema de otimização:
 
 \begin{equation}
-\chi^{2} \, = \left\| A \, f \, - \,P \right\|^{2},
+\chi^{2} \, = \left\| A \, f \, - \,p \right\|^{2},
 \label{eq:eqCap3MinimosQuadrados}
 \end{equation} 
 
-\noindent onde $E(x) = \chi^{2}$, ou seja, \eqref{eq:eqCap3MinimosQuadrados} é a função de energia. Outras técnicas são encontradas na literatura para a otimização das funções de custo, tais como métodos de gradientes descendentes, iterativos algébricos e estatísticos, os quais são abordados nos próximos itens.
+\noindent onde $E(x) = \chi^{2}$, ou seja, \eqref{eq:eqCap3MinimosQuadrados} é a função de energia. Outras técnicas são encontradas na literatura para a formulação e otimização das funções de custo, tais como métodos de gradientes descendentes, iterativos algébricos e estatísticos, os quais são abordados nos próximos itens.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%						               Reconstrução Iterativa (Método Algébrico)    										%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -418,7 +420,7 @@ a_{21}f_{1} \, + a_{22}f_{2} \, = p_{2} \\
 \label{eq:eqCap3ARTEquacoesLineares}
 \end{equation}
 
-Cada equação, nesse caso, simboliza uma reta no espaço bidimensional, como demonstra a Figura \ref{fig:imgCap3ART}. Uma estimativa inicial $f^{(0)}$ deve ser feita e então esse ponto deve ser projetado perpendicularmente na reta, ou hiperplano, que representa $p_{1}$ para obter a nova imagem $f^{(1)}$. O processo volta a se repetir, projetando $f^{(1)}$ no hiperplano definido pela equação de $p_{2}$ e assim até convergir para a solução desejada $f = (f_{1},f_{2})^{T}$.
+Cada equação, nesse caso, simboliza uma reta no espaço bidimensional, como demonstra a Figura \ref{fig:imgCap3ART}. Uma estimativa inicial $f^{(0)}$ deve ser feita e então esse ponto deve ser projetado perpendicularmente na reta, ou hiperplano, que representa $p_{1}$ para obter a nova imagem $f^{(1)}$. O processo volta a se repetir, projetando $f^{(1)}$ no hiperplano definido pela equação de $p_{2}$ e assim até convergir para a solução desejada $f = (f_{1},f_{2})^{T}$, com um número de $k$ iterações.
 
 
 \begin{figure}[h]
@@ -434,9 +436,11 @@ A equação abaixo demonstra a fórmula para o cálculo do método \acs{ART}, na
 
 
 \begin{equation}
-f^{n} = f^{n-1} - \dfrac{(a_{i} \, f^{n-1}- p_{i})}{a_{i}\,(a_{i})^{T}}   (a_{i})^{T}   .  
+f^{k} = f^{k-1} - \dfrac{(a_{i \, :} \,\, f^{k-1}- p_{i})}{a_{i\, :}\,(a_{i\, :})^{T}}   (a_{i\, :})^{T}   ,  
 \label{eq:eqCap3ARTEquacao}
 \end{equation}
+
+\noindent na qual $a_{i \, :}$ é um vetor da matriz A contendo todos os elementos j da ``i-ésima'' linha. 
 
 %\begin{equation}
 %f^{Próximo} = f^{Atual} - Retroprojeção_{raio}\{\dfrac{Projeção_{raio}(f^{Atual})- Medição_{raio}}{Fator\,Normalização}\}.  
@@ -476,7 +480,7 @@ ImgReconstruida = \underset{}{\arg\max} \;\; l(ImgEstimada \mid Medidas),
 De acordo com \citeonline[p. 230]{buzug2008computed}, em um equipamento que utiliza raios X de transmissão, o número de \textit{quanta} emitido pelo tubo e recebido pelo detector segue a distribuição de Poisson, descrita matematicamente por:
 
 \begin{equation}
-P(Y_{i} = y_{i} \mid \hat{y_{i}}(f) ) = \dfrac{e^{-\hat{y_{i}}(f) } \, [\hat{y_{i}}(f)] ^{y_{i}}}  {y_{i}!},
+Prob(Y_{i} = y_{i} \mid \hat{y_{i}}(f) ) = \dfrac{e^{-\hat{y_{i}}(f) } \, [\hat{y_{i}}(f)] ^{y_{i}}}  {y_{i}!},
 \label{eq:eqCap3DistribuicaoPoisson}
 \end{equation}
 
@@ -489,7 +493,7 @@ P(Y_{i} = y_{i} \mid \hat{y_{i}}(f) ) = \dfrac{e^{-\hat{y_{i}}(f) } \, [\hat{y_{
 
 \noindent em que $\hat{p_{i}}(f)$ é a função de atenuação que cada raio sofre, $b_{i}$ é o número médio de \textit{quanta} recebido pelo detector caso não exista nenhum objeto entre o tubo e o detector e $r_{i}$ modela os fatores externos mencionados acima. 
 
-A função $\hat{p_{i}}(f)$ é calculada pelo somatório dos produtos da contribuição $a_{ij}$ para a atenuação $f_{j}$ de todos os \textit{voxels} $j$ no percurso do feixe de raio $i$, dado por: 
+A função $\hat{p_{i}}(f)$ é calculada pelo somatório dos produtos da contribuição $a_{ij}$ para a atenuação $f_{j}$ de todos os \textit{voxels} $j$ no percurso do feixe de raio $i$, dada por: 
 
 
 \begin{equation}
@@ -497,19 +501,19 @@ A função $\hat{p_{i}}(f)$ é calculada pelo somatório dos produtos da contrib
 \label{eq:eqCap3BeerEsperancaAtenuacao}
 \end{equation}
 
-A probabilidade conjunta $P \mid (P = {y_{1},y_{2},y_{3},...,y_{M}})$ das projeções independentes $y_{i}$, dado o valor esperado $\hat{y_{i}}(f)$, é dada pela seguinte equação:   
+A probabilidade conjunta de uma amostra aleatória $P$ obter uma observação $p \mid (p = {y_{1},y_{2},y_{3},...,y_{M}})$ das projeções independentes $y_{i}$, dado o valor esperado $\hat{y_{i}}(f)$, é dada pela seguinte equação:   
 
 \begin{equation}
-P(P = p\mid f ) = \prod_{i=1}^{M}  \dfrac{e^{-\hat{y_{i}}(f)} \, [\hat{y_{i}}(f)]^{y_{i}}}  {y_{i}!},
+Prob(P = p\mid f ) = \prod_{i=1}^{M}  \dfrac{e^{-\hat{y_{i}}(f)} \, [\hat{y_{i}}(f)]^{y_{i}}}  {y_{i}!},
 \label{eq:eqCap3DistribuicaoPoissonConjunta}
 \end{equation}
 
-\noindent porém segundo \citeonline[p. 231]{buzug2008computed}, não faz sentido analisar a probabilidade de uma projeção $P$, ou seja uma observação, dado o valor esperado $\hat{y_{i}}(f)$ calculado através dos coeficientes de atenuação $f$, já que o intuito da resolução do problema é estimar os valores desses coeficientes $\hat{f}$. Nesse sentido, pode-se fazer o uso da \textbf{função de verossimilhança} para a resolução do problema.
+\noindent porém segundo \citeonline[p. 231]{buzug2008computed}, não faz sentido analisar a probabilidade de uma projeção $p$, ou seja uma observação, dado o valor esperado $\hat{y_{i}}(f)$ calculado através dos coeficientes de atenuação $f$, já que o intuito da resolução do problema é estimar os valores desses coeficientes $\hat{f}$. Nesse sentido, pode-se fazer o uso da \textbf{função de verossimilhança} para a resolução do problema.
 
 A \textbf{verossimilhança} diz que uma observação qualquer $Y = y$ é uma evidência que favorece a hipótese A sobre a hipótese B, dada as duas hipóteses inicialmente, se a condição abaixo é satisfeita \cite{morettin2010}:
 
 \begin{equation}
-p_{A}(y) >p_{B}(y).
+Prob(Y=y_{A}) >Prob(Y=y_{B}).
 \label{eq:eqCap3LeiVerossimilhanca}
 \end{equation}
 
@@ -518,11 +522,11 @@ Existe uma diferença entre probabilidade e verossimilhança. Quando em uma fun�
 Dito esses conceitos junto ao problema encontrado com a Equação \ref{eq:eqCap3DistribuicaoPoissonConjunta}, é plausível a utilização da função de verossimilhança para a resolução do mesmo, tendo como resultado a equação abaixo: 
 
 \begin{equation}
-l(f \mid P = p) = \prod_{i=1}^{M}  \dfrac{e^{-\hat{y_{i}}(f)} \, [\hat{y_{i}}(f)]^{y_{i}}}  {y_{i}!},
+L(f \mid p) = \prod_{i=1}^{M}  \dfrac{e^{-\hat{y_{i}}(f)} \, [\hat{y_{i}}(f)]^{y_{i}}}  {y_{i}!},
 \label{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca1}
 \end{equation} 
   
-Sendo assim, a finalidade da função acima é de variar os valores de $f$ buscando o valor ótimo de verossimilhança $l$, dado um conjunto de observações $P$ \cite[p. 231]{buzug2008computed}. A busca pelo valor máximo da equação está intimamente ligada com o conceito de verossimilhança ditado acima, que busca a melhor hipótese $\hat{f}$ para os valores de $f$ dado o conjunto de observações $P$, como ilustra a figura abaixo. 
+Sendo assim, a finalidade da função acima é de variar os valores de $f$ buscando o valor ótimo de verossimilhança $L$, dado um conjunto de observações $p$ \cite[p. 231]{buzug2008computed}. A busca pelo valor máximo da equação está intimamente ligada com o conceito de verossimilhança ditado acima, que busca a melhor hipótese $\hat{f}$ para os valores de $f$ dado o conjunto de observações $p$, como ilustra a figura abaixo. 
 
 
 \begin{figure}[H]
@@ -537,49 +541,49 @@ Sendo assim, a finalidade da função acima é de variar os valores de $f$ busca
 Substituindo a Equação \ref{eq:eqCap3BeerLambertDiscreto2} na Equação \ref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca1} e fazendo o uso da função logaritmo a fim de simplificar os cálculos e por conveniência, tem-se a Equação \ref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca2}, desprezando constantes independentes de $f$ \cite[p. 10]{Fessler2000handbook}. 
 
 \begin{equation}
-L(f \mid P = p) = \log (l(f \mid P = p)) = \sum_{i=1}^{M} \, y_{i} \log (b_{i} \, e \, ^{-\hat{p_{i}}(f)} \, + r_{i}) \,-\,(b_{i} \, e \, ^{-\hat{p_{i}}(f)} \, + r_{i}),
+l(f \mid p) = \log (L(f \mid p)) = \sum_{i=1}^{M} \, y_{i} \log (b_{i} \, e \, ^{-\hat{p_{i}}(f)} \, + r_{i}) \,-\,(b_{i} \, e \, ^{-\hat{p_{i}}(f)} \, + r_{i}),
 \label{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca2}
 \end{equation} 
 
 \noindent onde a equação acima é a log-verossimilhança para \acs{CT} de transmissão e reescrevendo-a de maneira mais simples abaixo, podendo fazer uma analogia com a Equação \ref{eq:eqCap3ModeloVerossimilhança}.
 
 \begin{equation}
-\hat{f} = \underset{f\geq 0}{\arg\max} \; L(f \mid P),
+\hat{f} = \underset{f\geq 0}{\arg\max} \; l(f \mid p),
 \label{eq:eqCap3VerossimilhançaFinal}
 \end{equation}
 
-Ainda de acordo com \citeonline[p. 11]{Fessler2000handbook}, devido ao problema de reconstrução tomográfica ser mal condicionado, a maximização de $L(f)$ por si só leva a resultados de imagens ruidosas. Isso porque existe um grande conjunto de mapas de atenuação que se encaixam bem, como o resultado da equação. Então, segundo o autor, a função de verossimilhança por si só não consegue encontrar o melhor resultado. Uma das soluções encontradas para esse problema, que é vastamente conhecida na literatura, é a introdução de um termo de regularização na função objetivo, ou seja, incorporar informações já conhecidas para limitar o espaço de soluções de um vasto conjunto para um subconjunto menor. Então a maximização da sua nova forma ``penalizada'' é feita para encontrar a melhor solução contida nesse subconjunto, como é demonstrado abaixo:     
+Ainda de acordo com \citeonline[p. 11]{Fessler2000handbook}, devido ao problema de reconstrução tomográfica ser mal condicionado, a maximização de $l(f)$ por si só leva a resultados de imagens ruidosas. Isso porque existe um grande conjunto de mapas de atenuação que se encaixam bem, como o resultado da equação. Então, segundo o autor, a função de verossimilhança por si só não consegue encontrar o melhor resultado. Uma das soluções encontradas para esse problema, que é vastamente conhecida na literatura, é a introdução de um termo de regularização na função objetivo, ou seja, incorporar informações já conhecidas para limitar o espaço de soluções de um vasto conjunto para um subconjunto menor. Então a maximização da sua nova forma ``penalizada'' é feita para encontrar a melhor solução contida nesse subconjunto, como é demonstrado abaixo:     
 
 \begin{equation}
-\hat{f} = \underset{f\geq 0}{\arg\max} \; \Phi(f), \;\; \text{onde} \;\; \Phi(f) = L(f) - \beta R(f),
+\hat{f} = \underset{f\geq 0}{\arg\max} \; \Phi(f), \;\; \text{onde} \;\; \Phi(f) = l(f) - \beta R(f),
 \label{eq:eqCap3VerossimilhançaPenalizada}
 \end{equation}
 
 \noindent ou simbolicamente:
 
 \begin{equation}
-(\text{Função \textit{a posteriori}}) = (\text{Função de Verossimilhança}) - \beta (\text{Função \textit{a priori}}).
+(\text{Função \textit{a posteriori}}) = (\text{Função Log-Verossimilhança}) - \beta (\text{Função \textit{a priori}}).
 \label{eq:eqCap3VerossimilhançaPenalizadaSimbolica}
 \end{equation}
 
-Nessa notação, $R(f)$ modela a função de regularização do sistema, o fator $\beta$ controla a força de influência dessa função e $L(f)$ é a função objetivo formulada anteriormente. O algoritmos que introduz essa técnica é conhecido como \ac{PML}. 
+Nessa notação, $R(f)$ modela a função de regularização do sistema, o fator $\beta$ controla a força de influência dessa função e $l(f)$ é a função objetivo formulada anteriormente. O algoritmos que introduz essa técnica é conhecido como \ac{PML}. 
 
-Da mesma maneira, a formulação de \eqref{eq:eqCap3VerossimilhançaPenalizada} pode ser dada também a partir do modelo Bayesiano, ou teorema de Bayes, demonstrado abaixo, que utiliza de conhecimentos de probabilidade \textit{a priori} para a estimativa de parâmetros \textit{a posteriori}, dado as probabilidades condicionais \cite[p. 144]{zeng2010medical}. Esses algoritmos são conhecidos como métodos \textit{Bayesianos} ou \ac{MAP}. O cálculo da estimativa \acs{MAP} ocorre através do teorema de Bayes:
+A formulação de \eqref{eq:eqCap3VerossimilhançaPenalizada} pode ser dada também a partir do modelo Bayesiano, ou teorema de Bayes, demonstrado abaixo, que utiliza de conhecimentos de probabilidade \textit{a priori} para a estimativa de parâmetros \textit{a posteriori}, dado as probabilidades condicionais \cite[p. 144]{zeng2010medical}. Esses algoritmos são conhecidos como métodos \textit{Bayesianos} ou \ac{MAP}. O cálculo da estimativa \acs{MAP} ocorre através do teorema de Bayes:
 
 \begin{equation}
-Prob(f \mid P) = \dfrac{Prob(P \mid f) Prob(f)}{Prob(P)},
+Prob(f \mid p) = \dfrac{Prob(p \mid f) Prob(f)}{Prob(p)},
 \label{eq:eqCap3TeoremaBayes}
 \end{equation}  
 
 \noindent tal qual,  aplicando o logaritmo na equação acima, tem-se \eqref{eq:eqCap3TeoremaBayesLog}, onde o elemento que não depende do coeficiente de atenuação $f$ é desprezado, gerando \eqref{eq:eqCap3TeoremaBayesLogSimplificada}:
 
 \begin{equation}
-\log(Prob(f \mid P)) = \log(Prob(P \mid f)) + \log(Prob(f)) - \log(Prob(P)),
+\log(Prob(f \mid p)) = \log(Prob(p \mid f)) + \log(Prob(f)) - \log(Prob(p)),
 \label{eq:eqCap3TeoremaBayesLog}
 \end{equation}
 
 \begin{equation}
-\log(Prob(f \mid P)) = \log(Prob(P \mid f)) + \log(Prob(f)),
+\log(Prob(f \mid p)) = \log(Prob(p \mid f)) + \log(Prob(f)),
 \label{eq:eqCap3TeoremaBayesLogSimplificada}
 \end{equation}
 
@@ -720,18 +724,18 @@ Após a formulação da função objetivo e da restrição do sistema é necess�
 	\label{fig:imgCap3ProcedimentoIterativo}
 \end{figure}
 
-Diversos algoritmos para a otimização das funções objetivo são encontrados na literatura \cite{Fessler2000handbook,das2011penalized,zeng2010medical,sidky2014iterative,xu2015statistical,zheng2018detector}. No entanto nesse trabalho somente o algoritmo de Máxima Expectativa (\textit{Expectativa Maximization} - \acs{EM}) é discutido.
+Diversos algoritmos para a otimização das funções objetivo são encontrados na literatura \cite{Fessler2000handbook,das2011penalized,zeng2010medical,sidky2014iterative,xu2015statistical,zheng2018detector}. No entanto nesse trabalho somente o algoritmo de Máxima Expectativa (\textit{Expectation Maximization} - \acs{EM}) é discutido.
 
 Considerando a constante $\beta = 0$ da Equação \ref{eq:eqCap3TeoremaBayesLogSimplificadaFinal} elimina-se a informação \textit{a priori} do sistema e então o problema volta a lidar somente com a equação de máxima verossimilhança \eqref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca2}, ou do inglês \acs{ML}.  
 
 Basicamente, seguindo o trabalho de \citeonline[p. 111]{sidky2014iterative}, a equação do método de \acs{MLEM} é dada por:
 
 \begin{equation}
-f^{n} = f^{n-1}  \left(A^{T} \, \dfrac{P}{A \, f^{n-1}}\right)   /    (A^{T}\,1),
+f^{k} = f^{k-1}  \left(A^{T} \, \dfrac{p}{A \, f^{k-1}}\right)   /    (A^{T}\,1),
 \label{eq:eqCap3MLEM}
 \end{equation}
 
-\noindent na qual $A$ é a matriz da projeção, a sua transposta $A^{T}$ representa a retroprojeção e o fator de normalização no denominador é calculado fazendo a retroprojeção com valores de P igual a 1.
+\noindent na qual $A$ é a matriz da projeção, a sua transposta $A^{T}$ representa a retroprojeção e o fator de normalização no denominador é calculado fazendo a retroprojeção com valores de $p$ igual a 1.
 
 %Basicamente, o algoritmo de \acs{EM} é constituído por duas etapas \cite[p. 149]{zeng2010medical}. A primeira é a substituição da variável aleatória $y_{i}$ de \eqref{eq:eqCap3DistribuicaoPoissonConjuntaVerossimilhanca2} por sua expectativa, caracterizando o passo ``E''. O próximo passo é maximizar a nova equação, igualando a derivada de $f_{j}$ a zero, sendo essa etapa caracterizada por ``M''. Daí então que é derivado o algoritmo de \acs{MLEM}. A derivação matemática dos passos apresentados pode ser encontrada em \citeonline[p. 148-150]{zeng2010medical}. A equação matemática do algoritmo de \acs{MLEM} é dada por:  \rv{Elias: EM para emissão?}
 %

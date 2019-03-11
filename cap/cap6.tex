@@ -135,7 +135,6 @@ Do mesmo modo que no \textit{phantom} virtual, os tempos de processamento també
 	\label{tab:tabCap6TimeBR3D}
 	\begin{tabular}{l|c}
 		\textbf{Método}	     &   \textbf{Tempo (s)}   	\\ 
-		[5pt]
 		\hline
 		\hline
 		\rule[-0.5ex]{-3pt}{3ex}
@@ -272,10 +271,12 @@ A análise do sinal e do ruído referente aos dois sistemas de \acs{DBT} é apre
 A fim de estabelecer um padrão para a ilustração dos resultados, bem como para a discussão, foi adotado uma convenção para a nomenclatura dos eixos e para a disposição dos resultados. A Figura \ref{fig:imgCap63DVolume} exemplifica o padrão adotado, na qual a coordenada X representa a direção da parede torácica para o mamilo, denominada por perfil \ac{PA} e a coordenada Y representa a direção onde o tubo de raios X se movimenta, denominada de perfil \ac{LA}. Já a coordenada Z simboliza a profundidade onde são reconstruídas as fatias da mama.
 
 \begin{figure}[H]
-	\caption{Ilustração da convenção dos eixos adotados nesse trabalho, na qual a coordenada X representa a direção da parede torácica para o mamilo e a coordenada Y onde o tubo de raios X rotaciona. A coordenada (0,0) simboliza a posição do tubo de raios X quando no ângulo de $0^{\circ}$.}
-	\begin{center}
-		\includegraphics[scale=.7, clip, trim=3.6cm 8.5cm 4.2cm 8.5cm]{imgs/cap5/3D_Breast.pdf}
-	\end{center}
+	\centering
+	\caption{Ilustração da (a) convenção dos eixos adotados nesse trabalho em comparação com o (b) equipamento comercial, na qual a coordenada X representa a direção da parede torácica para o mamilo e a coordenada Y onde o tubo de raios X rotaciona. A coordenada (0,0) simboliza a posição do tubo de raios X quando no ângulo de $0^{\circ}$.}
+%		\includegraphics[scale=.7, clip, trim=3.6cm 8.5cm 4.2cm 8.5cm]{imgs/cap5/3D_Breast.pdf}
+	\subfloat[]{\includegraphics[scale=.6, clip, trim=5.6cm 3.7cm 15.6cm 5cm]{imgs/cap5/Convencao3D.pdf}}
+	\hfil
+	\subfloat[]{\includegraphics[scale=.6, clip, trim=18.5cm 3.7cm 6cm 5cm]{imgs/cap5/Convencao3D.pdf}}
 	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap63DVolume}
 \end{figure} 
@@ -283,7 +284,7 @@ A fim de estabelecer um padrão para a ilustração dos resultados, bem como par
 \subsection{Avaliação do Sinal  \& Ruído}
 
 
-A figura \ref{fig:imgCap6Means} mostra o valor médio dos \textit{pixels} na fatia reconstruída referente a cada dose para ambos os sistemas. Observa-se que há uma queda visível no valor médio dos \textit{pixels} na região posterior do detector, especialmente no sistema \#2. Isto é causado principalmente por imperfeições na calibração da uniformidade dos \textit{pixels} (\textit{flat-fielding}), que compensa fenômenos como o efeito heel, o qual leva a não uniformidade dos feixes de raios X \cite[p. 485]{marshall2017handbook}.
+A figura \ref{fig:imgCap6Means} mostra o valor médio dos \textit{pixels} na fatia reconstruída referente a cada dose para ambos os sistemas. Observa-se que há uma queda visível no valor médio dos \textit{pixels} na região posterior do detector, especialmente no sistema \#2. Isto é causado principalmente por imperfeições na calibração da uniformidade dos \textit{pixels} (\textit{flat-fielding}), que compensa fenômenos como o efeito \textit{heel}, o qual leva a não uniformidade dos feixes de raios X \cite[p. 485]{marshall2017handbook}.
 
 
 \begin{figure}[htb]
@@ -298,7 +299,7 @@ A figura \ref{fig:imgCap6Means} mostra o valor médio dos \textit{pixels} na fat
 
 A característica da dependência do sinal em relação ao ruído é observada ao analisar as Figuras \ref{fig:imgCap6Means}, \ref{fig:imgCap6GE_Var} e \ref{fig:imgCap6HO_Var}. À medida que a dose aumenta, o valor esperado referente ao sinal livre do ruído também aumenta, ilustrada pela Figura \ref{fig:imgCap6Means}. Consequência deste fato e em relação direta com a Equação \ref{eq:eqCap5HeteroscedasticoVar}, a variância do ruído também aumenta, representada pelas Figuras \ref{fig:imgCap6GE_Var} e \ref{fig:imgCap6HO_Var}.
 
-Além disso, a dependência espacial da variância do ruído é observada nas fatias reconstruídas, seguindo o mesmo comportamento demonstrado em trabalhos anteriores para o domínio das projeções. Novamente, esse fenômeno decorre devido ao \textit{flat-fielding} que evita não-uniformidades no detector causadas pelo efeito heel e pela geometria do feixe cônico no domínio das projeções \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}.
+Além disso, a dependência espacial da variância do ruído é observada nas fatias reconstruídas, seguindo o mesmo comportamento demonstrado em trabalhos anteriores para o domínio das projeções. Novamente, esse fenômeno decorre devido ao \textit{flat-fielding} que evita não-uniformidades no detector causadas pelo efeito \textit{heel} e pela geometria do feixe cônico no domínio das projeções \cite{borges2017pipeline,borges2017method, borges2018restoration,brito2018application,guerrero2018}.
 
 \begin{figure}[htb]
 	\centering
@@ -369,9 +370,9 @@ A correlação gerada pelo procedimento de reconstrução foi medida por meio do
 \begin{figure}[htb]
 	\centering
 	\caption{Medidas de \acs{NNPS} para os sistemas (a) \#1 e (b) \#2.} 
-	\subfloat{\includegraphics[scale=.54, clip, trim=3.6cm 8cm 4.3cm 8cm ]{imgs/cap5/ge_NNPS.pdf}\label{fig:imgGENNPS}}
+	\subfloat{\includegraphics[scale=.54, clip, trim=3.5cm 8cm 4.3cm 8cm ]{imgs/cap5/ge_NNPS.pdf}\label{fig:imgGENNPS}}
 	\hfill
-	\subfloat{\includegraphics[scale=.54, clip, trim=3.6cm 8cm 4.3cm 8cm ]{imgs/cap5/hologic_NNPS.pdf}\label{fig:imgHONNPS}}
+	\subfloat{\includegraphics[scale=.54, clip, trim=3.5cm 8cm 4.3cm 8cm ]{imgs/cap5/hologic_NNPS.pdf}\label{fig:imgHONNPS}}
 	\legend{Fonte: do autor, 2019.}
 	\label{fig:imgCap6NNPS}
 \end{figure}

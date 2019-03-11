@@ -9,7 +9,7 @@ A seção de materiais e métodos é dividida em duas partes. A primeira está r
 
 De modo geral, a Figura \ref{fig:imgCap4Toolbox} ilustra como foi desenvolvido o \textit{software} de reconstrução tomográfica para imagens de \acs{DBT}, nesse trabalho denominado de \textit{toolbox}. O desenvolvimento dessa ferramenta se deu pelo fato da indisponibilidade de \textit{softwares} abertos no início deste trabalho que exerciam a  função de reconstrução de imagens especificamente para \acs{DBT}. Nesse meio tempo, foi disponibilizado através de um repositório \textit{online} do setor de divisão de imagem, diagnóstico e confiabilidade de \textit{software} do órgão americano \acs{FDA} uma \textit{toolbox}, também de código aberto, para reconstrução de imagens \cite{Zengtoolbox}.  
 
-Para a elaboração da ferramenta de reconstrução, primeiramente foi utilizado como base um \textit{software} de reconstrução para \acs{CT} com geometria de feixe cônico. A partir daí, foi feito o desenvolvimento da geometria de meio feixe cônico, ou \textit{half-cone-beam}, específico para a técnica de tomossíntese. Para avaliações através de métricas objetivas, a fim de  validar os métodos de reconstrução implementados, é necessário ter um padrão-ouro (\textit{ground-truth}), sendo assim, utilizou-se de \textit{phantoms} virtuais sintéticos. Imagens de pacientes e \textit{phantoms} físicos também foram utilizados para a validação. Diferentes técnicas de projeção e retroprojeção geométricas foram então aplicadas para a obtenção das projeções e retroprojeções dos \textit{phantoms} virtuais, para então ser possível a aplicação dos métodos de reconstrução. Métricas objetivas, bem como as subjetivas para casos clínicos foram aplicadas. Então, consolidou-se o desenvolvimento da ferramenta, possibilitando diversas aplicações, como a da análise de ruído proposta por esse trabalho.
+Para a elaboração da ferramenta de reconstrução, primeiramente foi utilizado como base um \textit{software} de reconstrução para \acs{CT} com geometria de feixe cônico (\textit{cone-beam}) \cite{kim2012}. A partir daí, foi feito o desenvolvimento da geometria de meio feixe cônico, ou \textit{half-cone-beam}, específico para a técnica de tomossíntese. A \textit{toolbox} foi desenvolvida no \textit{software} MATLAB\footnote{\url{www.mathworks.com}}. Para avaliações através de métricas objetivas, a fim de  validar os métodos de reconstrução implementados, é necessário ter um padrão-ouro (\textit{ground-truth}), sendo assim, utilizou-se de \textit{phantoms} virtuais sintéticos. Imagens de pacientes e \textit{phantoms} físicos também foram utilizados para a validação. Diferentes técnicas de projeção e retroprojeção geométricas foram então aplicadas para a obtenção das projeções e retroprojeções dos \textit{phantoms} virtuais, para então ser possível a aplicação dos métodos de reconstrução. Métricas objetivas, bem como as subjetivas para casos clínicos foram aplicadas. Então, consolidou-se o desenvolvimento da ferramenta, possibilitando diversas aplicações, como a da análise de ruído proposta por esse trabalho.
 
 \begin{figure}[H]
 	\caption{Fluxograma simplificado ilustrando o desenvolvimento do \textit{software} de reconstrução tomográfica para imagens de \acs{DBT}.}
@@ -41,7 +41,7 @@ Como esse trabalho visa a reconstrução de estruturas anatômicas em \acs{3D} p
 	\label{fig:imgCap4SheppLogan}
 \end{figure}
 
-Para uma avaliação mais de acordo com a realidade dos exames de mamografia, utilizou-se de forma semelhante um \textit{phantom} antropomórfico virtual da mama \cite{bakic2002mammogram1,bakic2002mammogram2,bakic2003mammogram}, gerado pelo \textit{software} de ensaios clínicos virtuais (\textit{Virtual Clinical Trials} - \acs{VCT}), denominado OpenVCT \cite{BakicVCT}, desenvolvido na Universidade da Pensilvânia nos Estados Unidos. Esse programa possibilita a geração de modelos de mama customizados, deformações como a compressão exercida pelo prato, inserção de lesões como microcalcificações e também proporciona a simulação das projeções de raios X geradas pelo mamógrafo \cite{barufaldi2018openvct}. A Figura \ref{fig:imgCap4PhantomVCT} ilustra uma fatia retirada do volume do \textit{phantom} antropomórfico simulado, assim como a representação de seu volume \acs{3D}. Foi simulado uma mama de espessura $63,3mm$ advinda de uma paciente com idade de 48 anos, $1,65m$ de altura e $60Kg$. Lesões que mimetizam microcalcificações foram inseridas na altura de $54mm$ do volume aproximadamente. 
+Para uma avaliação mais de acordo com a realidade dos exames de mamografia, utilizou-se de forma semelhante um \textit{phantom} antropomórfico virtual da mama \cite{bakic2002mammogram1,bakic2002mammogram2,bakic2003mammogram}, gerado pelo \textit{software} de ensaios clínicos virtuais (\textit{Virtual Clinical Trials} - \acs{VCT}), denominado OpenVCT \cite{BakicVCT}, desenvolvido na Universidade da Pensilvânia nos Estados Unidos. Esse programa possibilita a geração de modelos de mama customizados, deformações como a compressão exercida pelo prato, inserção de lesões como microcalcificações e também proporciona a simulação das projeções de raios X geradas pelo mamógrafo \cite{barufaldi2018openvct}. A Figura \ref{fig:imgCap4PhantomVCT} ilustra uma fatia retirada do volume do \textit{phantom} antropomórfico simulado, assim como a representação de seu volume \acs{3D}. Foi simulado uma mama de espessura $63,3mm$ advinda de uma paciente com idade de 48 anos, $1,65m$ de altura e $60kg$. Lesões que mimetizam microcalcificações foram inseridas na altura de $54mm$ do volume aproximadamente. 
 
 \begin{figure}[htb]
 	\centering
@@ -59,7 +59,7 @@ Para uma avaliação mais de acordo com a realidade dos exames de mamografia, ut
 
 \subsection{\textit{Phantom} Físico}
 
- O modelo antropomórfico físico da mama BR3D \cite{PhantomBR3D} foi empregado da mesma forma. Esse simulador de tecido é constituído de 6 fatias, cada uma com $10mm$ de espessura, com um material heterogêneo que representa uma mistura de tecido $100\%$ adiposo e $100\%$ glandular de uma mama com razão de 50/50. Junto a uma fatia específica, estão contidas microcalcificações, fibras e massas que simulam os indicadores do câncer de mama, na qual a Tabela \ref{tab:tabCap4BR3D} especifica suas respectivas dimensões. Todas essas estruturas possuem diferentes tamanhos e buscam mimetizar os aspectos reais encontrados em uma mama com possíveis lesões, como ilustra a Figura \ref{fig:imgCap4BR3D}.
+ O \textit{phantom} antropomórfico físico da mama, modelo BR3D da empresa \textit{Computerized Imaging Reference Systems} \cite{PhantomBR3D}, foi empregado da mesma forma. Esse simulador de tecido é constituído de 6 fatias, cada uma com $10mm$ de espessura, com um material heterogêneo que representa uma mistura de tecido $100\%$ adiposo e $100\%$ glandular de uma mama com razão de 50/50. Junto a uma fatia específica, estão contidas microcalcificações, fibras e massas que simulam os indicadores do câncer de mama, na qual a Tabela \ref{tab:tabCap4BR3D} especifica suas respectivas dimensões. Todas essas estruturas possuem diferentes tamanhos e buscam mimetizar os aspectos reais encontrados em uma mama com possíveis lesões, como ilustra a Figura \ref{fig:imgCap4BR3D}.
  
  \begin{table}[htb]
  	\centering
@@ -90,7 +90,7 @@ Para uma avaliação mais de acordo com a realidade dos exames de mamografia, ut
  \end{table}
 
 \begin{figure}[htb]
-	\caption{Ilustração das fatias do \textit{phantom} BR3D.}
+	\caption{Ilustração das fatias do \textit{phantom} BR3D, da empresa CIRS.}
 	\begin{center}
 		\includegraphics[scale=0.6, clip, trim=5.6cm 12.8cm 5.4cm 5cm]{imgs/cap4/BR3D.pdf}
 	\end{center}
@@ -100,7 +100,21 @@ Para uma avaliação mais de acordo com a realidade dos exames de mamografia, ut
 
 \subsection{Imagens Clínicas}
 
-Através de uma parceria com o Hospital de Amor da cidade de Barretos, São Paulo, foram adquiridas imagens clínicas tanto do equipamento da \acs{GE}, denominado nesse trabalho por sistema \#1 (número um), quanto do equipamento da Hologic, denominado por sistema \#2 (número dois). Junto às projeções adquiridas nos equipamentos, as respectivas reconstruções também foram capturadas permitindo uma comparação visual direta com as reconstruções feitas pela \textit{toolbox}, avaliando a similaridade entre as mesmas. Esse projeto foi aprovado segundo o comitê de ética número CAAE: 78625417.1.1001.5437.
+Através de uma parceria com o Hospital de Amor da cidade de Barretos, São Paulo, foram adquiridas imagens clínicas tanto do equipamento da \acs{GE}, denominado nesse trabalho por sistema \#1 (número um), quanto do equipamento da Hologic, denominado por sistema \#2 (número dois). A Figura \ref{fig:imgCap4ProjsDBT} ilustra dois exemplos de imagens clínicas adquiridas para ambos os equipamentos. É importante notar que as imagens do sistema \#1 são do tipo ``não processadas''\footnote{Projeções que não tiveram nenhum tipo de processamento, ou seja, são os valores reais medidos no detector.} ou comumente chamadas de \textit{raw}, enquanto as imagens do sistema \#2 são do tipo ``processadas''\footnote{Projeções que foram processadas pelo equipamento, para uma melhor visualização dos radiologistas.}. Junto às projeções apanhadas nos equipamentos, as respectivas reconstruções também foram capturadas permitindo uma comparação visual direta com as reconstruções feitas pela \textit{toolbox}, avaliando a similaridade entre as mesmas. Esse projeto foi aprovado segundo o comitê de ética número CAAE: 78625417.1.1001.5437.
+
+\begin{figure}[htb]
+	\centering
+	
+	\caption{Imagens clínicas, referentes a projeções \acs{2D} do sistema (a) \#1 e (b) \#2, ressaltando a diferença entre a imagem (a) \textit{raw} e a (b) já processada. A janela de níveis de cinza não foi ajustada para as imagens abaixo.}
+	
+	\subfloat[]{\includegraphics[scale=0.12, clip, trim=0cm 0cm 0cm 0cm]{imgs/cap4/GE_Proj5_Raw.png}}
+	\hfil
+	\subfloat[]{\includegraphics[scale=0.14, clip, trim=0cm 0cm 0cm 0cm]{imgs/cap4/HO_Proj8_Process.png}}
+	\hfil
+	
+	\legend{Fonte: do autor, 2019.}
+	\label{fig:imgCap4ProjsDBT}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%													Geometria																%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -175,7 +189,7 @@ Já para as imagens clínicas, ambos sistemas foram empregados. A Tabela \ref{ta
 	\legend{Fonte: \citeonline{michell2018role,vedantham2015digital,sechopoulos2013review,baker2011breast}.}
 \end{table}
 
-A \textit{toolbox} desenvolvida nesse trabalho permite simular as projeções de raios X, quando o volume do objeto está expresso em valores de coeficientes de atenuação, ou seja, somente a projeção geométrica é simulada, não levando em conta as interações da radiação com a matéria como é feito no OpenVCT. Esse procedimento foi feito com o \textit{phantom} de Shepp-Logan com uma geometria semelhante ao do sistema \#1 e a Figura \ref{fig:imgCap4Projecoes} ilustra as projeções geradas.
+A \textit{toolbox} desenvolvida nesse trabalho permite simular as projeções de raios X, quando o volume do objeto está expresso em valores de coeficientes de atenuação. Esse procedimento foi feito com o \textit{phantom} de Shepp-Logan com uma geometria semelhante ao do sistema \#1 e a Figura \ref{fig:imgCap4Projecoes} ilustra as projeções geradas.
 
 \begin{figure}[htb]
 	\centering
@@ -384,13 +398,13 @@ A confecção do filtro para o algoritmo de retroprojeção filtrada se dá a pa
 
 Para a validação da \textit{toolbox} foram utilizados os \textit{phantoms} virtuais, físicos e imagens clínicas obtidas no Hospital de Amor em Barretos. Para cada tipo de validação foi feita uma análise de modo quantitativo ou qualitativo.
 
-Para o simulador de Shepp-Logan, tanto a análise visual quanto a quantitativa foram feitas. As projeções foram reconstruídas através dos quatro métodos de reconstrução e a qualidade de cada imagem foi comparada com o padrão-ouro através da métrica de índice de similaridade estrutural (\textit{Structural Similarity Index} - \acs{SSIM}). Uma equação polinomial foi calculada para converter os níveis de cinza das imagens reconstruídas para os níveis de cinza do \textit{phantom} padrão-ouro.
+Para o simulador de Shepp-Logan, tanto a análise visual quanto a quantitativa foram feitas. As projeções foram reconstruídas através dos quatro métodos de reconstrução e a qualidade de cada imagem foi comparada com o padrão-ouro através da métrica de índice de similaridade estrutural (\textit{Structural Similarity Index} - \acs{SSIM}). Uma polinômio de primeiro grau foi calculado para converter os níveis de cinza das imagens reconstruídas por diferentes métodos para os níveis de cinza do \textit{phantom} padrão-ouro, de modo que todos os resultados das reconstruções tenham a mesma faixa de valores de \textit{pixel}.
 
 Já para o BR3D, uma simples comparação visual foi feita, dado que encontrava-se disponível a imagem reconstruída pelo equipamento comercial. Foram analisados os resultados dos quatro métodos, comparando-os em aspectos visuais como ruído, contraste e objetos em foco na mesma altura. 
 
-Especificamente, no \textit{phantom} gerado pelo OpenVCT, foi feita uma comparação entre a \textit{toolbox} desenvolvida nesse trabalho e outra apresentada pelo \acs{FDA}. Para isso, foram reconstruídas as projeções em ambos \textit{softwares} pelos métodos de \acs{BP}, \acs{FBP} e \acs{SART}. O método de \acs{MLEM} não foi comparado, visto que a implementação dessa técnica se difere entre ambos os \textit{softwares}. Então, as fatias reconstruídas por cada \textit{toolbox} foram comparadas entre si quantitativamente através das métricas de \acs{SSIM} e do erro quadrático médio (\textit{Mean Square Error} - \acs{MSE}). Em outras palavras, o \textit{software} do órgão \acs{FDA} foi tido como o padrão para as reconstruções.  Um ajuste polinomial de primeira ordem foi feito para combinar os níveis de cinza das fatias de ambas \textit{toolboxes} entre métodos de reconstrução iguais, como apresentado no trabalho de \citeonline {borges2018restoration}. A métrica de medida de artefatos fora do foco, denominada de função de espalhamento de artefatos (\textit{Artifact Spread Function} - \acs{ASF}) foi aplicada nas reconstruções de ambas \textit{toolboxes} e também no \textit{phantom} original.
+Especificamente, no \textit{phantom} gerado pelo OpenVCT, foi feita uma comparação entre a \textit{toolbox} desenvolvida nesse trabalho e outra apresentada pelo \acs{FDA}. Para isso, foram reconstruídas as projeções em ambos \textit{softwares} pelos métodos de \acs{BP}, \acs{FBP} e \acs{SART}. O método de \acs{MLEM} não foi comparado, visto que a implementação dessa técnica se difere entre ambos os \textit{softwares}. Então, as fatias reconstruídas por cada \textit{toolbox} foram comparadas entre si quantitativamente através das métricas de \acs{SSIM} e do erro quadrático médio (\textit{Mean Square Error} - \acs{MSE}). Em outras palavras, o \textit{software} do órgão \acs{FDA} foi tido como o padrão para as reconstruções.  Do mesmo modo que anteriormente, um ajuste polinomial de primeira ordem foi feito para combinar os níveis de cinza das fatias de ambas \textit{toolboxes} entre métodos de reconstrução iguais, como apresentado no trabalho de \citeonline {borges2018restoration}. A métrica de medida de artefatos fora do foco, denominada de função de espalhamento de artefatos (\textit{Artifact Spread Function} - \acs{ASF}) foi aplicada nas reconstruções de ambas \textit{toolboxes} e também no \textit{phantom} original.
 
-Por fim, para as imagens clínicas, as mesmas foram reconstruídas seguindo o método que mais se aproxima do equipamento comercial. Ou seja, para o sistema \#1 e \#2 foram utilizados os métodos \acs{SART} e \acs{FBP} respectivamente. As imagens reconstruídas cedidas pelo equipamento foram tomadas como padrão e então uma comparação visual foi feita em termos de objetos em foco na mesma altura e também de similaridade. As projeções utilizadas referentes ao sistema \#1 foram do tipo ``não processadas'', enquanto as do sistema \#2 do tipo ``processadas''. Isso se deve ao fato de não termos acesso a ambos os tipos nos dois sistemas.  
+Por fim, para as imagens clínicas, as mesmas foram reconstruídas seguindo o método que mais se aproxima do equipamento comercial. Ou seja, para o sistema \#1 e \#2 foram utilizados os métodos \acs{SART} e \acs{FBP} respectivamente. As imagens reconstruídas cedidas pelo equipamento foram tomadas como padrão e então uma comparação visual foi feita em termos de objetos em foco na mesma altura e também de similaridade. Novamente, as projeções utilizadas referentes ao sistema \#1 foram do tipo ``não processadas'', enquanto as do sistema \#2 do tipo ``processadas''. Isso se deve ao fato de não termos acesso a ambos os tipos nos dois sistemas.  
 
 
 \subsubsection{Métricas Objetivas} 
@@ -433,7 +447,7 @@ SSIM(x,y) = [l(x,y)]^{\alpha} \cdot [c(x,y)]^{\beta} \cdot [s(x,y)]^{\gamma},
 \label{eq:eqCap4SSIM}
 \end{equation}
 
-\noindent na qual $\alpha,\beta \text{ e } \gamma$ são constantes de ajuste da métrica. É importante ressaltar que o \acs{SSIM} retorna os índices de similaridade para diversas regiões da imagem, porém quando se fala em similaridade é interessante que exista somente um índice para toda a imagem. Portanto é feito uma média dos M índices retornados, dado pela equação:
+\noindent na qual $\alpha,\beta \text{ e } \gamma$ são constantes de ajuste da métrica. É importante ressaltar que o \acs{SSIM} retorna os índices de similaridade para M regiões locais da imagem, porém quando se fala em similaridade é interessante que exista somente um índice para toda a imagem. Portanto é feito uma média dos M índices retornados, dado pela equação:
 
 \begin{equation}
 MSSIM(x,y) = \dfrac{1}{M} \sum_{j=1}^{M} SSIM(x_{j},y_{j}).
@@ -486,7 +500,7 @@ Os procedimentos envolveram a utilização de dois sistemas comerciais de \acs{D
 
 \subsection{\textit{Phantom} Uniforme}
 
-Para a execução dos procedimentos, foi utilizado um \textit{phantom} de \ac{PMMA}. Esse simulador, Figura \ref{fig:imgCap4PMMA}, é empregado na rotina clínica com o propósito de controle de qualidade, pois o mesmo simula a absorção da radiação semelhante a uma mama considerada padrão. Testes como a calibração do controle automático de exposição (\textit{Automatic Exposure Control} - \acs{AEC}), análises de ruído, \textit{kerma} incidente, correções de \textit{flat-field} etc, são exemplos nos quais são aplicados o simulador \cite{caron2017,vanegen2018protocol}. Nesse trabalho, sua utilização foi para a estimativa e a medida dos parâmetros do sinal e do ruído. Isso se deve ao fato do bloco de acrílico, ou \acs{PMMA}, ser uniforme, proporcionando teoricamente um sinal também uniforme no detector. A espessura de cada bloco de \acs{PMMA} mede 3 e 4cm, respectivamente, para cada sistema.
+Para a execução dos procedimentos, foi utilizado um \textit{phantom} de \ac{PMMA}, produzido pela mesma empresa do equipamento de \acs{DBT}. Esse simulador, Figura \ref{fig:imgCap4PMMA}, é empregado na rotina clínica com o propósito de controle de qualidade, pois o mesmo simula a absorção da radiação semelhante a uma mama considerada padrão. Testes como a calibração do controle automático de exposição (\textit{Automatic Exposure Control} - \acs{AEC}), análises de ruído, \textit{kerma}\footnote{Segundo \citeonline[p. 53]{bushberg2011essential}, \textit{kerma (kinetic energy released in matter)} é o acrônimo de energia cinética liberada na matéria.} incidente, correções de \textit{flat-field} etc, são exemplos nos quais são aplicados o simulador \cite{caron2017,vanegen2018protocol}. Nesse trabalho, sua utilização foi para a estimativa e a medida dos parâmetros do sinal e do ruído. Isso se deve ao fato do bloco de acrílico, ou \acs{PMMA}, ser uniforme, proporcionando teoricamente um sinal também uniforme no detector. A espessura de cada bloco de \acs{PMMA} mede 3 e 4cm, respectivamente, para cada sistema.
 
  \begin{figure}[htb]
 	\caption{Ilustração do \textit{phantom} uniforme de \acs{PMMA}.}
@@ -519,7 +533,7 @@ A métrica de \acs{SNR}, já mencionada, avalia a relação sinal-ruído em uma 
  \label{eq:eqNNPS}
  \end{equation}
 
-\noindent na qual, $N$ é o número de \textit{pixels} do \textit{patch}\footnote{ Termo usado em processamento de imagens para nomear regiões de \textit{pixels} (normalmente retangulares) de uma imagem para a execução de cálculos locais. Estes podem ter tamanhos variados.}, $s$ é o tamanho do detector em milímetros, $P$ é a quantidade de \textit{patches} utilizados na imagem, $\mathcal{F}$  denota a transformada de Fourier,$I_{p}$, $S_{p}$ denotam o sinal adquirido e o mesmo livre de ruído, respectivamente, e $L$ é o maior valor de \textit{pixel} da imagem \cite{dobbins2000handbook}.
+\noindent na qual, $N$ é o número de \textit{pixels} do \textit{patch}\footnote{ Termo usado em processamento de imagens para nomear regiões de \textit{pixels} (normalmente retangulares) de uma imagem para a execução de cálculos locais. Estes podem ter tamanhos variados.}, $s$ é o tamanho do detector em milímetros, $P$ é a quantidade de \textit{patches} utilizados na imagem, $\mathcal{F}$  denota a transformada de Fourier, $I_{p}$, $S_{p}$ denotam o sinal adquirido e o mesmo livre de ruído, respectivamente, e $L$ é o maior valor de \textit{pixel} da imagem \cite{dobbins2000handbook}. O resultado da medida de \acs{NPS} é uma matriz do tamanho do \textit{patch} utilizado, porém para fins de análise gráfica é mais interessante que seja representado o perfil \acs{2D} dessa medida em função da frequência. Para isso, foram tomados os valores desde a mínima frequência até a máxima em todas as direções e foi realizado uma média radial entre esses valores, resultando assim em um perfil médio para todas as frequências \cite{li2014statistical}.
 
 \subsection{Metodologia} \label{Metodologia}
 
